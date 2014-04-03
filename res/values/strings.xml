@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_week">Week</string>
+    <string name="title_month">Month</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add">+</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">New Budget</string>
+    <string name="label_start_day">Choose the day your weekly budget will start on</string>
+    <string name="button_new_budget">New Budget</string>
+    <string name="button_join_budget">Join Budget</string>
+
+    <string-array name="array_weekdays">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string name="title_activity_join_budget">Join Budget</string>
+    <string name="label_join_unique_id">Please enter the unique ID of the budget you wish to join</string>
+    <string name="button_go">Go</string>
+    <string name="label_new_amount">Enter the amount you would like to spend each week</string>
+    <string name="label_new_unique">Here is the unique ID for your budget. You may share it or use it to sync to a different device</string>
+
+</resources>
