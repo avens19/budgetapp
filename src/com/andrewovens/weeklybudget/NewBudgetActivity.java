@@ -1,17 +1,19 @@
 package com.andrewovens.weeklybudget;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.*;
 
 public class NewBudgetActivity extends Activity {
+	
+	private Budget _budget;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,39 @@ public class NewBudgetActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		_budget = new Budget(true);
+		
+		EditText uniqueId = (EditText)findViewById(R.id.text_new_unique);
+		uniqueId.setText(_budget.UniqueId);
+	}
+	
+	public void goButtonOnClick(View v)
+	{
+		Spinner weekday = (Spinner) findViewById(R.id.weekday_spinner);
+		EditText amount = (EditText)findViewById(R.id.text_new_amount);
+		
+		_budget.StartDay = weekday.getSelectedItemPosition();
+		_budget.Amount = Integer.parseInt(amount.getText().toString());
+		
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				try {
+					API.CreateBudget(_budget);
+					
+					Intent i = new Intent(NewBudgetActivity.this, WeekActivity.class);
+					startActivity(i);
+					NewBudgetActivity.this.finish();
+					
+				} catch (Exception e) {
+					Toast.makeText(NewBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT).show();
+					e.printStackTrace();
+				}
+			}
+			
+		});
 	}
 
 	@Override

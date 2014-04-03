@@ -27,5 +27,6 @@
     <string name="button_go">Go</string>
     <string name="label_new_amount">Enter the amount you would like to spend each week</string>
     <string name="label_new_unique">Here is the unique ID for your budget. You may share it or use it to sync to a different device</string>
+    <string name="error_network">Cannot connect to the network</string>
 
 </resources>

@@ -62,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_new_unique"
         android:layout_centerHorizontal="true"
-        android:text="@string/button_go" />
+        android:text="@string/button_go"
+        android:onClick="goButtonOnClick" />
 
 </RelativeLayout>
