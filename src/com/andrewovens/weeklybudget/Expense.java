@@ -7,13 +7,13 @@ public class Expense {
 	public Date Date;
 	public String Description;
 	public double Amount;
-	public String Budget;
+	public String BudgetId;
 	
-	public Expense(Date date, String description, double amount, String budget)
+	public Expense(Date date, String description, double amount, String budgetId)
 	{
 		Date = date;
 		Description = description;
 		Amount = amount;
-		Budget = budget;
+		BudgetId = budgetId;
 	}
 }
