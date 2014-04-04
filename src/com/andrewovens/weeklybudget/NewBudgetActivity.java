@@ -2,8 +2,12 @@ package com.andrewovens.weeklybudget;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,20 +24,25 @@ public class NewBudgetActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_budget);
 
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
-		
 		_budget = new Budget(true);
 		
-		EditText uniqueId = (EditText)findViewById(R.id.text_new_unique);
+		TextView uniqueId = (TextView)findViewById(R.id.text_new_unique);
 		uniqueId.setText(_budget.UniqueId);
+	}
+	
+	public void uniqueIdOnClick(View v)
+	{
+		ClipboardManager clipboard = (ClipboardManager)
+		        getSystemService(Context.CLIPBOARD_SERVICE);
+		
+		clipboard.setPrimaryClip(ClipData.newPlainText("uniqueId", _budget.UniqueId));
+		
+		Toast.makeText(this, R.string.copied_unique_id, Toast.LENGTH_SHORT).show();
 	}
 	
 	public void goButtonOnClick(View v)
 	{
-		Spinner weekday = (Spinner) findViewById(R.id.weekday_spinner);
+		Spinner weekday = (Spinner)findViewById(R.id.weekday_spinner);
 		EditText amount = (EditText)findViewById(R.id.text_new_amount);
 		
 		_budget.StartDay = weekday.getSelectedItemPosition();
@@ -44,19 +53,23 @@ public class NewBudgetActivity extends Activity {
 			@Override
 			public void run() {
 				try {
-					API.CreateBudget(_budget);
+					Looper.prepare();
+					
+					_budget = API.CreateBudget(_budget);
+					
+					Settings.setBudgetId(NewBudgetActivity.this, _budget.UniqueId);
 					
 					Intent i = new Intent(NewBudgetActivity.this, WeekActivity.class);
 					startActivity(i);
 					NewBudgetActivity.this.finish();
 					
 				} catch (Exception e) {
-					Toast.makeText(NewBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT).show();
+					Settings.showToastOnUi(NewBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
 					e.printStackTrace();
 				}
 			}
 			
-		});
+		}).start();
 	}
 
 	@Override
@@ -78,22 +91,4 @@ public class NewBudgetActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_new_budget,
-					container, false);
-			return rootView;
-		}
-	}
-
 }

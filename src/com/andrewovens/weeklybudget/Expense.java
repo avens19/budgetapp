@@ -31,7 +31,7 @@ public class Expense {
 	{
 		Expense e = new Expense();
 		e.Id = jo.getLong("Id");
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss", Locale.US);
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		e.Date = formatter.parse(jo.getString("Date"));
 		e.Description = jo.getString("Description");
 		e.Amount = jo.getDouble("Amount");
@@ -43,7 +43,7 @@ public class Expense {
 	{
 		JSONObject jo = new JSONObject();
 		jo.put("Id", Id);
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss", Locale.US);
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		jo.put("Date", formatter.format(Date));
 		jo.put("Description", Description);
 		jo.put("Amount", Amount);

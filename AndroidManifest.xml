@@ -7,8 +7,9 @@
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="19" />
-    <permission android:name="android.permission.INTERNET"></permission>
-    <permission android:name="android.permission.ACCESS_NETWORK_STATE"></permission>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -43,6 +44,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.andrewovens.weeklybudget.FirstActivity" />
+        </activity>
+        <activity
+            android:name="com.andrewovens.weeklybudget.AddExpenseActivity"
+            android:label="@string/title_activity_add_expense" >
         </activity>
     </application>
 

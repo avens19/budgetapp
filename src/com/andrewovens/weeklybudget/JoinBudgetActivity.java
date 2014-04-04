@@ -1,27 +1,26 @@
 package com.andrewovens.weeklybudget;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.EditText;
+import android.widget.Toast;
 
+@SuppressLint("DefaultLocale")
 public class JoinBudgetActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_join_budget);
-
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
 	}
 
 	@Override
@@ -43,22 +42,35 @@ public class JoinBudgetActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public void goButtonOnClick(View v)
+	{
+		EditText id = (EditText)findViewById(R.id.text_join_unique_id);
+		
+		final String budgetId = id.getText().toString().toLowerCase();
+		
+		new Thread(new Runnable(){
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_join_budget,
-					container, false);
-			return rootView;
-		}
+			@Override
+			public void run() {
+				try {
+					Looper.prepare();
+					
+					Budget budget = API.GetBudget(budgetId);
+					
+					Settings.setBudgetId(JoinBudgetActivity.this, budget.UniqueId);
+					
+					Intent i = new Intent(JoinBudgetActivity.this, WeekActivity.class);
+					startActivity(i);
+					JoinBudgetActivity.this.finish();
+					
+				} catch (Exception e) {
+					Settings.showToastOnUi(JoinBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
+					e.printStackTrace();
+				}
+			}
+			
+		}).start();
 	}
 
 }

@@ -1,25 +1,29 @@
 package com.andrewovens.weeklybudget;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class WeekActivity extends Activity implements ActionBar.OnNavigationListener {
 
-    /**
-     * The serialization (saved instance state) Bundle key representing the
-     * current dropdown position.
-     */
-    private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
+    private Budget _budget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +48,65 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
                         }),
                 this);
         
-//        Intent k = new Intent(this, FirstActivity.class);
-//        startActivity(k);
-//        this.finish();
+        final String budgetId = Settings.getBudgetId(this);
+        
+        // Check for first run.
+        if(budgetId == null)
+        {
+	        Intent k = new Intent(this, FirstActivity.class);
+	        startActivity(k);
+	        this.finish();
+	        return;
+        }
+        
+        new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				try
+				{
+					_budget = API.GetBudget(budgetId);
+					List<Expense> expenses = API.GetWeek(budgetId);
+					final List<String> expenseStrings = new ArrayList<String>();
+					
+					double total = 0;
+					for(int i = 0;i < expenses.size(); i++)
+					{
+						Expense e = expenses.get(i);
+						total += e.Amount;
+						expenseStrings.add(API.getWeekDay(e.Date) + ": " + e.Amount);
+					}
+					final double remaining = _budget.Amount - total;
+					
+					runOnUiThread(new Runnable(){
+						@Override
+						public void run() {
+							TextView r = (TextView)WeekActivity.this.findViewById(R.id.remaining);
+							r.setText(Double.toString(remaining));
+							ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
+							WeekRowAdapter ca = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenseStrings);
+							lv.setAdapter(ca);
+						}
+					});
+				}
+				catch(Exception e)
+				{
+					Settings.showToastOnUi(WeekActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
+					e.printStackTrace();
+				}
+			}
+        	
+        }).start();
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Restore the previously serialized current dropdown position.
-        if (savedInstanceState.containsKey(STATE_SELECTED_NAVIGATION_ITEM)) {
-            getActionBar().setSelectedNavigationItem(
-                    savedInstanceState.getInt(STATE_SELECTED_NAVIGATION_ITEM));
-        }
+        
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        // Serialize the current dropdown position.
-        outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
-                getActionBar().getSelectedNavigationIndex());
+        
     }
 
 
@@ -71,6 +115,15 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.week, menu);
+        MenuItem add = menu.findItem(R.id.action_add);
+        add.setOnMenuItemClickListener(new OnMenuItemClickListener(){
+
+			@Override
+			public boolean onMenuItemClick(MenuItem arg0) {
+				Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
+		    	startActivity(i);
+		    	return true;
+			}});
         return true;
     }
 
@@ -90,45 +143,34 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
     public boolean onNavigationItemSelected(int position, long id) {
         // When the given dropdown item is selected, show its contents in the
         // container view.
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+
         return true;
     }
+    
+    public class WeekRowAdapter extends ArrayAdapter<String> {
+    	private final Context context;
+    	private final int resourceID;
+    	private List<String> list;
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    	public WeekRowAdapter(Context context, int resource, List<String> bah) {
+    	    super(context, resource, bah);
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
+    	    this.context = context;
+    	    this.resourceID = resource;
+    	    this.list = bah;
+    	}
 
-        public PlaceholderFragment() {
-        }
+    	@Override
+    	public View getView(int position, View convertView, ViewGroup parent) {
+    	    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    	    View rowView = inflater.inflate(resourceID, parent, false);
+    	    
+    	    TextView tv = (TextView)rowView.findViewById(R.id.text_week_row);
+    	    tv.setText(list.get(position));
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_week, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
+    	    return rowView;
+
+    	}
+
     }
-
 }
