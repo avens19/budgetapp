@@ -34,5 +34,9 @@
     <string name="add_description">Description</string>
     <string name="add_amount">Amount</string>
     <string name="add_add">Add</string>
+    <string name="context_edit">Edit Expense</string>
+    <string name="context_delete">Delete Expense</string>
+    <string name="edit_title">Edit Expense</string>
+    <string name="edit_button">Edit</string>
 
 </resources>

@@ -1,12 +1,14 @@
 package com.andrewovens.weeklybudget;
 
 import android.annotation.SuppressLint;
+
 import java.io.IOException;
 import java.net.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 import org.json.*;
 
 @SuppressLint("SimpleDateFormat")
@@ -72,6 +74,30 @@ public class API {
 		return Expense.fromJson(responseExpense);
 	}
 	
+	public static void EditExpense(Expense e) throws Exception
+	{
+		String urlString = baseUrl + "expense/" + e.Id;
+		URL url = new URL(urlString);
+		
+		JSONObject expense = e.toJson();
+		String response = NetworkOperations.HttpPost(url, expense.toString(), "PUT");
+		
+		if(!response.isEmpty())
+			throw new Exception("Update failed!");
+	}
+	
+	public static Expense DeleteExpense(Expense e) throws JSONException, IOException, ParseException
+	{
+		String urlString = baseUrl + "expense/" + e.Id;
+		URL url = new URL(urlString);
+		
+		String response = NetworkOperations.HttpGet(url, "DELETE");
+		
+		JSONObject responseExpense = new JSONObject(response);
+		
+		return Expense.fromJson(responseExpense);
+	}
+	
 	public static String getDateString(Date date)
 	{
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -80,7 +106,7 @@ public class API {
 	
 	public static String getWeekDay(Date date)
 	{
-		SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE");
 		return sdf.format(date);
 	}
 }

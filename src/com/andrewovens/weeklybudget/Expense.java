@@ -31,7 +31,7 @@ public class Expense {
 	{
 		Expense e = new Expense();
 		e.Id = jo.getLong("Id");
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		e.Date = formatter.parse(jo.getString("Date"));
 		e.Description = jo.getString("Description");
 		e.Amount = jo.getDouble("Amount");
