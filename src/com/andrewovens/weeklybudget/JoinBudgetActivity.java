@@ -62,6 +62,7 @@ public class JoinBudgetActivity extends Activity {
 					
 					Intent i = new Intent(JoinBudgetActivity.this, WeekActivity.class);
 					startActivity(i);
+					JoinBudgetActivity.this.setResult(RESULT_OK);
 					JoinBudgetActivity.this.finish();
 					
 				} catch (Exception e) {

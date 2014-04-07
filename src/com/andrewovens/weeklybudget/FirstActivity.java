@@ -43,12 +43,19 @@ public class FirstActivity extends Activity {
 	public void newBudgetOnClick(View view)
 	{
 		Intent i = new Intent(this, NewBudgetActivity.class);
-		startActivity(i);
+		startActivityForResult(i,1);
 	}
 	
 	public void joinBudgetOnClick(View view)
 	{
 		Intent i = new Intent(this, JoinBudgetActivity.class);
-		startActivity(i);
+		startActivityForResult(i,1);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
+	{
+		if(resultCode == Activity.RESULT_OK)
+			this.finish();
 	}
 }

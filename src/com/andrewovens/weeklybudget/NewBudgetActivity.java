@@ -1,5 +1,7 @@
 package com.andrewovens.weeklybudget;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.ClipData;
@@ -18,16 +20,47 @@ import android.widget.*;
 public class NewBudgetActivity extends Activity {
 	
 	private Budget _budget;
+	private boolean _isEdit = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_budget);
-
-		_budget = new Budget(true);
+		
+		Intent i = getIntent();
+		String budget = i.getStringExtra("budget");
 		
 		TextView uniqueId = (TextView)findViewById(R.id.text_new_unique);
-		uniqueId.setText(_budget.UniqueId);
+		
+		if(budget == null)
+		{		
+			_budget = new Budget(true);
+			
+			uniqueId.setText(_budget.UniqueId);
+		}
+		else
+		{
+			try
+			{
+				_isEdit = true;
+				this.setTitle(R.string.edit_budget_title);
+				
+				_budget = Budget.fromJson(new JSONObject(budget));
+				
+				Spinner weekday = (Spinner)findViewById(R.id.weekday_spinner);
+				EditText amount = (EditText)findViewById(R.id.text_new_amount);
+				Button edit = (Button)findViewById(R.id.button_create_budget);
+				
+				weekday.setSelection(_budget.StartDay);
+				amount.setText(_budget.Amount + "");
+				uniqueId.setText(_budget.UniqueId);
+				edit.setText(R.string.button_edit_budget);
+			}
+			catch(Exception e)
+			{
+				this.finish();
+			}
+		}
 	}
 	
 	public void uniqueIdOnClick(View v)
@@ -55,13 +88,23 @@ public class NewBudgetActivity extends Activity {
 				try {
 					Looper.prepare();
 					
-					_budget = API.CreateBudget(_budget);
-					
-					Settings.setBudgetId(NewBudgetActivity.this, _budget.UniqueId);
-					
-					Intent i = new Intent(NewBudgetActivity.this, WeekActivity.class);
-					startActivity(i);
-					NewBudgetActivity.this.finish();
+					if(_isEdit)
+					{
+						API.EditBudget(_budget);
+						
+						NewBudgetActivity.this.finish();
+					}
+					else
+					{
+						_budget = API.CreateBudget(_budget);
+						
+						Settings.setBudgetId(NewBudgetActivity.this, _budget.UniqueId);
+						
+						Intent i = new Intent(NewBudgetActivity.this, WeekActivity.class);
+						startActivity(i);
+						NewBudgetActivity.this.setResult(RESULT_OK);
+						NewBudgetActivity.this.finish();
+					}
 					
 				} catch (Exception e) {
 					Settings.showToastOnUi(NewBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT);

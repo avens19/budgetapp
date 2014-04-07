@@ -49,6 +49,10 @@
             android:name="com.andrewovens.weeklybudget.AddExpenseActivity"
             android:label="@string/title_activity_add_expense" >
         </activity>
+        <activity
+            android:name="com.andrewovens.weeklybudget.MonthActivity"
+            android:label="@string/title_activity_month" >
+        </activity>
     </application>
 
 </manifest>

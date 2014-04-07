@@ -41,7 +41,7 @@ public class AddExpenseActivity extends Activity {
 				int month = c.get(Calendar.MONTH);
 				int day = c.get(Calendar.DAY_OF_MONTH);
 				dp.init(year, month, day, null);
-				this.setTitle(R.string.edit_title);
+				this.setTitle(R.string.edit_expense_title);
 				EditText description = (EditText)findViewById(R.id.add_description);
 				description.setText(_expense.Description);
 				EditText amount = (EditText)findViewById(R.id.add_amount);

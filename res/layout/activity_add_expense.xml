@@ -39,6 +39,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/label_add_description"
         android:layout_centerHorizontal="true"
+        android:lines="1"
+        android:inputType="textCapSentences"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
         android:ems="10" >
 
         <requestFocus />
@@ -59,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/label_add_amount"
         android:layout_centerHorizontal="true"
+        android:imeOptions="actionDone"
         android:ems="10"
         android:inputType="numberDecimal" />
 

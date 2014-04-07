@@ -36,7 +36,12 @@
     <string name="add_add">Add</string>
     <string name="context_edit">Edit Expense</string>
     <string name="context_delete">Delete Expense</string>
-    <string name="edit_title">Edit Expense</string>
+    <string name="edit_expense_title">Edit Expense</string>
     <string name="edit_button">Edit</string>
+    <string name="button_create_budget">Create Budget</string>
+    <string name="button_edit_budget">Edit Budget</string>
+    <string name="edit_budget_title">Edit Budget</string>
+    <string name="title_activity_month">MonthActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

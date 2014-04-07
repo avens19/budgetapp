@@ -28,6 +28,18 @@ public class API {
 		return Budget.fromJson(responseBudget);
 	}
 	
+	public static void EditBudget(Budget b) throws Exception
+	{
+		String urlString = baseUrl + "budget/" + b.UniqueId;
+		URL url = new URL(urlString);
+		
+		JSONObject budget = b.toJson();
+		String response = NetworkOperations.HttpPost(url, budget.toString(), "PUT");
+		
+		if(!response.isEmpty())
+			throw new Exception("Edit failed!");
+	}
+	
 	public static Budget GetBudget(String id) throws JSONException, IOException
 	{
 		String urlString = baseUrl + "budget/" + id;
@@ -40,9 +52,13 @@ public class API {
 		return Budget.fromJson(responseBudget);
 	}
 	
-	public static List<Expense> GetWeek(String id) throws IOException, JSONException, ParseException
+	public static List<Expense> GetWeek(String id, int daysBackFromToday) throws IOException, JSONException, ParseException
 	{
-		String date = getDateString(new Date());
+		Calendar calendar=Calendar.getInstance();
+		//subtract days
+		calendar.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);
+		Date d = calendar.getTime();
+		String date = getDateString(d);
 		String urlString = baseUrl + "budget/" + id + "/Week/" + date;
 		URL url = new URL(urlString);
 		

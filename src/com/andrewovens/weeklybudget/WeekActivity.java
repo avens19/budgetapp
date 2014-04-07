@@ -1,5 +1,7 @@
 package com.andrewovens.weeklybudget;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -30,6 +32,11 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
     private Budget _budget;
     private WeekRowAdapter _adapter;
+    private int DaysBackFromToday = 0;
+    
+    private final int EDIT_BUDGET = 1;
+    
+    private int MONTH_ACTIVITY = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         setContentView(R.layout.activity_week);
 
         // Set up the action bar to show a dropdown list.
-        final ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
@@ -59,7 +66,26 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
     protected void onResume()
     {
     	super.onResume();
+    	
+    	ActionBar actionBar = getActionBar();
+    	
+    	actionBar.setSelectedNavigationItem(0);
+    	
     	loadData();
+    }
+    
+    private String getPeriod()
+    {
+    	Calendar start = Calendar.getInstance();
+    	start.add(Calendar.DAY_OF_YEAR, DaysBackFromToday * -1);
+    	while((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay)
+    	{
+    		start.add(Calendar.DAY_OF_YEAR, -1);
+    	}
+    	Calendar end = (Calendar) start.clone();
+    	end.add(Calendar.DAY_OF_YEAR, 6);
+    	DateFormat df = new SimpleDateFormat("MM/dd");
+    	return df.format(start.getTime()) + " - " + df.format(end.getTime());
     }
     
     private void loadData()
@@ -87,7 +113,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 				try
 				{
 					_budget = API.GetBudget(budgetId);
-					final List<Expense> expenses = API.GetWeek(budgetId);
+					final List<Expense> expenses = API.GetWeek(budgetId, DaysBackFromToday);
 					
 					double total = 0;
 					for(int i = 0;i < expenses.size(); i++)
@@ -108,6 +134,9 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 							ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
 							_adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
 							lv.setAdapter(_adapter);
+							
+							TextView dates = (TextView)findViewById(R.id.current_week);
+					        dates.setText(getPeriod());
 						}
 					});
 				}
@@ -119,6 +148,21 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			}
         	
         }).start();
+    }
+    
+    public void weekBackOnClick(View v)
+    {
+    	DaysBackFromToday += 7;
+    	loadData();
+    }
+    
+    public void weekForwardOnClick(View v)
+    {
+    	if(DaysBackFromToday > 0)
+    	{
+    		DaysBackFromToday -= 7;
+        	loadData();
+    	}
     }
     
     private void setUpOnLongClick()
@@ -197,17 +241,6 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
     		
     	}).start();
     }
-    
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -233,6 +266,19 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+        	if(_budget != null)
+        	{
+        		try
+        		{
+		        	Intent i = new Intent(this, NewBudgetActivity.class);
+		        	i.putExtra("budget", _budget.toJson().toString());
+		        	startActivityForResult(i, EDIT_BUDGET);
+        		}
+        		catch(Exception e)
+        		{
+        			e.printStackTrace();
+        		}
+        	}
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -240,9 +286,19 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
-        // When the given dropdown item is selected, show its contents in the
-        // container view.
-
+    	if(position == 1 && _budget != null)
+    	{
+    		try
+    		{
+	    		Intent i = new Intent(this, MonthActivity.class);
+	    		i.putExtra("budget", _budget.toJson().toString());
+	    		startActivityForResult(i, MONTH_ACTIVITY);
+    		}
+    		catch(Exception e)
+    		{
+    			e.printStackTrace();
+    		}
+    	}
         return true;
     }
     

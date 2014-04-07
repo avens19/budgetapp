@@ -34,6 +34,7 @@
         android:layout_alignLeft="@id/label_new_amount"
         android:layout_alignRight="@id/label_new_amount"
         android:layout_below="@id/label_new_amount"
+        android:imeOptions="actionDone"
         android:inputType="number"
         android:ems="10" />
     
@@ -56,12 +57,12 @@
         android:onClick="uniqueIdOnClick" />
     
     <Button
-        android:id="@+id/button_go"
+        android:id="@+id/button_create_budget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_new_unique"
         android:layout_centerHorizontal="true"
-        android:text="@string/button_go"
+        android:text="@string/button_create_budget"
         android:onClick="goButtonOnClick" />
 
 </RelativeLayout>
