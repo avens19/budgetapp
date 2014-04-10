@@ -58,7 +58,7 @@ public class JoinBudgetActivity extends Activity {
 					
 					Budget budget = API.GetBudget(budgetId);
 					
-					Settings.setBudgetId(JoinBudgetActivity.this, budget.UniqueId);
+					Settings.setBudget(JoinBudgetActivity.this, budget);
 					
 					Intent i = new Intent(JoinBudgetActivity.this, WeekActivity.class);
 					startActivity(i);
@@ -66,7 +66,7 @@ public class JoinBudgetActivity extends Activity {
 					JoinBudgetActivity.this.finish();
 					
 				} catch (Exception e) {
-					Settings.showToastOnUi(JoinBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
+					Helpers.showToastOnUi(JoinBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
 					e.printStackTrace();
 				}
 			}

@@ -1,24 +1,44 @@
 package com.andrewovens.weeklybudget;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import android.widget.AdapterView.OnItemClickListener;
+
 import org.json.JSONObject;
+
+import com.andrewovens.weeklybudget.WeekActivity.WeekRowAdapter;
 
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.os.Build;
 
 public class MonthActivity extends Activity implements OnNavigationListener {
 
 	private Budget _budget;
+	private int _daysBackFromToday;
+	private MonthRowAdapter _adapter;
+	
+	private final int EDIT_BUDGET = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +62,63 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 							getString(R.string.title_month),
 						}),
 						this);
+		
+		setUpSwipe();
 
 		try
 		{
-			String budgetString = getIntent().getStringExtra("budget");
+			Intent i = getIntent();
+			String budgetString = i.getStringExtra("budget");
 			_budget = Budget.fromJson(new JSONObject(budgetString));
+			_daysBackFromToday = i.getIntExtra("days", 0);
 		}
 		catch(Exception e)
 		{
 			this.finish();
 			e.printStackTrace();
 		}
+		
+		int startDay = _budget.StartDay;
+		
+		View rowView = findViewById(R.id.month_headings);
+		
+		TextView day1 = (TextView)rowView.findViewById(R.id.month_row_day1);
+		day1.setText(Dates.getWeekDay(startDay));
+		startDay = (startDay + 1) % 7;
+		TextView day2 = (TextView)rowView.findViewById(R.id.month_row_day2);
+		day2.setText(Dates.getWeekDay(startDay));
+		startDay = (startDay + 1) % 7;
+		TextView day3 = (TextView)rowView.findViewById(R.id.month_row_day3);
+		day3.setText(Dates.getWeekDay(startDay));
+		startDay = (startDay + 1) % 7;
+		TextView day4 = (TextView)rowView.findViewById(R.id.month_row_day4);
+		day4.setText(Dates.getWeekDay(startDay));
+		startDay = (startDay + 1) % 7;
+		TextView day5 = (TextView)rowView.findViewById(R.id.month_row_day5);
+		day5.setText(Dates.getWeekDay(startDay));
+		startDay = (startDay + 1) % 7;
+		TextView day6 = (TextView)rowView.findViewById(R.id.month_row_day6);
+		day6.setText(Dates.getWeekDay(startDay));
+		startDay = (startDay + 1) % 7;
+		TextView day7 = (TextView)rowView.findViewById(R.id.month_row_day7);
+		day7.setText(Dates.getWeekDay(startDay));
+
+		TextView total = (TextView)rowView.findViewById(R.id.month_row_total);
+		total.setText("Total");
+		
+		ListView lv = (ListView)MonthActivity.this.findViewById(R.id.month_list);		
+		lv.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				MonthRowAdapter adapter = (MonthRowAdapter)parent.getAdapter();
+				DateTotal dt = adapter.get(position);
+				int daysBackFromToday = (int) ((Calendar.getInstance().getTimeInMillis() - dt.Date.getTimeInMillis())/(24 * 60 * 60 * 1000));
+				Intent i = new Intent();
+				i.putExtra("days", daysBackFromToday);
+				MonthActivity.this.setResult(Activity.RESULT_OK, i);
+				MonthActivity.this.finish();
+			}
+	});
 	}
 
 	@Override
@@ -61,6 +127,92 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 		super.onResume();
 		ActionBar actionBar = getActionBar();
 		actionBar.setSelectedNavigationItem(1);
+		
+		loadData();
+	}
+	
+	private void setUpSwipe()
+	{
+		final View container = findViewById(R.id.month_container);
+		View v = findViewById(R.id.month_list);
+
+		container.setOnTouchListener(new OnSwipeTouchListener(this) {
+			public void onSwipeRight() {
+				monthBack();
+			}
+			public void onSwipeLeft() {
+				monthForward();
+			}
+
+			public boolean onTouch(View v, MotionEvent event) {
+				gestureDetector.onTouchEvent(event);
+				return true;
+			}
+		});
+		v.setOnTouchListener(new OnSwipeTouchListener(this) {
+			public void onSwipeRight() {
+				monthBack();
+			}
+			public void onSwipeLeft() {
+				monthForward();
+			}
+
+			public boolean onTouch(View v, MotionEvent event) {
+				gestureDetector.onTouchEvent(event);
+				return false;
+			}
+		});
+	}
+	
+	private void loadData()
+	{
+		Calendar now = Calendar.getInstance();
+		now.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+		
+		TextView month = (TextView)findViewById(R.id.current_month);
+		month.setText(now.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US));
+		
+		List<DateTotal> list = DBHelper.GetTotalsForMonth(_daysBackFromToday, _budget.StartDay);
+		
+		ListView lv = (ListView)MonthActivity.this.findViewById(R.id.month_list);
+		_adapter = new MonthRowAdapter(MonthActivity.this, R.layout.month_row, list);
+		lv.setAdapter(_adapter);
+	}
+	
+	public void monthBackOnClick(View v)
+	{
+		monthBack();
+	}
+	
+	private void monthBack()
+	{
+		Calendar now = Calendar.getInstance();
+		Calendar start = (Calendar) now.clone();
+		start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+		start.add(Calendar.MONTH, -1);
+		_daysBackFromToday = (int) ((now.getTimeInMillis() - start.getTimeInMillis())/(24 * 60 * 60 * 1000));
+		loadData();
+	}
+
+	public void monthForwardOnClick(View v)
+	{
+		monthForward();
+	}
+	
+	private void monthForward()
+	{
+		if(_daysBackFromToday > 0)
+		{
+			Calendar now = Calendar.getInstance();
+			Calendar start = (Calendar) now.clone();
+			start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+			start.add(Calendar.MONTH, 1);
+			_daysBackFromToday = (int) ((now.getTimeInMillis() - start.getTimeInMillis())/(24 * 60 * 60 * 1000));
+			if(_daysBackFromToday < 0)
+				_daysBackFromToday = 0;
+			
+			loadData();
+		}
 	}
 
 	@Override
@@ -93,9 +245,78 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+        if (id == R.id.action_settings) {
+        	if(_budget != null)
+        	{
+        		try
+        		{
+		        	Intent i = new Intent(this, NewBudgetActivity.class);
+		        	i.putExtra("budget", _budget.toJson().toString());
+		        	startActivityForResult(i, EDIT_BUDGET);
+        		}
+        		catch(Exception e)
+        		{
+        			e.printStackTrace();
+        		}
+        	}
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+	}
+	
+	public class MonthRowAdapter extends ArrayAdapter<DateTotal> {
+		private final Context context;
+		private final int resourceID;
+		private List<DateTotal> list;
+
+		public MonthRowAdapter(Context context, int resource, List<DateTotal> bah) {
+			super(context, resource, bah);
+
+			this.context = context;
+			this.resourceID = resource;
+			this.list = bah;
 		}
-		return super.onOptionsItemSelected(item);
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View rowView = inflater.inflate(resourceID, parent, false);
+			
+			DateTotal dt = list.get(position);
+			
+			Calendar current = (Calendar) dt.Date.clone();
+			
+			TextView day1 = (TextView)rowView.findViewById(R.id.month_row_day1);
+			day1.setText(current.get(Calendar.DAY_OF_MONTH)+"");
+			current.add(Calendar.DAY_OF_YEAR, 1);
+			TextView day2 = (TextView)rowView.findViewById(R.id.month_row_day2);
+			day2.setText(current.get(Calendar.DAY_OF_MONTH)+"");
+			current.add(Calendar.DAY_OF_YEAR, 1);
+			TextView day3 = (TextView)rowView.findViewById(R.id.month_row_day3);
+			day3.setText(current.get(Calendar.DAY_OF_MONTH)+"");
+			current.add(Calendar.DAY_OF_YEAR, 1);
+			TextView day4 = (TextView)rowView.findViewById(R.id.month_row_day4);
+			day4.setText(current.get(Calendar.DAY_OF_MONTH)+"");
+			current.add(Calendar.DAY_OF_YEAR, 1);
+			TextView day5 = (TextView)rowView.findViewById(R.id.month_row_day5);
+			day5.setText(current.get(Calendar.DAY_OF_MONTH)+"");
+			current.add(Calendar.DAY_OF_YEAR, 1);
+			TextView day6 = (TextView)rowView.findViewById(R.id.month_row_day6);
+			day6.setText(current.get(Calendar.DAY_OF_MONTH)+"");
+			current.add(Calendar.DAY_OF_YEAR, 1);
+			TextView day7 = (TextView)rowView.findViewById(R.id.month_row_day7);
+			day7.setText(current.get(Calendar.DAY_OF_MONTH)+"");
+
+			TextView total = (TextView)rowView.findViewById(R.id.month_row_total);
+			total.setText("$" + dt.Total);
+
+			return rowView;
+		}
+
+		public DateTotal get(int position)
+		{
+			return list.get(position);
+		}
+
 	}
 }

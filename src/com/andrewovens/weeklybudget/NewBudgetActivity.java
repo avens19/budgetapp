@@ -79,7 +79,24 @@ public class NewBudgetActivity extends Activity {
 		EditText amount = (EditText)findViewById(R.id.text_new_amount);
 		
 		_budget.StartDay = weekday.getSelectedItemPosition();
-		_budget.Amount = Integer.parseInt(amount.getText().toString());
+		
+		String amountString = amount.getText().toString();
+		amountString = amountString.trim();
+		if(amountString.isEmpty())
+		{
+			Toast.makeText(this, "You must enter an amount", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		try
+		{
+			_budget.Amount = Double.parseDouble(amount.getText().toString());
+		}
+		catch(Exception e)
+		{
+			Toast.makeText(this, "Amount must be a valid decimal number", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		
 		new Thread(new Runnable(){
 
@@ -92,13 +109,15 @@ public class NewBudgetActivity extends Activity {
 					{
 						API.EditBudget(_budget);
 						
+						Settings.setBudget(NewBudgetActivity.this, _budget);
+						
 						NewBudgetActivity.this.finish();
 					}
 					else
 					{
 						_budget = API.CreateBudget(_budget);
 						
-						Settings.setBudgetId(NewBudgetActivity.this, _budget.UniqueId);
+						Settings.setBudget(NewBudgetActivity.this, _budget);
 						
 						Intent i = new Intent(NewBudgetActivity.this, WeekActivity.class);
 						startActivity(i);
@@ -107,7 +126,7 @@ public class NewBudgetActivity extends Activity {
 					}
 					
 				} catch (Exception e) {
-					Settings.showToastOnUi(NewBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
+					Helpers.showToastOnUi(NewBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
 					e.printStackTrace();
 				}
 			}

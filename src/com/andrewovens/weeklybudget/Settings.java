@@ -1,5 +1,10 @@
 package com.andrewovens.weeklybudget;
 
+import java.util.Date;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,30 +12,59 @@ import android.widget.Toast;
 
 public class Settings {
 	public static final String SETTINGS_NAME = "WEEKLY_BUDGET_SETTINGS";
-	public static final String BUDGET_ID = "BUDGET_ID";
-	public static final String AMOUNT = "AMOUNT";
-	
-	public static String getBudgetId(Context cxt)
+	public static final String BUDGET = "BUDGET";
+	public static final String WATERMARK = "WATERMARK";
+	public static final String CURRENTID = "CURRENTID";
+
+	public static Budget getBudget(Context cxt)
 	{
 		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
-	    return settings.getString(BUDGET_ID, null);
+		String budgetString = settings.getString(BUDGET, null);
+
+		if(budgetString == null)
+			return null;
+
+		try {
+			return Budget.fromJson(new JSONObject(budgetString));
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
-	public static void setBudgetId(Context cxt, String id)
+	public static void setBudget(Context cxt, Budget b) throws JSONException
 	{
 		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
-	    editor.putString(BUDGET_ID, id);
-	    editor.commit();
+		editor.putString(BUDGET, b.toJson().toString());
+		editor.commit();
 	}
-	public static void showToastOnUi(final Activity a, final int resId, final int length)
+	
+	public static String getWatermark(Context cxt)
 	{
-		a.runOnUiThread(new Runnable(){
-
-			@Override
-			public void run() {
-				Toast.makeText(a, resId, length).show();
-			}
-			
-		});
+		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+		return settings.getString(WATERMARK, null);
+	}
+	public static void setWatermark(Context cxt, String watermark)
+	{
+		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString(WATERMARK, watermark);
+		editor.commit();
+	}
+	
+	public static long getNextId(Context cxt)
+	{
+		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+		long id = settings.getLong(CURRENTID, 1000000000000l);
+		setCurrentId(cxt, id + 1);
+		return id;
+	}
+	
+	private static void setCurrentId(Context cxt, long id)
+	{
+		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putLong(CURRENTID, id);
+		editor.commit();
 	}
 }

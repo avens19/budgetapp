@@ -55,11 +55,51 @@ public class API {
 	public static List<Expense> GetWeek(String id, int daysBackFromToday) throws IOException, JSONException, ParseException
 	{
 		Calendar calendar=Calendar.getInstance();
-		//subtract days
 		calendar.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);
 		Date d = calendar.getTime();
-		String date = getDateString(d);
+		String date = Dates.getDateString(d);
 		String urlString = baseUrl + "budget/" + id + "/Week/" + date;
+		URL url = new URL(urlString);
+		
+		String response = NetworkOperations.HttpGet(url);
+		
+		JSONArray responseArray = new JSONArray(response);
+		
+		List<Expense> expenses = new ArrayList<Expense>();
+		
+		for(int i = 0; i < responseArray.length(); i++)
+		{
+			JSONObject jo = responseArray.getJSONObject(i);
+			expenses.add(Expense.fromJson(jo));
+		}
+		
+		return expenses;
+	}
+	
+	public static List<Expense> GetExpenses(String id) throws IOException, JSONException, ParseException
+	{
+		String urlString = baseUrl + "budget/" + id + "/Expenses?watermark=null";
+		URL url = new URL(urlString);
+		
+		String response = NetworkOperations.HttpGet(url);
+		
+		JSONArray responseArray = new JSONArray(response);
+		
+		List<Expense> expenses = new ArrayList<Expense>();
+		
+		for(int i = 0; i < responseArray.length(); i++)
+		{
+			JSONObject jo = responseArray.getJSONObject(i);
+			expenses.add(Expense.fromJson(jo));
+		}
+		
+		return expenses;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static List<Expense> GetExpenses(String id, String dateWatermark) throws IOException, JSONException, ParseException
+	{
+		String urlString = baseUrl + "budget/" + id + "/Expenses?watermark=" + dateWatermark;
 		URL url = new URL(urlString);
 		
 		String response = NetworkOperations.HttpGet(url);
@@ -112,17 +152,5 @@ public class API {
 		JSONObject responseExpense = new JSONObject(response);
 		
 		return Expense.fromJson(responseExpense);
-	}
-	
-	public static String getDateString(Date date)
-	{
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-		return formatter.format(date);
-	}
-	
-	public static String getWeekDay(Date date)
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE");
-		return sdf.format(date);
 	}
 }

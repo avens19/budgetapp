@@ -16,6 +16,8 @@ public class Expense {
 	public String Description;
 	public double Amount;
 	public String BudgetId;
+	public String State;
+	public boolean IsDeleted;
 	
 	public Expense(){}
 	
@@ -36,6 +38,7 @@ public class Expense {
 		e.Description = jo.getString("Description");
 		e.Amount = jo.getDouble("Amount");
 		e.BudgetId = jo.getString("BudgetId");
+		e.IsDeleted = jo.optBoolean("IsDeleted", false);
 		return e;
 	}
 	

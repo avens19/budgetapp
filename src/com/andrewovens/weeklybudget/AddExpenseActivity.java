@@ -69,34 +69,64 @@ public class AddExpenseActivity extends Activity {
 	public void addButtonOnClick(View v)
 	{
 		final Expense e = new Expense();
-		if(_isEdit)
-			e.Id = _expense.Id;
-		
 		DatePicker dp = (DatePicker)findViewById(R.id.add_date);
 		e.Date = new GregorianCalendar(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime();
 		EditText description = (EditText)findViewById(R.id.add_description);
-		e.Description = description.getText().toString();
-		EditText amount = (EditText)findViewById(R.id.add_amount);
-		e.Amount = Double.parseDouble(amount.getText().toString());
-		e.BudgetId = Settings.getBudgetId(this);
 		
-		new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-				try {
-					if(!_isEdit)
-						API.AddExpense(e);
-					else
-						API.EditExpense(e);
-					AddExpenseActivity.this.finish();
-				} catch (Exception e) {
-					Settings.showToastOnUi(AddExpenseActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
-					e.printStackTrace();
-				}
+		String descriptionString = description.getText().toString();
+		descriptionString = descriptionString.trim();
+		
+		if(descriptionString.isEmpty())
+		{
+			Toast.makeText(this, "You must enter a description", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		e.Description = descriptionString;
+		EditText amount = (EditText)findViewById(R.id.add_amount);
+		String amountString = amount.getText().toString();
+		amountString = amountString.trim();
+		
+		if(amountString.isEmpty())
+		{
+			Toast.makeText(this, "You must enter an amount", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		try
+		{
+			e.Amount = Double.parseDouble(amountString);
+		}
+		catch(Exception ex)
+		{
+			Toast.makeText(this, "Amount must be a valid decimal number", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		e.BudgetId = Settings.getBudget(this).UniqueId;
+		
+		if(_isEdit)
+		{
+			e.Id = _expense.Id;
+			String state = DBHelper.GetExpense(e.Id).State;
+			
+			if(state.equals("created"))
+			{
+				DBHelper.EditExpense(e, "created");
+			}
+			else
+			{
+				DBHelper.EditExpense(e, "edited");
 			}
 			
-		}).start();
+		}
+		else
+		{
+			e.Id = Settings.getNextId(this);
+			
+			DBHelper.AddExpense(e, "created");
+		}
+		
+		this.finish();
 	}
 
 	@Override
