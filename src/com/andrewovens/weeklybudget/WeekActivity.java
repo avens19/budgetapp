@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -194,9 +195,15 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 					TextView r = (TextView)WeekActivity.this.findViewById(R.id.remaining);
 					double rounded = Math.round(remaining*100)/100.0;
 					if(rounded >= 0)
-						r.setText("Remaining: $" + rounded);
+					{
+						r.setText("Remaining: $" + Helpers.doubleString(rounded));
+						r.setTextColor(Color.BLACK);
+					}
 					else
-						r.setText("Over: $" + Math.abs(rounded));
+					{
+						r.setText("Over: $" + Helpers.doubleString(Math.abs(rounded)));
+						r.setTextColor(Color.RED);
+					}
 					ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
 					_adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
 					lv.setAdapter(_adapter);
@@ -450,7 +457,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			name.setText(list.get(position).Description);
 
 			TextView amount = (TextView)rowView.findViewById(R.id.week_row_amount);
-			amount.setText("$" + list.get(position).Amount);
+			amount.setText("$" + Helpers.doubleString(list.get(position).Amount));
 
 			return rowView;
 		}

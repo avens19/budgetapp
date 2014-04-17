@@ -19,6 +19,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -177,6 +178,13 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 		ListView lv = (ListView)MonthActivity.this.findViewById(R.id.month_list);
 		_adapter = new MonthRowAdapter(MonthActivity.this, R.layout.month_row, list);
 		lv.setAdapter(_adapter);
+		
+		View rowView = findViewById(R.id.month_total_row);
+		TextView total = (TextView)rowView.findViewById(R.id.month_total_row_total);
+		
+		double amount = DBHelper.GetTotalForMonth(_daysBackFromToday);
+		
+		total.setText("$" + Helpers.doubleString(amount));
 	}
 	
 	public void monthBackOnClick(View v)
@@ -308,7 +316,11 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 			day7.setText(current.get(Calendar.DAY_OF_MONTH)+"");
 
 			TextView total = (TextView)rowView.findViewById(R.id.month_row_total);
-			total.setText("$" + dt.Total);
+			total.setText("$" + Helpers.doubleString(dt.Total));
+			if(dt.Total > _budget.Amount)
+				total.setTextColor(Color.RED);
+			else
+				total.setTextColor(Color.BLACK);
 
 			return rowView;
 		}

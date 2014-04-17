@@ -190,6 +190,33 @@ public class DBHelper{
 		return list;
 	}
 	
+	public static double GetTotalForMonth(int daysBackFromToday)
+	{
+		Calendar start = Calendar.getInstance();
+		start.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);
+		while(start.get(Calendar.DAY_OF_MONTH) > 1)
+		{
+			start.add(Calendar.DAY_OF_YEAR, -1);
+		}
+		
+		Calendar end = (Calendar) start.clone();
+		end.add(Calendar.MONTH, 1);
+		
+		String startString = Dates.getDateString(start.getTime());
+    	String endString = Dates.getDateString(end.getTime());
+    	
+    	String[] columns = new String[]{"SUM(Amount)"};
+    	String where = "Date >= ? AND Date < ? AND State != ?";
+    	String[] whereArgs = new String[]{startString, endString, "deleted"};
+		
+		Cursor c = myDB.query(EXPENSESTABLENAME, columns, where, whereArgs,null,null, null);
+		c.moveToFirst();
+		
+		double total = c.getDouble(0);
+		
+		return total;
+	}
+	
 	public static List<DateTotal> GetTotalsForMonth(int daysBackFromToday, int startDay)
 	{
 		Calendar start = Calendar.getInstance();

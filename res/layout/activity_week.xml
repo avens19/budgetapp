@@ -55,7 +55,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/remaining"
-        android:layout_centerHorizontal="true" >
+        android:layout_centerHorizontal="true"
+        android:dividerHeight="0dp"
+		android:divider="@null" >
     </ListView>
 
 </RelativeLayout>

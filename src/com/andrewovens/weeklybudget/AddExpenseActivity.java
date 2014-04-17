@@ -45,7 +45,7 @@ public class AddExpenseActivity extends Activity {
 				EditText description = (EditText)findViewById(R.id.add_description);
 				description.setText(_expense.Description);
 				EditText amount = (EditText)findViewById(R.id.add_amount);
-				amount.setText(_expense.Amount + "");
+				amount.setText(Helpers.doubleString(_expense.Amount));
 				Button edit = (Button)findViewById(R.id.add_add_button);
 				edit.setText(R.string.edit_button);
 			}

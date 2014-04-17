@@ -35,7 +35,7 @@
         android:layout_alignRight="@id/label_new_amount"
         android:layout_below="@id/label_new_amount"
         android:imeOptions="actionDone"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:ems="10" />
     
     <TextView

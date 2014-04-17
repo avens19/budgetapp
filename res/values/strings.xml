@@ -43,5 +43,6 @@
     <string name="edit_budget_title">Edit Budget</string>
     <string name="title_activity_month">MonthActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="month_total_row_title">Total for month: </string>
 
 </resources>

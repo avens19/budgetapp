@@ -52,7 +52,7 @@ public class NewBudgetActivity extends Activity {
 				Button edit = (Button)findViewById(R.id.button_create_budget);
 				
 				weekday.setSelection(_budget.StartDay);
-				amount.setText(_budget.Amount + "");
+				amount.setText(Helpers.doubleString(_budget.Amount));
 				uniqueId.setText(_budget.UniqueId);
 				edit.setText(R.string.button_edit_budget);
 			}
