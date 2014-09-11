@@ -1,12 +1,7 @@
-package com.andrewovens.weeklybudget;
+package com.andrewovens.weeklybudget2;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.*;
-
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -65,7 +60,6 @@ public class AddExpenseActivity extends Activity {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void addButtonOnClick(View v)
 	{
 		final Expense e = new Expense();

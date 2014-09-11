@@ -1,7 +1,6 @@
-package com.andrewovens.weeklybudget;
+package com.andrewovens.weeklybudget2;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class DateTotal {
 	public Calendar Date;

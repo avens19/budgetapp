@@ -1,12 +1,10 @@
-package com.andrewovens.weeklybudget;
+package com.andrewovens.weeklybudget2;
 
 import android.annotation.SuppressLint;
 
 import java.io.IOException;
 import java.net.*;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.json.*;
@@ -96,7 +94,6 @@ public class API {
 		return expenses;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static List<Expense> GetExpenses(String id, String dateWatermark) throws IOException, JSONException, ParseException
 	{
 		String urlString = baseUrl + "budget/" + id + "/Expenses?watermark=" + dateWatermark;

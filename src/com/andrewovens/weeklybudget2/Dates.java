@@ -1,4 +1,4 @@
-package com.andrewovens.weeklybudget;
+package com.andrewovens.weeklybudget2;
 
 import java.text.DateFormat;
 import java.text.ParseException;
