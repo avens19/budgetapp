@@ -1,22 +1,13 @@
-package com.andrewovens.weeklybudget;
+package com.andrewovens.weeklybudget2;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import android.widget.AdapterView.OnItemClickListener;
-
 import org.json.JSONObject;
-
-import com.andrewovens.weeklybudget.WeekActivity.WeekRowAdapter;
-
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.os.Build;
 
 public class MonthActivity extends Activity implements OnNavigationListener {
 
@@ -184,7 +174,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 		
 		double amount = DBHelper.GetTotalForMonth(_daysBackFromToday);
 		
-		total.setText("$" + Helpers.doubleString(amount));
+		total.setText(Helpers.currencyString(amount));
 	}
 	
 	public void monthBackOnClick(View v)
@@ -288,7 +278,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowView = inflater.inflate(resourceID, parent, false);
+			View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
 			
 			DateTotal dt = list.get(position);
 			
@@ -316,7 +306,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 			day7.setText(current.get(Calendar.DAY_OF_MONTH)+"");
 
 			TextView total = (TextView)rowView.findViewById(R.id.month_row_total);
-			total.setText("$" + Helpers.doubleString(dt.Total));
+			total.setText(Helpers.currencyString(dt.Total));
 			if(dt.Total > _budget.Amount)
 				total.setTextColor(Color.RED);
 			else

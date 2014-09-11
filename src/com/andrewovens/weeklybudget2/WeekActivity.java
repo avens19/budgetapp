@@ -1,10 +1,10 @@
-package com.andrewovens.weeklybudget;
+package com.andrewovens.weeklybudget2;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.content.Context;
@@ -111,7 +111,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 		});
 	}
 
-	private String getPeriod()
+	@SuppressLint("SimpleDateFormat") private String getPeriod()
 	{
 		Calendar start = Calendar.getInstance();
 		start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
@@ -135,6 +135,14 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			Intent k = new Intent(this, FirstActivity.class);
 			startActivity(k);
 			this.finish();
+			return;
+		}
+		
+		if(this.getIntent().getBooleanExtra("ADD", false))
+		{
+			this.getIntent().putExtra("ADD", false);
+			Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
+			startActivity(i);
 			return;
 		}
 
@@ -196,12 +204,12 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 					double rounded = Math.round(remaining*100)/100.0;
 					if(rounded >= 0)
 					{
-						r.setText("Remaining: $" + Helpers.doubleString(rounded));
+						r.setText("Remaining: " + Helpers.currencyString(rounded));
 						r.setTextColor(Color.BLACK);
 					}
 					else
 					{
-						r.setText("Over: $" + Helpers.doubleString(Math.abs(rounded)));
+						r.setText("Over: " + Helpers.currencyString(Math.abs(rounded)));
 						r.setTextColor(Color.RED);
 					}
 					ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
@@ -295,11 +303,8 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 	
 	private void weekForward()
 	{
-		if(_daysBackFromToday > 0)
-		{
-			_daysBackFromToday -= 7;
-			loadData();
-		}
+		_daysBackFromToday -= 7;
+		loadData();
 	}
 
 	private void setUpOnLongClick()
@@ -448,7 +453,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowView = inflater.inflate(resourceID, parent, false);
+			View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
 
 			TextView day = (TextView)rowView.findViewById(R.id.week_row_day);
 			day.setText(Dates.getWeekDay(list.get(position).Date));
@@ -457,7 +462,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			name.setText(list.get(position).Description);
 
 			TextView amount = (TextView)rowView.findViewById(R.id.week_row_amount);
-			amount.setText("$" + Helpers.doubleString(list.get(position).Amount));
+			amount.setText(Helpers.currencyString(list.get(position).Amount));
 
 			return rowView;
 		}

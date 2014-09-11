@@ -1,14 +1,9 @@
-package com.andrewovens.weeklybudget;
-
-import java.util.Date;
+package com.andrewovens.weeklybudget2;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 public class Settings {
 	public static final String SETTINGS_NAME = "WEEKLY_BUDGET_SETTINGS";
