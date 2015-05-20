@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_week">Week</string>
+    <string name="title_month">Month</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add">+</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">New Budget</string>
+    <string name="label_start_day">Choose the day your weekly budget will start on</string>
+    <string name="button_new_budget">New Budget</string>
+    <string name="button_join_budget">Join Budget</string>
+
+    <string-array name="array_weekdays">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string name="title_activity_join_budget">Join Budget</string>
+    <string name="label_join_unique_id">Please enter the unique ID of the budget you wish to join</string>
+    <string name="button_go">Go</string>
+    <string name="label_new_amount">Enter the amount you would like to spend each week</string>
+    <string name="label_new_unique">Here is the unique ID for your budget. You may share it or use it to sync to a different device. Click to copy</string>
+    <string name="error_network">Cannot connect to the network</string>
+    <string name="title_activity_add_expense">Add Expense</string>
+    <string name="copied_unique_id">Copied unique ID to clipboard</string>
+    <string name="add_date">Date</string>
+    <string name="add_description">Description</string>
+    <string name="add_amount">Amount</string>
+    <string name="add_add">Add</string>
+    <string name="context_edit">Edit Expense</string>
+    <string name="context_delete">Delete Expense</string>
+    <string name="edit_expense_title">Edit Expense</string>
+    <string name="edit_button">Edit</string>
+    <string name="button_create_budget">Create Budget</string>
+    <string name="button_edit_budget">Edit Budget</string>
+    <string name="edit_budget_title">Edit Budget</string>
+    <string name="title_activity_month">MonthActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="month_total_row_title">Total for month: </string>
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_widget">Add widget</string>
+    <string name="title_activity_day">DayActivity</string>
+    <string name="label_budget_name">Give your budget a name</string>
+    <string name="current_budget">Current: </string>
+    <string name="title_activity_switch_budget">Switch Budget</string>
+    <string name="label_switch_budget">Pick the budget to switch to</string>
+    <string name="label_add_budget">Add another budget</string>
+</resources>
