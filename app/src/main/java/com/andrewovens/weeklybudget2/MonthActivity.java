@@ -276,7 +276,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
         		try
         		{
 		        	Intent i = new Intent(this, NewBudgetActivity.class);
-		        	i.putExtra("budget", _budget.toJson().toString());
+		        	i.putExtra("budget", _budget.toJson(false).toString());
 		        	startActivityForResult(i, EDIT_BUDGET);
         		}
         		catch(Exception e)

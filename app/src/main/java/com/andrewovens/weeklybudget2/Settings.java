@@ -10,7 +10,6 @@ public class Settings {
 	public static final String SETTINGS_NAME = "WEEKLY_BUDGET_SETTINGS";
 	public static final String BUDGET = "BUDGET";
 	public static final String BUDGETS = "BUDGETS";
-	public static final String WATERMARK = "WATERMARK";
 	public static final String CURRENTID = "CURRENTID";
 
 	public static Budget getBudget(Context cxt)
@@ -32,7 +31,7 @@ public class Settings {
 	{
 		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putString(BUDGET, b.toJson().toString());
+		editor.putString(BUDGET, b.toJson(false).toString());
 		editor.commit();
 	}
 
@@ -62,22 +61,9 @@ public class Settings {
 		SharedPreferences.Editor editor = settings.edit();
 		JSONArray array = new JSONArray();
 		for (Budget b : bs){
-			array.put(b.toJson().toString());
+			array.put(b.toJson(false).toString());
 		}
 		editor.putString(BUDGETS, array.toString());
-		editor.commit();
-	}
-	
-	public static String getWatermark(Context cxt)
-	{
-		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
-		return settings.getString(WATERMARK, null);
-	}
-	public static void setWatermark(Context cxt, String watermark)
-	{
-		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString(WATERMARK, watermark);
 		editor.commit();
 	}
 	

@@ -18,7 +18,7 @@ public class API {
 		String urlString = baseUrl + "budget";
 		URL url = new URL(urlString);
 		
-		JSONObject budget = b.toJson();
+		JSONObject budget = b.toJson(true);
 		String response = NetworkOperations.HttpPost(url, budget.toString());
 		
 		JSONObject responseBudget = new JSONObject(response);
@@ -31,7 +31,7 @@ public class API {
 		String urlString = baseUrl + "budget/" + b.UniqueId;
 		URL url = new URL(urlString);
 		
-		JSONObject budget = b.toJson();
+		JSONObject budget = b.toJson(true);
 		String response = NetworkOperations.HttpPost(url, budget.toString(), "PUT");
 		
 		if(!response.isEmpty())
