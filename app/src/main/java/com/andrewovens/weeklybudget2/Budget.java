@@ -1,5 +1,7 @@
 package com.andrewovens.weeklybudget2;
 
+import android.content.Context;
+
 import java.util.*;
 
 import org.json.*;
@@ -9,6 +11,7 @@ public class Budget {
 	public String UniqueId;
 	public int StartDay;
 	public double Amount;
+	public String Watermark;
 	
 	public Budget(boolean newBudget)
 	{
@@ -19,7 +22,7 @@ public class Budget {
 		}
 	}
 	
-	public JSONObject toJson() throws JSONException
+	public JSONObject toJson(boolean forServer) throws JSONException
 	{
 		JSONObject jo = new JSONObject();
         if(Name != null)
@@ -27,6 +30,10 @@ public class Budget {
 		jo.put("UniqueId", UniqueId);
 		jo.put("StartDay", StartDay);
 		jo.put("Amount", Amount);
+
+		if(!forServer)
+			jo.put("Watermark", Watermark);
+
 		return jo;
 	}
 	
@@ -37,6 +44,50 @@ public class Budget {
 		b.UniqueId = json.getString("UniqueId");
 		b.StartDay = json.getInt("StartDay");
 		b.Amount = json.getDouble("Amount");
+		b.Watermark = json.optString("Watermark");
 		return b;
 	}
+
+	public static Budget update(Budget original, Budget updated)
+	{
+		if(original == null)
+			return updated;
+
+		original.Amount = updated.Amount;
+		original.Name = updated.Name;
+		original.StartDay = updated.StartDay;
+		original.UniqueId = updated.UniqueId;
+		if(updated.Watermark != null)
+			original.Watermark = updated.Watermark;
+
+		return original;
+	}
+
+    public static void updateStoredBudget(Context c, Budget b)
+    {
+        try {
+            Settings.setBudget(c, b);
+
+            Budget[] budgets = Settings.getBudgets(c);
+            Budget[] newBudgets;
+            if (budgets != null) {
+                newBudgets = new Budget[budgets.length];
+                for (int i = 0; i < budgets.length; i++) {
+                    if (budgets[i].UniqueId.equals(b.UniqueId)) {
+                        newBudgets[i] = b;
+                    } else {
+                        newBudgets[i] = budgets[i];
+                    }
+                }
+            } else {
+                newBudgets = new Budget[1];
+                newBudgets[0] = b;
+            }
+
+            Settings.setBudgets(c, newBudgets);
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
+    }
 }

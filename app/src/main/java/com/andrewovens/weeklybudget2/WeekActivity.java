@@ -164,7 +164,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 						Settings.setBudgets(WeekActivity.this, bs);
 
-						_budget = budget;
+						_budget = Budget.update(_budget, budget);
 					} catch (Exception e) {
 						Helpers.showToastOnUi(WeekActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
 						e.printStackTrace();
@@ -193,12 +193,13 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			public void run() {
 				try
 				{
-					if(Settings.getWatermark(WeekActivity.this) == null)
+					if(_budget.Watermark == null)
 					{
 						_budget = Settings.getBudget(WeekActivity.this);
 						String d = Dates.UTCTimeString();
 						List<Expense> expenses = API.GetExpenses(_budget.UniqueId);
-						Settings.setWatermark(WeekActivity.this, d);
+						_budget.Watermark = d;
+						Budget.updateStoredBudget(WeekActivity.this, _budget);
 
 						for(Expense e : expenses)
 						{
@@ -272,7 +273,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 	public void SyncData() throws Exception
 	{
-		_budget = API.GetBudget(_budget.UniqueId);
+		_budget = Budget.update(_budget, API.GetBudget(_budget.UniqueId));
 		
 		Settings.setBudget(this, _budget);
 		
@@ -299,8 +300,9 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 		}
 
 		String d = Dates.UTCTimeString();
-		List<Expense> newExpenses = API.GetExpenses(_budget.UniqueId, Settings.getWatermark(WeekActivity.this));
-		Settings.setWatermark(WeekActivity.this, d);
+		List<Expense> newExpenses = API.GetExpenses(_budget.UniqueId, _budget.Watermark);
+		_budget.Watermark = d;
+		Budget.updateStoredBudget(WeekActivity.this, _budget);
 
 		for(Expense e : newExpenses)
 		{
@@ -450,7 +452,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 				try
 				{
 					Intent i = new Intent(this, NewBudgetActivity.class);
-					i.putExtra("budget", _budget.toJson().toString());
+					i.putExtra("budget", _budget.toJson(false).toString());
 					i.putExtra("days", _daysBackFromToday);
 					startActivityForResult(i, EDIT_BUDGET);
 				}
@@ -471,7 +473,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			try
 			{
 				Intent i = new Intent(this, MonthActivity.class);
-				i.putExtra("budget", _budget.toJson().toString());
+				i.putExtra("budget", _budget.toJson(false).toString());
 				i.putExtra("days", _daysBackFromToday);
 				startActivityForResult(i, MONTH_ACTIVITY);
 			}
