@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.andrewovens.weeklybudget2"
-    android:versionCode="5"
-    android:versionName="2.1.1" >
+    android:versionCode="6"
+    android:versionName="2.1.2" >
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -55,7 +55,7 @@
         </activity>
         <activity
             android:name=".AddExpenseActivity"
-            android:label="@string/title_activity_add_expense" >
+            android:label="@string/title_activity_add_expense">
         </activity>
         <activity
             android:name=".MonthActivity"
