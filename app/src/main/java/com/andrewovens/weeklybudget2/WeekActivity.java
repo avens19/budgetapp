@@ -7,6 +7,8 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActionBar;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -257,6 +259,12 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 					dates.setText(getPeriod());
 
 					this.notify();
+
+					Intent intent = new Intent(WeekActivity.this, AddExpenseWidget.class);
+					intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+					int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), AddExpenseWidget.class));
+					intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+					sendBroadcast(intent);
 				}
 			}
 		};
