@@ -1,20 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_bg" >
+    android:background="@drawable/rounded_bg_white" >
 
     <TextView
-        android:id="@+id/appwidget_text"
+        android:id="@+id/appwidget_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
+        android:layout_marginTop="3dp"
         android:background="#00ffffff"
         android:contentDescription="@string/add_expense_widget_text"
-        android:text="@string/add_expense_widget_text"
-        android:textColor="#ffffff"
-        android:textSize="48sp"
-        android:textStyle="bold" />
+        android:textColor="#000000"
+        android:textSize="12sp" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_bg" >
+
+        <TextView
+            android:id="@+id/appwidget_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-4dp"
+            android:background="#00ffffff"
+            android:contentDescription="@string/add_expense_widget_text"
+            android:text="@string/add_expense_widget_text"
+            android:textColor="#ffffff"
+            android:textSize="48sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
