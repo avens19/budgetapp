@@ -69,7 +69,7 @@
             android:layout_centerHorizontal="true"
             android:imeOptions="actionDone"
             android:ems="10"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal|numberSigned" />
 
         <Button
             android:id="@+id/add_add_button"
