@@ -40,14 +40,31 @@
         
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/remaining"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/week_info_wrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/current_week_layout"
-        android:padding="10dp"
-        android:textSize="20sp"
-        android:layout_alignParentRight="true" />
+        android:padding="10dp">
+        <ProgressBar
+            android:id="@+id/main_load"
+            style="@android:style/Widget.ProgressBar.Large"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:padding="10dp"
+            android:layout_alignParentLeft="true"
+            android:indeterminate="true"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/remaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/week_list"
@@ -55,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/remaining"
+        android:layout_below="@+id/week_info_wrapper"
         android:layout_centerHorizontal="true"
         android:dividerHeight="0dp"
 		android:divider="@null" >
