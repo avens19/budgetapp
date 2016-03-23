@@ -82,6 +82,21 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 		loadData();
 
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Looper.prepare();
+
+					SyncData();
+				} catch (Exception e) {
+					Helpers.showToastOnUi(WeekActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
+					e.printStackTrace();
+				}
+			}
+		}).start();
+
         this.invalidateOptionsMenu();
 	}
 
@@ -220,8 +235,6 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 					double remaining = _budget.Amount - total;
 
 					UpdateView(expenses, remaining);
-
-					SyncData();
 				}
 				catch(Exception e)
 				{
@@ -252,8 +265,13 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 						r.setTextColor(Color.RED);
 					}
 					ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
-					_adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
-					lv.setAdapter(_adapter);
+					if (_adapter == null) {
+						_adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
+						lv.setAdapter(_adapter);
+					} else {
+						_adapter.setList(expenses);
+						_adapter.notifyDataSetChanged();
+					}
 
 					TextView dates = (TextView)findViewById(R.id.current_week);
 					dates.setText(getPeriod());
@@ -281,54 +299,67 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 	public void SyncData() throws Exception
 	{
-		_budget = Budget.update(_budget, API.GetBudget(_budget.UniqueId));
-		
-		Settings.setBudget(this, _budget);
-		
-		List<Expense> expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "created");
-		for(Expense e : expenses)
-		{
-			Expense expense = API.AddExpense(e);
-			DBHelper.DeleteExpense(e);
-			DBHelper.AddExpense(expense, "synced");
-		}
+        final View spinner = findViewById(R.id.main_load);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                spinner.setVisibility(View.VISIBLE);
+            }
+        });
 
-		expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "edited");
-		for(Expense e : expenses)
-		{
-			API.EditExpense(e);
-			DBHelper.EditExpense(e, "synced");
-		}
+		try {
+			_budget = Budget.update(_budget, API.GetBudget(_budget.UniqueId));
 
-		expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "deleted");
-		for(Expense e : expenses)
-		{
-			API.DeleteExpense(e);
-			DBHelper.DeleteExpense(e);
-		}
+			Settings.setBudget(this, _budget);
 
-		String d = Dates.UTCTimeString();
-		List<Expense> newExpenses = API.GetExpenses(_budget.UniqueId, _budget.Watermark);
-		_budget.Watermark = d;
-		Budget.updateStoredBudget(WeekActivity.this, _budget);
-
-		for(Expense e : newExpenses)
-		{
-			if(!e.IsDeleted)
-				DBHelper.AddExpense(e, "synced");
-			else
+			List<Expense> expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "created");
+			for (Expense e : expenses) {
+				Expense expense = API.AddExpense(e);
 				DBHelper.DeleteExpense(e);
-		}
+				DBHelper.AddExpense(expense, "synced");
+			}
 
-		expenses = DBHelper.GetExpensesForWeek(_budget.UniqueId, _daysBackFromToday, _budget.StartDay);
-		double total = 0;
-		for(int i = 0;i < expenses.size(); i++)
-		{
-			total += expenses.get(i).Amount;
-		}
-		double remaining = _budget.Amount - total;
+			expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "edited");
+			for (Expense e : expenses) {
+				API.EditExpense(e);
+				DBHelper.EditExpense(e, "synced");
+			}
 
-		UpdateView(expenses, remaining);
+			expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "deleted");
+			for (Expense e : expenses) {
+				API.DeleteExpense(e);
+				DBHelper.DeleteExpense(e);
+			}
+
+			String d = Dates.UTCTimeString();
+			List<Expense> newExpenses = API.GetExpenses(_budget.UniqueId, _budget.Watermark);
+			_budget.Watermark = d;
+			Budget.updateStoredBudget(WeekActivity.this, _budget);
+
+			for (Expense e : newExpenses) {
+				if (!e.IsDeleted)
+					DBHelper.AddExpense(e, "synced");
+				else
+					DBHelper.DeleteExpense(e);
+			}
+
+			expenses = DBHelper.GetExpensesForWeek(_budget.UniqueId, _daysBackFromToday, _budget.StartDay);
+			double total = 0;
+			for (int i = 0; i < expenses.size(); i++) {
+				total += expenses.get(i).Amount;
+			}
+			double remaining = _budget.Amount - total;
+
+			UpdateView(expenses, remaining);
+		}
+		finally {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    spinner.setVisibility(View.INVISIBLE);
+                }
+            });
+		}
 	}
 
 	public void weekBackOnClick(View v)
@@ -518,24 +549,33 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
 
 			TextView day = (TextView)rowView.findViewById(R.id.week_row_day);
-			day.setText(Dates.getWeekDay(list.get(position).Date));
+			day.setText(Dates.getWeekDay(this.list.get(position).Date));
 
 			TextView name = (TextView)rowView.findViewById(R.id.week_row_name);
-			name.setText(list.get(position).Description);
+			name.setText(this.list.get(position).Description);
 
 			TextView amount = (TextView)rowView.findViewById(R.id.week_row_amount);
-			amount.setText(Helpers.currencyString(list.get(position).Amount));
+			amount.setText(Helpers.currencyString(this.list.get(position).Amount));
 
 			return rowView;
 		}
 
+        @Override
+        public int getCount() {
+            return this.list.size();
+        }
+
+		public void setList(List<Expense> newList) {
+			this.list = newList;
+		}
+
 		public Expense get(int position)
 		{
-			return list.get(position);
+			return this.list.get(position);
 		}
 
 	}
