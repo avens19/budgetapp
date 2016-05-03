@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.andrewovens.weeklybudget.WeekActivity" >
+
+    <item
+        android:id="@+id/category_context_rename"
+        android:title="@string/category_context_rename"/>
+
+    <item
+        android:id="@+id/category_context_delete"
+        android:title="@string/category_context_delete"/>
+
+</menu>

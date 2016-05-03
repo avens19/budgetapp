@@ -16,18 +16,14 @@ public class Expense {
 	public String Description;
 	public double Amount;
 	public String BudgetId;
+	public Long CategoryId;
 	public String State;
 	public boolean IsDeleted;
+	public boolean IsSystem;
 	
-	public Expense(){}
-	
-	public Expense(Date date, String description, double amount, String budgetId)
-	{
-		Date = date;
-		Description = description;
-		Amount = amount;
-		BudgetId = budgetId;
-	}
+	public Expense(){
+        IsSystem = false;
+    }
 	
 	public static Expense fromJson(JSONObject jo) throws ParseException, JSONException
 	{
@@ -38,7 +34,10 @@ public class Expense {
 		e.Description = jo.getString("Description");
 		e.Amount = jo.getDouble("Amount");
 		e.BudgetId = jo.getString("BudgetId");
+		long cat = jo.optLong("CategoryId", -1);
+		e.CategoryId = cat != -1 ? cat : null;
 		e.IsDeleted = jo.optBoolean("IsDeleted", false);
+		e.IsSystem = jo.optBoolean("IsSystem", false);
 		return e;
 	}
 	
@@ -51,6 +50,11 @@ public class Expense {
 		jo.put("Description", Description);
 		jo.put("Amount", Amount);
 		jo.put("BudgetId", BudgetId);
+		if(CategoryId != null)
+		{
+			jo.put("CategoryId", CategoryId);
+		}
+        jo.put("IsSystem", IsSystem);
 		return jo;
 	}
 	

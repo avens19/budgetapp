@@ -71,12 +71,42 @@
             android:ems="10"
             android:inputType="numberDecimal|numberSigned" />
 
+        <TextView
+            android:id="@+id/label_pick_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/add_amount"
+            android:layout_marginTop="10dp"
+            android:text="@string/label_pick_category" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/category_picker"
+            android:layout_below="@+id/label_pick_category"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:id="@+id/add_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/category_picker"
+            android:layout_centerHorizontal="true"
+            android:lines="1"
+            android:inputType="textCapSentences"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:ems="10"
+            android:visibility="gone" >
+        </EditText>
+
         <Button
             android:id="@+id/add_add_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/add_amount"
+            android:layout_below="@+id/add_category"
             android:layout_marginTop="10dp"
             android:text="@string/add_add"
             android:onClick="addButtonOnClick" />

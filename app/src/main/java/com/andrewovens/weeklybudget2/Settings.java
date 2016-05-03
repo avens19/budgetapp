@@ -11,6 +11,7 @@ public class Settings {
 	public static final String BUDGET = "BUDGET";
 	public static final String BUDGETS = "BUDGETS";
 	public static final String CURRENTID = "CURRENTID";
+	public static final String CURRENTCATEGORYID = "CURRENTCATEGORYID";
 
 	public static Budget getBudget(Context cxt)
 	{
@@ -74,12 +75,28 @@ public class Settings {
 		setCurrentId(cxt, id + 1);
 		return id;
 	}
-	
+
 	private static void setCurrentId(Context cxt, long id)
 	{
 		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putLong(CURRENTID, id);
+		editor.commit();
+	}
+
+	public static long getNextCategoryId(Context cxt)
+	{
+		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+		long id = settings.getLong(CURRENTCATEGORYID, 1000000000000l);
+		setCurrentCategoryId(cxt, id + 1);
+		return id;
+	}
+
+	private static void setCurrentCategoryId(Context cxt, long id)
+	{
+		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putLong(CURRENTCATEGORYID, id);
 		editor.commit();
 	}
 }

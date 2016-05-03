@@ -4,6 +4,9 @@
     <string name="app_name">Weekly Budget</string>
     <string name="title_week">Week</string>
     <string name="title_month">Month</string>
+    <string name="title_category_week">Categories (Week)</string>
+    <string name="title_category_month">Categories (Month)</string>
+    <string name="title_category">Edit Categories</string>
     <string name="action_settings">Settings</string>
     <string name="action_add">+</string>
     <string name="title_activity_first">Weekly Budget</string>
@@ -52,4 +55,16 @@
     <string name="title_activity_switch_budget">Switch Budget</string>
     <string name="label_switch_budget">Pick the budget to switch to</string>
     <string name="label_add_budget">Add another budget</string>
+    <string name="label_pick_category">Category (Optional)</string>
+    <string name="label_new_category">New Category...</string>
+    <string name="label_no_category">No Category</string>
+    <string name="uncategorized">Uncategorized</string>
+    <string name="category_context_rename">Rename Category</string>
+    <string name="category_context_delete">Delete Category</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="carry_balance">Carry Balance</string>
+    <string name="carry_balance_message">Transfer balance to next week?</string>
+    <string name="carry_balance_expense_description">Carried Balance</string>
+    <string name="already_carried">This week\'s balance has already been carried over</string>
 </resources>
