@@ -50,8 +50,11 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 						android.R.layout.simple_list_item_1,
 						android.R.id.text1,
 						new String[] {
-                                getString(R.string.title_week),
-                                getString(R.string.title_month),
+								getString(R.string.title_week),
+								getString(R.string.title_month),
+								getString(R.string.title_category_week),
+								getString(R.string.title_category_month),
+								getString(R.string.title_category),
 						}),
 						this);
 		
@@ -226,6 +229,9 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 		{
 			try
 			{
+				Intent i = new Intent();
+				i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_WEEK);
+				this.setResult(Activity.RESULT_OK, i);
 				this.finish();
 			}
 			catch(Exception e)
@@ -233,6 +239,48 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 				e.printStackTrace();
 			}
 		}
+		else if(position == 2)
+		{
+			try
+			{
+				Intent i = new Intent();
+				i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY_WEEK);
+				this.setResult(Activity.RESULT_OK, i);
+				this.finish();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else if(position == 3)
+		{
+			try
+			{
+				Intent i = new Intent();
+				i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY_MONTH);
+				this.setResult(Activity.RESULT_OK, i);
+				this.finish();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+        else if(position == 4)
+        {
+            try
+            {
+                Intent i = new Intent();
+                i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY);
+                this.setResult(Activity.RESULT_OK, i);
+                this.finish();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
 		return true;
 	}
 

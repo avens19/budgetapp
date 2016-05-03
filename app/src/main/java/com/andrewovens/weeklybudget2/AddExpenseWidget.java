@@ -50,7 +50,6 @@ public class AddExpenseWidget extends AppWidgetProvider {
 		views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
 
 		DBHelper.OpenDB(context);
-		DBHelper.CreateExpensesTable();
 
 		Budget _budget = Settings.getBudget(context);
 		if(_budget != null) {

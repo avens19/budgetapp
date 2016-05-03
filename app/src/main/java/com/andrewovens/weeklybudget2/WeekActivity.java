@@ -3,13 +3,17 @@ package com.andrewovens.weeklybudget2;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.view.MotionEvent;
@@ -34,13 +39,23 @@ import android.widget.Toast;
 public class WeekActivity extends Activity implements ActionBar.OnNavigationListener {
 
 	private Budget _budget;
-	private WeekRowAdapter _adapter;
 	private int _daysBackFromToday = 0;
 
-	private final int EDIT_BUDGET = 1;
-	private final int SWITCH_BUDGET = 2;
+	private static final int EDIT_BUDGET = 1;
+	private static final int SWITCH_BUDGET = 2;
 
-	private int MONTH_ACTIVITY = 101;
+	private static final int MONTH_ACTIVITY = 101;
+	private static final int CATEGORY_WEEK_ACTIVITY = 102;
+	private static final int CATEGORY_MONTH_ACTIVITY = 103;
+    private static final int CATEGORY_ACTIVITY = 104;
+
+	public static final String GOTO_ACTIVITY = "GOTO_ACTIVITY";
+
+	public static final int GOTO_WEEK = 200;
+	public static final int GOTO_MONTH = 201;
+	public static final int GOTO_CATEGORY_WEEK = 202;
+	public static final int GOTO_CATEGORY_MONTH = 203;
+    public static final int GOTO_CATEGORY = 204;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +77,9 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 						new String[]{
 								getString(R.string.title_week),
 								getString(R.string.title_month),
+								getString(R.string.title_category_week),
+								getString(R.string.title_category_month),
+								getString(R.string.title_category),
 						}),
 				this);
 
@@ -74,7 +92,6 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 		super.onResume();
 
 		DBHelper.OpenDB(this);
-		DBHelper.CreateExpensesTable();
 
 		ActionBar actionBar = getActionBar();
 
@@ -214,9 +231,15 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 					{
 						_budget = Settings.getBudget(WeekActivity.this);
 						String d = Dates.UTCTimeString();
-						List<Expense> expenses = API.GetExpenses(_budget.UniqueId);
+						List<Category> categories = API.GetCategories(_budget.UniqueId, "null");
+						List<Expense> expenses = API.GetExpenses(_budget.UniqueId, "null");
 						_budget.Watermark = d;
 						Budget.updateStoredBudget(WeekActivity.this, _budget);
+
+						for(Category c : categories)
+						{
+							DBHelper.AddCategory(c, "synced");
+						}
 
 						for(Expense e : expenses)
 						{
@@ -252,8 +275,8 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			public void run() {
 				synchronized(this)
 				{
-					TextView r = (TextView)WeekActivity.this.findViewById(R.id.remaining);
-					double rounded = Math.round(remaining*100)/100.0;
+                    Button r = (Button)WeekActivity.this.findViewById(R.id.remaining);
+					final double rounded = Math.round(remaining*100)/100.0;
 					if(rounded >= 0)
 					{
 						r.setText("Remaining: " + Helpers.currencyString(rounded));
@@ -264,13 +287,63 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 						r.setText("Over: " + Helpers.currencyString(Math.abs(rounded)));
 						r.setTextColor(Color.RED);
 					}
+                    r.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(DBHelper.SystemExpenseExistsForWeek(_budget.UniqueId, _daysBackFromToday - 7, _budget.StartDay))
+                            {
+                                Toast.makeText(WeekActivity.this, R.string.already_carried, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(WeekActivity.this);
+
+                            builder
+                                    .setTitle(R.string.carry_balance)
+                                    .setMessage(R.string.carry_balance_message)
+                                    .setCancelable(true)
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    })
+                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Calendar start=Calendar.getInstance();
+                                            start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+                                            while((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay)
+                                            {
+                                                start.add(Calendar.DAY_OF_YEAR, -1);
+                                            }
+                                            start.add(Calendar.DAY_OF_YEAR, 7);
+                                            Expense e = new Expense();
+                                            e.Amount = -rounded;
+                                            e.Date = new GregorianCalendar(start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH)).getTime();
+                                            e.BudgetId = _budget.UniqueId;
+                                            e.Id = Settings.getNextId(WeekActivity.this);
+                                            e.Description = getString(R.string.carry_balance_expense_description);
+                                            e.IsSystem = true;
+                                            DBHelper.AddExpense(e, "created");
+                                            loadData();
+                                            dialog.dismiss();
+                                        }
+                                    });
+
+                            Dialog d = builder.create();
+
+                            d.show();
+                        }
+                    });
 					ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
-					if (_adapter == null) {
-						_adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
-						lv.setAdapter(_adapter);
+					if (lv.getAdapter() == null) {
+						WeekRowAdapter adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
+						lv.setAdapter(adapter);
 					} else {
-						_adapter.setList(expenses);
-						_adapter.notifyDataSetChanged();
+                        ((WeekRowAdapter)lv.getAdapter()).clear();
+                        ((WeekRowAdapter)lv.getAdapter()).addAll(expenses);
+                        ((WeekRowAdapter)lv.getAdapter()).notifyDataSetChanged();
 					}
 
 					TextView dates = (TextView)findViewById(R.id.current_week);
@@ -307,10 +380,33 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
             }
         });
 
+		if(_budget == null)
+		{
+			return;
+		}
+
 		try {
 			_budget = Budget.update(_budget, API.GetBudget(_budget.UniqueId));
 
 			Settings.setBudget(this, _budget);
+
+			List<Category> categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, "created");
+			for (Category c : categories) {
+				Category category = API.AddCategory(c);
+				DBHelper.ReplaceCategory(c, category, "synced");
+			}
+
+			categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, "edited");
+			for (Category c : categories) {
+				API.EditCategory(c);
+				DBHelper.EditCategory(c, "synced");
+			}
+
+			categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, "deleted");
+			for (Category c : categories) {
+				Category category = API.DeleteCategory(c);
+				DBHelper.EditCategory(category, "synced");
+			}
 
 			List<Expense> expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "created");
 			for (Expense e : expenses) {
@@ -332,9 +428,14 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			}
 
 			String d = Dates.UTCTimeString();
+			List<Category> newCategories = API.GetCategories(_budget.UniqueId, _budget.Watermark);
 			List<Expense> newExpenses = API.GetExpenses(_budget.UniqueId, _budget.Watermark);
 			_budget.Watermark = d;
 			Budget.updateStoredBudget(WeekActivity.this, _budget);
+
+			for (Category c : newCategories) {
+				DBHelper.AddCategory(c, "synced");
+			}
 
 			for (Expense e : newExpenses) {
 				if (!e.IsDeleted)
@@ -391,7 +492,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				parent.setTag(parent.getItemAtPosition(position));
+				parent.setTag(parent.getAdapter().getItem(position));
 				WeekActivity.this.openContextMenu(parent);
 				return false;
 			}
@@ -408,8 +509,9 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+        ListView lv = (ListView)findViewById(R.id.week_list);
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-		Expense e = _adapter.get(info.position);
+		Expense e = (Expense)lv.getItemAtPosition(info.position);
 
 		try
 		{
@@ -509,74 +611,116 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 	public boolean onNavigationItemSelected(int position, long id) {
 		if(position == 1 && _budget != null)
 		{
-			try
-			{
-				Intent i = new Intent(this, MonthActivity.class);
-				i.putExtra("budget", _budget.toJson(false).toString());
-				i.putExtra("days", _daysBackFromToday);
-				startActivityForResult(i, MONTH_ACTIVITY);
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
+			gotoMonth();
 		}
+		else if(position == 2 && _budget != null)
+		{
+			gotoCategoryWeek();
+		}
+		else if(position == 3 && _budget != null)
+		{
+			gotoCategoryMonth();
+		}
+        else if(position == 4 && _budget != null)
+        {
+            gotoCategory();
+        }
 		return true;
 	}
+
+	private void gotoMonth()
+	{
+		try
+		{
+			Intent i = new Intent(this, MonthActivity.class);
+			i.putExtra("budget", _budget.toJson(false).toString());
+			i.putExtra("days", _daysBackFromToday);
+			startActivityForResult(i, MONTH_ACTIVITY);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void gotoCategoryWeek()
+	{
+		try
+		{
+			Intent i = new Intent(this, CategoryWeekActivity.class);
+			i.putExtra("budget", _budget.toJson(false).toString());
+			i.putExtra("days", _daysBackFromToday);
+			startActivityForResult(i, CATEGORY_WEEK_ACTIVITY);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void gotoCategoryMonth()
+	{
+		try
+		{
+			Intent i = new Intent(this, CategoryMonthActivity.class);
+			i.putExtra("budget", _budget.toJson(false).toString());
+			i.putExtra("days", _daysBackFromToday);
+			startActivityForResult(i, CATEGORY_MONTH_ACTIVITY);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+    private void gotoCategory()
+    {
+        try
+        {
+            Intent i = new Intent(this, CategoryActivity.class);
+            i.putExtra("budget", _budget.toJson(false).toString());
+            i.putExtra("days", _daysBackFromToday);
+            startActivityForResult(i, CATEGORY_ACTIVITY);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void gotoActivity(int go)
+    {
+        switch(go)
+        {
+            case GOTO_MONTH:
+                gotoMonth();
+                break;
+            case GOTO_CATEGORY_WEEK:
+                gotoCategoryWeek();
+                break;
+            case GOTO_CATEGORY_MONTH:
+                gotoCategoryMonth();
+                break;
+            case GOTO_CATEGORY:
+                gotoCategory();
+                break;
+        }
+    }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
-        if(requestCode == MONTH_ACTIVITY && resultCode == Activity.RESULT_OK)
-		{
-			_daysBackFromToday = data.getIntExtra("days", 0);
-			loadData();
-		}
-	}
-
-	public class WeekRowAdapter extends ArrayAdapter<Expense> {
-		private final Context context;
-		private final int resourceID;
-		private List<Expense> list;
-
-		public WeekRowAdapter(Context context, int resource, List<Expense> bah) {
-			super(context, resource, bah);
-
-			this.context = context;
-			this.resourceID = resource;
-			this.list = bah;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
-
-			TextView day = (TextView)rowView.findViewById(R.id.week_row_day);
-			day.setText(Dates.getWeekDay(this.list.get(position).Date));
-
-			TextView name = (TextView)rowView.findViewById(R.id.week_row_name);
-			name.setText(this.list.get(position).Description);
-
-			TextView amount = (TextView)rowView.findViewById(R.id.week_row_amount);
-			amount.setText(Helpers.currencyString(this.list.get(position).Amount));
-
-			return rowView;
-		}
-
-        @Override
-        public int getCount() {
-            return this.list.size();
+        int days = -1;
+        int activity = GOTO_WEEK;
+        if (data != null)
+        {
+            days = data.getIntExtra("days", -1);
+            activity = data.getIntExtra(GOTO_ACTIVITY, GOTO_WEEK);
         }
-
-		public void setList(List<Expense> newList) {
-			this.list = newList;
-		}
-
-		public Expense get(int position)
-		{
-			return this.list.get(position);
-		}
-
+        if (days != -1) {
+            _daysBackFromToday = data.getIntExtra("days", 0);
+        }
+        loadData();
+        gotoActivity(activity);
 	}
 }

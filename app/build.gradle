@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.andrewovens.weeklybudget2"
         minSdkVersion 16
-        targetSdkVersion 20
+        targetSdkVersion 19
     }
 
     buildTypes {
@@ -18,6 +18,11 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 }

@@ -73,45 +73,45 @@ public class API {
 		
 		return expenses;
 	}
-	
-	public static List<Expense> GetExpenses(String id) throws IOException, JSONException, ParseException
+
+    public static List<Expense> GetExpenses(String id, String watermarkString) throws IOException, JSONException, ParseException
+    {
+        String urlString = baseUrl + "budget/" + id + "/Expenses?watermark=" + watermarkString;
+        URL url = new URL(urlString);
+
+        String response = NetworkOperations.HttpGet(url);
+
+        JSONArray responseArray = new JSONArray(response);
+
+        List<Expense> expenses = new ArrayList<Expense>();
+
+        for(int i = 0; i < responseArray.length(); i++)
+        {
+            JSONObject jo = responseArray.getJSONObject(i);
+            expenses.add(Expense.fromJson(jo));
+        }
+
+        return expenses;
+    }
+
+	public static List<Category> GetCategories(String id, String watermarkString) throws IOException, JSONException, ParseException
 	{
-		String urlString = baseUrl + "budget/" + id + "/Expenses?watermark=null";
+		String urlString = baseUrl + "budget/" + id + "/Categories?watermark=" + watermarkString;
 		URL url = new URL(urlString);
-		
+
 		String response = NetworkOperations.HttpGet(url);
-		
+
 		JSONArray responseArray = new JSONArray(response);
-		
-		List<Expense> expenses = new ArrayList<Expense>();
-		
+
+		List<Category> categories = new ArrayList<Category>();
+
 		for(int i = 0; i < responseArray.length(); i++)
 		{
 			JSONObject jo = responseArray.getJSONObject(i);
-			expenses.add(Expense.fromJson(jo));
+			categories.add(Category.fromJson(jo));
 		}
-		
-		return expenses;
-	}
-	
-	public static List<Expense> GetExpenses(String id, String dateWatermark) throws IOException, JSONException, ParseException
-	{
-		String urlString = baseUrl + "budget/" + id + "/Expenses?watermark=" + dateWatermark;
-		URL url = new URL(urlString);
-		
-		String response = NetworkOperations.HttpGet(url);
-		
-		JSONArray responseArray = new JSONArray(response);
-		
-		List<Expense> expenses = new ArrayList<Expense>();
-		
-		for(int i = 0; i < responseArray.length(); i++)
-		{
-			JSONObject jo = responseArray.getJSONObject(i);
-			expenses.add(Expense.fromJson(jo));
-		}
-		
-		return expenses;
+
+		return categories;
 	}
 	
 	public static Expense AddExpense(Expense e) throws JSONException, IOException, ParseException
@@ -126,6 +126,19 @@ public class API {
 		
 		return Expense.fromJson(responseExpense);
 	}
+
+	public static Category AddCategory(Category c) throws JSONException, IOException, ParseException
+	{
+		String urlString = baseUrl + "categories";
+		URL url = new URL(urlString);
+
+		JSONObject expense = c.toJson();
+		String response = NetworkOperations.HttpPost(url, expense.toString());
+
+		JSONObject responseCategory = new JSONObject(response);
+
+		return Category.fromJson(responseCategory);
+	}
 	
 	public static void EditExpense(Expense e) throws Exception
 	{
@@ -138,6 +151,18 @@ public class API {
 		if(!response.isEmpty())
 			throw new Exception("Update failed!");
 	}
+
+    public static void EditCategory(Category c) throws Exception
+    {
+        String urlString = baseUrl + "categories/" + c.Id;
+        URL url = new URL(urlString);
+
+        JSONObject category = c.toJson();
+        String response = NetworkOperations.HttpPost(url, category.toString(), "PUT");
+
+        if(!response.isEmpty())
+            throw new Exception("Update failed!");
+    }
 	
 	public static Expense DeleteExpense(Expense e) throws JSONException, IOException, ParseException
 	{
@@ -149,5 +174,17 @@ public class API {
 		JSONObject responseExpense = new JSONObject(response);
 		
 		return Expense.fromJson(responseExpense);
+	}
+
+	public static Category DeleteCategory(Category c) throws JSONException, IOException, ParseException
+	{
+		String urlString = baseUrl + "categories/" + c.Id;
+		URL url = new URL(urlString);
+
+		String response = NetworkOperations.HttpGet(url, "DELETE");
+
+		JSONObject responseCategory = new JSONObject(response);
+
+		return Category.fromJson(responseCategory);
 	}
 }
