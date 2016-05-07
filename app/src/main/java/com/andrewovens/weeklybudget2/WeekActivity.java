@@ -238,13 +238,13 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 						for(Category c : categories)
 						{
-							DBHelper.AddCategory(c, "synced");
+							DBHelper.AddCategory(c, DBHelper.SYNCEDSTATEKEY);
 						}
 
 						for(Expense e : expenses)
 						{
 							if(!e.IsDeleted)
-								DBHelper.AddExpense(e, "synced");
+								DBHelper.AddExpense(e, DBHelper.SYNCEDSTATEKEY);
 						}
 					}
 
@@ -325,7 +325,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
                                             e.Id = Settings.getNextId(WeekActivity.this);
                                             e.Description = getString(R.string.carry_balance_expense_description);
                                             e.IsSystem = true;
-                                            DBHelper.AddExpense(e, "created");
+                                            DBHelper.AddExpense(e, DBHelper.CREATEDSTATEKEY);
                                             loadData();
                                             dialog.dismiss();
                                         }
@@ -390,38 +390,38 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 			Settings.setBudget(this, _budget);
 
-			List<Category> categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, "created");
+			List<Category> categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, DBHelper.CREATEDSTATEKEY);
 			for (Category c : categories) {
 				Category category = API.AddCategory(c);
-				DBHelper.ReplaceCategory(c, category, "synced");
+				DBHelper.ReplaceCategory(c, category, DBHelper.SYNCEDSTATEKEY);
 			}
 
-			categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, "edited");
+			categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, DBHelper.EDITEDSTATEKEY);
 			for (Category c : categories) {
 				API.EditCategory(c);
-				DBHelper.EditCategory(c, "synced");
+				DBHelper.EditCategory(c, DBHelper.SYNCEDSTATEKEY);
 			}
 
-			categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, "deleted");
+			categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, DBHelper.DELETEDSTATEKEY);
 			for (Category c : categories) {
 				Category category = API.DeleteCategory(c);
-				DBHelper.EditCategory(category, "synced");
+				DBHelper.EditCategory(category, DBHelper.SYNCEDSTATEKEY);
 			}
 
-			List<Expense> expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "created");
+			List<Expense> expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, DBHelper.CREATEDSTATEKEY);
 			for (Expense e : expenses) {
 				Expense expense = API.AddExpense(e);
 				DBHelper.DeleteExpense(e);
-				DBHelper.AddExpense(expense, "synced");
+				DBHelper.AddExpense(expense, DBHelper.SYNCEDSTATEKEY);
 			}
 
-			expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "edited");
+			expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, DBHelper.EDITEDSTATEKEY);
 			for (Expense e : expenses) {
 				API.EditExpense(e);
-				DBHelper.EditExpense(e, "synced");
+				DBHelper.EditExpense(e, DBHelper.SYNCEDSTATEKEY);
 			}
 
-			expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, "deleted");
+			expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, DBHelper.DELETEDSTATEKEY);
 			for (Expense e : expenses) {
 				API.DeleteExpense(e);
 				DBHelper.DeleteExpense(e);
@@ -434,12 +434,12 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			Budget.updateStoredBudget(WeekActivity.this, _budget);
 
 			for (Category c : newCategories) {
-				DBHelper.AddCategory(c, "synced");
+				DBHelper.AddCategory(c, DBHelper.SYNCEDSTATEKEY);
 			}
 
 			for (Expense e : newExpenses) {
 				if (!e.IsDeleted)
-					DBHelper.AddExpense(e, "synced");
+					DBHelper.AddExpense(e, DBHelper.SYNCEDSTATEKEY);
 				else
 					DBHelper.DeleteExpense(e);
 			}
@@ -537,10 +537,10 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 	private void deleteExpense(Expense e)
 	{
-		if(e.State.equals("created"))
+		if(e.State.equals(DBHelper.CREATEDSTATEKEY))
 			DBHelper.DeleteExpense(e);
 		else
-			DBHelper.EditExpense(e, "deleted");
+			DBHelper.EditExpense(e, DBHelper.DELETEDSTATEKEY);
 		loadData();
 	}
 

@@ -453,10 +453,10 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
 
     private void deleteExpense(Expense e)
     {
-        if(e.State.equals("created"))
+        if(e.State.equals(DBHelper.CREATEDSTATEKEY))
             DBHelper.DeleteExpense(e);
         else
-            DBHelper.EditExpense(e, "deleted");
+            DBHelper.EditExpense(e, DBHelper.DELETEDSTATEKEY);
         loadData();
     }
 }

@@ -311,7 +311,7 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
 
                     c.Name = categoryName;
 
-                    DBHelper.EditCategory(c, c.State == "created" ? "created" : "edited");
+                    DBHelper.EditCategory(c, c.State == DBHelper.CREATEDSTATEKEY ? DBHelper.CREATEDSTATEKEY : DBHelper.EDITEDSTATEKEY);
 
                     loadData();
                 }
@@ -341,7 +341,7 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
                     public void onClick(DialogInterface dialog, int which) {
                         c.IsDeleted = true;
 
-                        DBHelper.EditCategory(c, c.State == "created" ? "created" : "edited");
+                        DBHelper.EditCategory(c, c.State == DBHelper.CREATEDSTATEKEY ? DBHelper.CREATEDSTATEKEY : DBHelper.EDITEDSTATEKEY);
 
                         ListView lv = (ListView)findViewById(R.id.category_list);
 
