@@ -3,6 +3,9 @@ package com.andrewovens.weeklybudget2;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.widget.AdapterView.OnItemClickListener;
 import org.json.JSONObject;
 import android.app.ActionBar.OnNavigationListener;
@@ -26,6 +29,7 @@ import android.widget.TextView;
 public class MonthActivity extends Activity implements OnNavigationListener {
 
 	private Budget _budget;
+	private BroadcastReceiver _syncReceiver;
 	private int _daysBackFromToday;
 	private MonthRowAdapter _adapter;
 	
@@ -113,7 +117,28 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 				MonthActivity.this.setResult(Activity.RESULT_OK, i);
 				MonthActivity.this.finish();
 			}
-	});
+		});
+
+		IntentFilter syncFilter = new IntentFilter(SyncService.SYNCCOMPLETE);
+		_syncReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						loadData();
+					}
+				});
+			}
+		};
+		registerReceiver(_syncReceiver, syncFilter);
+	}
+
+	@Override
+	protected void onDestroy()
+	{
+		unregisterReceiver(_syncReceiver);
+		super.onDestroy();
 	}
 
 	@Override
@@ -126,6 +151,8 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 		loadData();
 
         this.invalidateOptionsMenu();
+
+		SyncService.startSync(this);
 	}
 	
 	private void setUpSwipe()
