@@ -166,7 +166,7 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
             c.Id = Settings.getNextCategoryId(this);
             c.IsDeleted = false;
 
-            DBHelper.AddCategory(c, "created");
+            DBHelper.AddCategory(c, DBHelper.CREATEDSTATEKEY);
         }
 
         if(c.Id != NONEITEMINDEX){
@@ -180,13 +180,13 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 			e.Id = _expense.Id;
 			String state = DBHelper.GetExpense(e.Id).State;
 			
-			if(state.equals("created"))
+			if(state.equals(DBHelper.CREATEDSTATEKEY))
 			{
-				DBHelper.EditExpense(e, "created");
+				DBHelper.EditExpense(e, DBHelper.CREATEDSTATEKEY);
 			}
 			else
 			{
-				DBHelper.EditExpense(e, "edited");
+				DBHelper.EditExpense(e, DBHelper.EDITEDSTATEKEY);
 			}
 			
 		}
@@ -194,7 +194,7 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 		{
 			e.Id = Settings.getNextId(this);
 			
-			DBHelper.AddExpense(e, "created");
+			DBHelper.AddExpense(e, DBHelper.CREATEDSTATEKEY);
 		}
 		
 		this.finish();
