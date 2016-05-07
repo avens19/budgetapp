@@ -2,8 +2,10 @@ package com.andrewovens.weeklybudget2;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -40,6 +42,7 @@ import java.util.Locale;
 public class CategoryMonthActivity extends Activity implements ActionBar.OnNavigationListener, ValueFormatter, OnChartValueSelectedListener {
 
     private Budget _budget;
+    private BroadcastReceiver _syncReceiver;
     private int _daysBackFromToday;
 
     private final int EDIT_BUDGET = 1;
@@ -97,6 +100,27 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
 
         NonScrollableListView lv = (NonScrollableListView)findViewById(R.id.category_month_expense_list);
         lv.setFocusable(false);
+
+        IntentFilter syncFilter = new IntentFilter(SyncService.SYNCCOMPLETE);
+        _syncReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadData();
+                    }
+                });
+            }
+        };
+        registerReceiver(_syncReceiver, syncFilter);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        unregisterReceiver(_syncReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -109,6 +133,8 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         loadData();
 
         this.invalidateOptionsMenu();
+
+        SyncService.startSync(this);
     }
 
     private void setUpSwipe()
@@ -458,5 +484,6 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         else
             DBHelper.EditExpense(e, DBHelper.DELETEDSTATEKEY);
         loadData();
+        SyncService.startSync(this);
     }
 }

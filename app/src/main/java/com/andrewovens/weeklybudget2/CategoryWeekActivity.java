@@ -3,7 +3,10 @@ package com.andrewovens.weeklybudget2;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -39,6 +42,7 @@ import java.util.Locale;
 public class CategoryWeekActivity extends Activity implements ActionBar.OnNavigationListener, ValueFormatter, OnChartValueSelectedListener {
 
     private Budget _budget;
+    private BroadcastReceiver _syncReceiver;
     private int _daysBackFromToday;
 
     private final int EDIT_BUDGET = 1;
@@ -96,6 +100,27 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
 
         NonScrollableListView lv = (NonScrollableListView)findViewById(R.id.category_week_expense_list);
         lv.setFocusable(false);
+
+        IntentFilter syncFilter = new IntentFilter(SyncService.SYNCCOMPLETE);
+        _syncReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadData();
+                    }
+                });
+            }
+        };
+        registerReceiver(_syncReceiver, syncFilter);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        unregisterReceiver(_syncReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -108,6 +133,8 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
         loadData();
 
         this.invalidateOptionsMenu();
+
+        SyncService.startSync(this);
     }
 
     private void setUpSwipe()
@@ -451,5 +478,6 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
         else
             DBHelper.EditExpense(e, DBHelper.DELETEDSTATEKEY);
         loadData();
+        SyncService.startSync(this);
     }
 }

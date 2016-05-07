@@ -4,8 +4,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -38,6 +41,7 @@ import java.util.Locale;
 public class CategoryActivity extends Activity implements ActionBar.OnNavigationListener {
 
     private Budget _budget;
+    private BroadcastReceiver _syncReceiver;
     private int _daysBackFromToday;
 
     private final int EDIT_BUDGET = 1;
@@ -83,6 +87,27 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
             this.finish();
             e.printStackTrace();
         }
+
+        IntentFilter syncFilter = new IntentFilter(SyncService.SYNCCOMPLETE);
+        _syncReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadData();
+                    }
+                });
+            }
+        };
+        registerReceiver(_syncReceiver, syncFilter);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        unregisterReceiver(_syncReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -95,6 +120,8 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
         loadData();
 
         this.invalidateOptionsMenu();
+
+        SyncService.startSync(this);
     }
 
     private void loadData()
@@ -115,7 +142,6 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
             CategoryAdapter a = (CategoryAdapter)lv.getAdapter();
             a.clear();
             a.addAll(list);
-            a.notifyDataSetInvalidated();
         }
     }
 
@@ -314,6 +340,8 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
                     DBHelper.EditCategory(c, c.State == DBHelper.CREATEDSTATEKEY ? DBHelper.CREATEDSTATEKEY : DBHelper.EDITEDSTATEKEY);
 
                     loadData();
+
+                    SyncService.startSync(CategoryActivity.this);
                 }
             })
             .setView(v);
@@ -346,6 +374,8 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
                         ListView lv = (ListView)findViewById(R.id.category_list);
 
                         ((CategoryAdapter)lv.getAdapter()).remove(c);
+
+                        SyncService.startSync(CategoryActivity.this);
                     }
                 });
 

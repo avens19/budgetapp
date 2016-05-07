@@ -11,10 +11,12 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Looper;
@@ -39,6 +41,7 @@ import android.widget.Toast;
 public class WeekActivity extends Activity implements ActionBar.OnNavigationListener {
 
 	private Budget _budget;
+    private BroadcastReceiver _syncReceiver;
 	private int _daysBackFromToday = 0;
 
 	private static final int EDIT_BUDGET = 1;
@@ -84,7 +87,35 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 				this);
 
 		setUpSwipe();
+        setUpOnLongClick();
+        ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
+        registerForContextMenu(lv);
+
+        IntentFilter syncFilter = new IntentFilter(SyncService.SYNCCOMPLETE);
+        _syncReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final View spinner = findViewById(R.id.main_load);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (spinner != null) {
+                            spinner.setVisibility(View.INVISIBLE);
+                        }
+                        loadData();
+                    }
+                });
+            }
+        };
+        registerReceiver(_syncReceiver, syncFilter);
 	}
+
+    @Override
+    protected void onDestroy()
+    {
+        unregisterReceiver(_syncReceiver);
+        super.onDestroy();
+    }
 
 	@Override
 	protected void onResume()
@@ -99,23 +130,16 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 		loadData();
 
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					Looper.prepare();
-
-					SyncData();
-				} catch (Exception e) {
-					Helpers.showToastOnUi(WeekActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
-					e.printStackTrace();
-				}
-			}
-		}).start();
+		startSync();
 
         this.invalidateOptionsMenu();
 	}
+
+    private void startSync(){
+        View spinner = findViewById(R.id.main_load);
+        spinner.setVisibility(View.VISIBLE);
+        SyncService.startSync(this);
+    }
 
 	private void setUpSwipe()
 	{
@@ -207,7 +231,8 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
 			}).start();
 		}
-		
+
+        // Check for open from widget
 		if(this.getIntent().getBooleanExtra("ADD", false))
 		{
 			this.getIntent().putExtra("ADD", false);
@@ -216,251 +241,93 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			return;
 		}
 
-		setUpOnLongClick();
+		List<Expense> expenses = DBHelper.GetExpensesForWeek(_budget.UniqueId, _daysBackFromToday, _budget.StartDay);
 
-		ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
-		registerForContextMenu(lv);
+        double total = 0;
+        for(int i = 0;i < expenses.size(); i++)
+        {
+            total += expenses.get(i).Amount;
+        }
+        double remaining = _budget.Amount - total;
 
-		new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-				try
-				{
-					if(_budget.Watermark == null)
-					{
-						_budget = Settings.getBudget(WeekActivity.this);
-						String d = Dates.UTCTimeString();
-						List<Category> categories = API.GetCategories(_budget.UniqueId, "null");
-						List<Expense> expenses = API.GetExpenses(_budget.UniqueId, "null");
-						_budget.Watermark = d;
-						Budget.updateStoredBudget(WeekActivity.this, _budget);
-
-						for(Category c : categories)
-						{
-							DBHelper.AddCategory(c, DBHelper.SYNCEDSTATEKEY);
-						}
-
-						for(Expense e : expenses)
-						{
-							if(!e.IsDeleted)
-								DBHelper.AddExpense(e, DBHelper.SYNCEDSTATEKEY);
-						}
-					}
-
-					List<Expense> expenses = DBHelper.GetExpensesForWeek(_budget.UniqueId, _daysBackFromToday, _budget.StartDay);
-
-					double total = 0;
-					for(int i = 0;i < expenses.size(); i++)
-					{
-						total += expenses.get(i).Amount;
-					}
-					double remaining = _budget.Amount - total;
-
-					UpdateView(expenses, remaining);
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-		}).start();
-	}
-
-	public void UpdateView(final List<Expense> expenses, final double remaining)
-	{
-		Runnable update = new Runnable(){
-			@Override
-			public void run() {
-				synchronized(this)
-				{
-                    Button r = (Button)WeekActivity.this.findViewById(R.id.remaining);
-					final double rounded = Math.round(remaining*100)/100.0;
-					if(rounded >= 0)
-					{
-						r.setText("Remaining: " + Helpers.currencyString(rounded));
-						r.setTextColor(Color.BLACK);
-					}
-					else
-					{
-						r.setText("Over: " + Helpers.currencyString(Math.abs(rounded)));
-						r.setTextColor(Color.RED);
-					}
-                    r.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(DBHelper.SystemExpenseExistsForWeek(_budget.UniqueId, _daysBackFromToday - 7, _budget.StartDay))
-                            {
-                                Toast.makeText(WeekActivity.this, R.string.already_carried, Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(WeekActivity.this);
-
-                            builder
-                                    .setTitle(R.string.carry_balance)
-                                    .setMessage(R.string.carry_balance_message)
-                                    .setCancelable(true)
-                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                        }
-                                    })
-                                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Calendar start=Calendar.getInstance();
-                                            start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
-                                            while((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay)
-                                            {
-                                                start.add(Calendar.DAY_OF_YEAR, -1);
-                                            }
-                                            start.add(Calendar.DAY_OF_YEAR, 7);
-                                            Expense e = new Expense();
-                                            e.Amount = -rounded;
-                                            e.Date = new GregorianCalendar(start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH)).getTime();
-                                            e.BudgetId = _budget.UniqueId;
-                                            e.Id = Settings.getNextId(WeekActivity.this);
-                                            e.Description = getString(R.string.carry_balance_expense_description);
-                                            e.IsSystem = true;
-                                            DBHelper.AddExpense(e, DBHelper.CREATEDSTATEKEY);
-                                            loadData();
-                                            dialog.dismiss();
-                                        }
-                                    });
-
-                            Dialog d = builder.create();
-
-                            d.show();
-                        }
-                    });
-					ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
-					if (lv.getAdapter() == null) {
-						WeekRowAdapter adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
-						lv.setAdapter(adapter);
-					} else {
-                        ((WeekRowAdapter)lv.getAdapter()).clear();
-                        ((WeekRowAdapter)lv.getAdapter()).addAll(expenses);
-                        ((WeekRowAdapter)lv.getAdapter()).notifyDataSetChanged();
-					}
-
-					TextView dates = (TextView)findViewById(R.id.current_week);
-					dates.setText(getPeriod());
-
-					this.notify();
-
-					Intent intent = new Intent(WeekActivity.this, AddExpenseWidget.class);
-					intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-					int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), AddExpenseWidget.class));
-					intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-					sendBroadcast(intent);
-				}
-			}
-		};
-		synchronized(update)
-		{
-			runOnUiThread(update);
-			try {
-				update.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void SyncData() throws Exception
-	{
-        final View spinner = findViewById(R.id.main_load);
-        runOnUiThread(new Runnable() {
+        Button r = (Button)WeekActivity.this.findViewById(R.id.remaining);
+        final double rounded = Math.round(remaining*100)/100.0;
+        if(rounded >= 0)
+        {
+            r.setText("Remaining: " + Helpers.currencyString(rounded));
+            r.setTextColor(Color.BLACK);
+        }
+        else
+        {
+            r.setText("Over: " + Helpers.currencyString(Math.abs(rounded)));
+            r.setTextColor(Color.RED);
+        }
+        r.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                spinner.setVisibility(View.VISIBLE);
+            public void onClick(View v) {
+                if(DBHelper.SystemExpenseExistsForWeek(_budget.UniqueId, _daysBackFromToday - 7, _budget.StartDay))
+                {
+                    Toast.makeText(WeekActivity.this, R.string.already_carried, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(WeekActivity.this);
+
+                builder
+                        .setTitle(R.string.carry_balance)
+                        .setMessage(R.string.carry_balance_message)
+                        .setCancelable(true)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Calendar start=Calendar.getInstance();
+                                start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+                                while((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay)
+                                {
+                                    start.add(Calendar.DAY_OF_YEAR, -1);
+                                }
+                                start.add(Calendar.DAY_OF_YEAR, 7);
+                                Expense e = new Expense();
+                                e.Amount = -rounded;
+                                e.Date = new GregorianCalendar(start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH)).getTime();
+                                e.BudgetId = _budget.UniqueId;
+                                e.Id = Settings.getNextId(WeekActivity.this);
+                                e.Description = getString(R.string.carry_balance_expense_description);
+                                e.IsSystem = true;
+                                DBHelper.AddExpense(e, DBHelper.CREATEDSTATEKEY);
+                                loadData();
+                                dialog.dismiss();
+                            }
+                        });
+
+                Dialog d = builder.create();
+
+                d.show();
             }
         });
+        ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
+        if (lv.getAdapter() == null) {
+            WeekRowAdapter adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
+            lv.setAdapter(adapter);
+        } else {
+            ((WeekRowAdapter)lv.getAdapter()).clear();
+            ((WeekRowAdapter)lv.getAdapter()).addAll(expenses);
+        }
 
-		if(_budget == null)
-		{
-			return;
-		}
+        TextView dates = (TextView)findViewById(R.id.current_week);
+        dates.setText(getPeriod());
 
-		try {
-			_budget = Budget.update(_budget, API.GetBudget(_budget.UniqueId));
-
-			Settings.setBudget(this, _budget);
-
-			List<Category> categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, DBHelper.CREATEDSTATEKEY);
-			for (Category c : categories) {
-				Category category = API.AddCategory(c);
-				DBHelper.ReplaceCategory(c, category, DBHelper.SYNCEDSTATEKEY);
-			}
-
-			categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, DBHelper.EDITEDSTATEKEY);
-			for (Category c : categories) {
-				API.EditCategory(c);
-				DBHelper.EditCategory(c, DBHelper.SYNCEDSTATEKEY);
-			}
-
-			categories = DBHelper.GetUnsyncedCategories(_budget.UniqueId, DBHelper.DELETEDSTATEKEY);
-			for (Category c : categories) {
-				Category category = API.DeleteCategory(c);
-				DBHelper.EditCategory(category, DBHelper.SYNCEDSTATEKEY);
-			}
-
-			List<Expense> expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, DBHelper.CREATEDSTATEKEY);
-			for (Expense e : expenses) {
-				Expense expense = API.AddExpense(e);
-				DBHelper.DeleteExpense(e);
-				DBHelper.AddExpense(expense, DBHelper.SYNCEDSTATEKEY);
-			}
-
-			expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, DBHelper.EDITEDSTATEKEY);
-			for (Expense e : expenses) {
-				API.EditExpense(e);
-				DBHelper.EditExpense(e, DBHelper.SYNCEDSTATEKEY);
-			}
-
-			expenses = DBHelper.GetUnsyncedExpenses(_budget.UniqueId, DBHelper.DELETEDSTATEKEY);
-			for (Expense e : expenses) {
-				API.DeleteExpense(e);
-				DBHelper.DeleteExpense(e);
-			}
-
-			String d = Dates.UTCTimeString();
-			List<Category> newCategories = API.GetCategories(_budget.UniqueId, _budget.Watermark);
-			List<Expense> newExpenses = API.GetExpenses(_budget.UniqueId, _budget.Watermark);
-			_budget.Watermark = d;
-			Budget.updateStoredBudget(WeekActivity.this, _budget);
-
-			for (Category c : newCategories) {
-				DBHelper.AddCategory(c, DBHelper.SYNCEDSTATEKEY);
-			}
-
-			for (Expense e : newExpenses) {
-				if (!e.IsDeleted)
-					DBHelper.AddExpense(e, DBHelper.SYNCEDSTATEKEY);
-				else
-					DBHelper.DeleteExpense(e);
-			}
-
-			expenses = DBHelper.GetExpensesForWeek(_budget.UniqueId, _daysBackFromToday, _budget.StartDay);
-			double total = 0;
-			for (int i = 0; i < expenses.size(); i++) {
-				total += expenses.get(i).Amount;
-			}
-			double remaining = _budget.Amount - total;
-
-			UpdateView(expenses, remaining);
-		}
-		finally {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    spinner.setVisibility(View.INVISIBLE);
-                }
-            });
-		}
+        Intent intent = new Intent(WeekActivity.this, AddExpenseWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int ids[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), AddExpenseWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
 	}
 
 	public void weekBackOnClick(View v)
@@ -542,6 +409,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 		else
 			DBHelper.EditExpense(e, DBHelper.DELETEDSTATEKEY);
 		loadData();
+        SyncService.startSync(this);
 	}
 
 	@Override

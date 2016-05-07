@@ -196,6 +196,8 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 			
 			DBHelper.AddExpense(e, DBHelper.CREATEDSTATEKEY);
 		}
+
+		SyncService.startSync(this);
 		
 		this.finish();
 	}
