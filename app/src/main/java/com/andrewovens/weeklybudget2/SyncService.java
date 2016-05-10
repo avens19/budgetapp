@@ -121,8 +121,6 @@ public class SyncService extends IntentService {
             // Restore interrupt status.
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            Toast.makeText(this, R.string.error_network, Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
         } finally {
             Intent i = new Intent(SYNCCOMPLETE);
             sendBroadcast(i);

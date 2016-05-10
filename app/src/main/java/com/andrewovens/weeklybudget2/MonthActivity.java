@@ -243,18 +243,15 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 	
 	private void monthForward()
 	{
-		if(_daysBackFromToday > 0)
-		{
-			Calendar now = Calendar.getInstance();
-			Calendar start = (Calendar) now.clone();
-			start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
-			start.add(Calendar.MONTH, 1);
-			_daysBackFromToday = (int) ((now.getTimeInMillis() - start.getTimeInMillis())/(24 * 60 * 60 * 1000));
-			if(_daysBackFromToday < 0)
-				_daysBackFromToday = 0;
-			
-			loadData();
-		}
+		Calendar now = Calendar.getInstance();
+		Calendar start = (Calendar) now.clone();
+		start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+		start.add(Calendar.MONTH, 1);
+		_daysBackFromToday = (int) ((now.getTimeInMillis() - start.getTimeInMillis())/(24 * 60 * 60 * 1000));
+		if(_daysBackFromToday < 0)
+			_daysBackFromToday = 0;
+
+		loadData();
 	}
 
 	@Override
