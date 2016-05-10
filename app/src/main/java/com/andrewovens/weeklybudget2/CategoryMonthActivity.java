@@ -199,7 +199,7 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         now.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
 
         TextView month = (TextView)findViewById(R.id.category_current_month);
-        month.setText(now.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US));
+        month.setText(now.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
 
         List<CategoryAmount> list = DBHelper.GetCategoryAmountsForMonth(_budget.UniqueId, _daysBackFromToday, this.getString(R.string.uncategorized));
 
