@@ -77,34 +77,6 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 			e.printStackTrace();
 		}
 		
-		int startDay = _budget.StartDay;
-		
-		View rowView = findViewById(R.id.month_headings);
-		
-		TextView day1 = (TextView)rowView.findViewById(R.id.month_row_day1);
-		day1.setText(Dates.getWeekDay(startDay));
-		startDay = (startDay + 1) % 7;
-		TextView day2 = (TextView)rowView.findViewById(R.id.month_row_day2);
-		day2.setText(Dates.getWeekDay(startDay));
-		startDay = (startDay + 1) % 7;
-		TextView day3 = (TextView)rowView.findViewById(R.id.month_row_day3);
-		day3.setText(Dates.getWeekDay(startDay));
-		startDay = (startDay + 1) % 7;
-		TextView day4 = (TextView)rowView.findViewById(R.id.month_row_day4);
-		day4.setText(Dates.getWeekDay(startDay));
-		startDay = (startDay + 1) % 7;
-		TextView day5 = (TextView)rowView.findViewById(R.id.month_row_day5);
-		day5.setText(Dates.getWeekDay(startDay));
-		startDay = (startDay + 1) % 7;
-		TextView day6 = (TextView)rowView.findViewById(R.id.month_row_day6);
-		day6.setText(Dates.getWeekDay(startDay));
-		startDay = (startDay + 1) % 7;
-		TextView day7 = (TextView)rowView.findViewById(R.id.month_row_day7);
-		day7.setText(Dates.getWeekDay(startDay));
-
-		TextView total = (TextView)rowView.findViewById(R.id.month_row_total);
-		total.setText("Total");
-		
 		ListView lv = (ListView)MonthActivity.this.findViewById(R.id.month_list);		
 		lv.setOnItemClickListener(new OnItemClickListener(){
 			@Override
@@ -145,6 +117,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 	protected void onResume()
 	{
 		super.onResume();
+
 		ActionBar actionBar = getActionBar();
 		actionBar.setSelectedNavigationItem(1);
 		
@@ -193,6 +166,40 @@ public class MonthActivity extends Activity implements OnNavigationListener {
 	private void loadData()
 	{
         _budget = Settings.getBudget(this);
+
+        int startDay = _budget.StartDay;
+
+        Calendar start = Calendar.getInstance();
+        while((start.get(Calendar.DAY_OF_WEEK) - 1) != startDay)
+        {
+            start.add(Calendar.DAY_OF_YEAR, -1);
+        }
+
+        View headingsRowView = findViewById(R.id.month_headings);
+
+        TextView day1 = (TextView)headingsRowView.findViewById(R.id.month_row_day1);
+        day1.setText(Dates.getWeekDay(start.getTime()));
+        start.add(Calendar.DAY_OF_YEAR, 1);
+        TextView day2 = (TextView)headingsRowView.findViewById(R.id.month_row_day2);
+        day2.setText(Dates.getWeekDay(start.getTime()));
+        start.add(Calendar.DAY_OF_YEAR, 1);
+        TextView day3 = (TextView)headingsRowView.findViewById(R.id.month_row_day3);
+        day3.setText(Dates.getWeekDay(start.getTime()));
+        start.add(Calendar.DAY_OF_YEAR, 1);
+        TextView day4 = (TextView)headingsRowView.findViewById(R.id.month_row_day4);
+        day4.setText(Dates.getWeekDay(start.getTime()));
+        start.add(Calendar.DAY_OF_YEAR, 1);
+        TextView day5 = (TextView)headingsRowView.findViewById(R.id.month_row_day5);
+        day5.setText(Dates.getWeekDay(start.getTime()));
+        start.add(Calendar.DAY_OF_YEAR, 1);
+        TextView day6 = (TextView)headingsRowView.findViewById(R.id.month_row_day6);
+        day6.setText(Dates.getWeekDay(start.getTime()));
+        start.add(Calendar.DAY_OF_YEAR, 1);
+        TextView day7 = (TextView)headingsRowView.findViewById(R.id.month_row_day7);
+        day7.setText(Dates.getWeekDay(start.getTime()));
+
+        TextView totalHeading = (TextView)headingsRowView.findViewById(R.id.month_row_total);
+        totalHeading.setText("Total");
 
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
