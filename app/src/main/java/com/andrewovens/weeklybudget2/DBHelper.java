@@ -1,13 +1,20 @@
 package com.andrewovens.weeklybudget2;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class DBHelper{
 
@@ -103,7 +110,7 @@ public class DBHelper{
         ContentValues cv = new ContentValues();
 
         cv.put("Id", e.Id);
-        cv.put("Date", Dates.getDateTimeString(e.Date));
+        cv.put("Date", getDateString(e.Date));
         cv.put("Description", e.Description);
         cv.put("Amount", e.Amount);
         cv.put("BudgetId", e.BudgetId);
@@ -205,7 +212,7 @@ public class DBHelper{
         {
             Expense e = new Expense();
             e.Id = c.getLong(0);
-            e.Date = Dates.getDate(c.getString(1));
+            e.Date = getDate(c.getString(1));
             e.Description = c.getString(2);
             e.Amount = c.getDouble(3);
             e.BudgetId = c.getString(4);
@@ -309,8 +316,8 @@ public class DBHelper{
         Calendar end = (Calendar) start.clone();
         end.add(Calendar.DAY_OF_YEAR, 7);
 
-        String startString = Dates.getDateString(start.getTime());
-        String endString = Dates.getDateString(end.getTime());
+        String startString = getDateString(start.getTime());
+        String endString = getDateString(end.getTime());
 
         return new String[]{startString, endString};
     }
@@ -327,8 +334,8 @@ public class DBHelper{
         Calendar end = (Calendar) start.clone();
         end.add(Calendar.MONTH, 1);
 
-        String startString = Dates.getDateString(start.getTime());
-        String endString = Dates.getDateString(end.getTime());
+        String startString = getDateString(start.getTime());
+        String endString = getDateString(end.getTime());
 
         return new String[]{startString, endString};
     }
@@ -464,8 +471,8 @@ public class DBHelper{
 			if(first)
 				first = false;
 			
-			String startString = Dates.getDateString(start.getTime());
-	    	String endString = Dates.getDateString(end.getTime());
+			String startString = getDateString(start.getTime());
+	    	String endString = getDateString(end.getTime());
 	    	
 	    	String[] columns = new String[]{"Amount"};
 	    	String where = "BudgetId = ? AND Date >= ? AND Date < ? AND State != ? AND IsSystem = 0";
@@ -505,5 +512,21 @@ public class DBHelper{
         Cursor c = myDB.rawQuery(query, args);
 
         return c.getCount() >= 1;
+    }
+
+    private static String getDateString(Date date)
+    {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        return formatter.format(date);
+    }
+    private static Date getDate(String date)
+    {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        try {
+            return formatter.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
     }
 }

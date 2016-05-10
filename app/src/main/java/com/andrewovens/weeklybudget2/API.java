@@ -49,30 +49,6 @@ public class API {
 		
 		return Budget.fromJson(responseBudget);
 	}
-	
-	public static List<Expense> GetWeek(String id, int daysBackFromToday) throws IOException, JSONException, ParseException
-	{
-		Calendar calendar=Calendar.getInstance();
-		calendar.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);
-		Date d = calendar.getTime();
-		String date = Dates.getDateString(d);
-		String urlString = baseUrl + "budget/" + id + "/Week/" + date;
-		URL url = new URL(urlString);
-		
-		String response = NetworkOperations.HttpGet(url);
-		
-		JSONArray responseArray = new JSONArray(response);
-		
-		List<Expense> expenses = new ArrayList<Expense>();
-		
-		for(int i = 0; i < responseArray.length(); i++)
-		{
-			JSONObject jo = responseArray.getJSONObject(i);
-			expenses.add(Expense.fromJson(jo));
-		}
-		
-		return expenses;
-	}
 
     public static List<Expense> GetExpenses(String id, String watermarkString) throws IOException, JSONException, ParseException
     {

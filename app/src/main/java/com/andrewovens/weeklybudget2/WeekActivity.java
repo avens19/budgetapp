@@ -184,8 +184,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 		}
 		Calendar end = (Calendar) start.clone();
 		end.add(Calendar.DAY_OF_YEAR, 6);
-		DateFormat df = new SimpleDateFormat("MM/dd");
-		return df.format(start.getTime()) + " - " + df.format(end.getTime());
+		return Dates.getShortDateString(this, start.getTime()) + " - " + Dates.getShortDateString(this, end.getTime());
 	}
 
 	private void loadData()
@@ -313,7 +312,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         });
         ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
         if (lv.getAdapter() == null) {
-            WeekRowAdapter adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
+            WeekRowAdapter adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses, DayType.DayOfWeek);
             lv.setAdapter(adapter);
         } else {
             ((WeekRowAdapter)lv.getAdapter()).clear();

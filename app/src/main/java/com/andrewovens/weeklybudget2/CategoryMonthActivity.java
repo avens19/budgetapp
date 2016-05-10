@@ -404,7 +404,7 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
 
         List<Expense> expenses = DBHelper.GetExpensesForCategoryForMonth(_budget.UniqueId, c.CategoryId != null ? c.CategoryId.toString() : null, _daysBackFromToday);
 
-        WeekRowAdapter aa = new WeekRowAdapter(this, R.layout.week_row, expenses);
+        WeekRowAdapter aa = new WeekRowAdapter(this, R.layout.week_row, expenses, DayType.DayOfMonth);
         lv.setAdapter(aa);
 
         lv.setVisibility(View.VISIBLE);

@@ -10,8 +10,12 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by andrew on 07/05/16.
@@ -97,7 +101,7 @@ public class SyncService extends IntentService {
                 }
             }
 
-            String d = Dates.UTCTimeString();
+            String d = UTCTimeString();
             List<Category> newCategories = API.GetCategories(budget.UniqueId, watermark);
             List<Expense> newExpenses = API.GetExpenses(budget.UniqueId, watermark);
             budget.Watermark = d;
@@ -124,5 +128,13 @@ public class SyncService extends IntentService {
             sendBroadcast(i);
             queuedIntents--;
         }
+    }
+
+    private static String UTCTimeString()
+    {
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        return dateFormatGmt.format(new Date());
     }
 }

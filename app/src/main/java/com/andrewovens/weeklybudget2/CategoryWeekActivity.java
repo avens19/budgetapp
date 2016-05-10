@@ -187,7 +187,7 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
         });
     }
 
-    @SuppressLint("SimpleDateFormat") private String getPeriod()
+    private String getPeriod()
     {
         Calendar start = Calendar.getInstance();
         start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
@@ -197,8 +197,7 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
         }
         Calendar end = (Calendar) start.clone();
         end.add(Calendar.DAY_OF_YEAR, 6);
-        DateFormat df = new SimpleDateFormat("MM/dd");
-        return df.format(start.getTime()) + " - " + df.format(end.getTime());
+        return Dates.getShortDateString(this, start.getTime()) + " - " + Dates.getShortDateString(this, end.getTime());
     }
 
     private void loadData()
@@ -398,7 +397,7 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
 
         List<Expense> expenses = DBHelper.GetExpensesForCategoryForWeek(_budget.UniqueId, c.CategoryId != null ? c.CategoryId.toString() : null, _daysBackFromToday, _budget.StartDay);
 
-        WeekRowAdapter aa = new WeekRowAdapter(this, R.layout.week_row, expenses);
+        WeekRowAdapter aa = new WeekRowAdapter(this, R.layout.week_row, expenses, DayType.DayOfWeek);
         lv.setAdapter(aa);
 
         lv.setVisibility(View.VISIBLE);

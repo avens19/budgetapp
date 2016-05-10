@@ -15,12 +15,14 @@ import java.util.List;
 public class WeekRowAdapter extends ArrayAdapter<Expense> {
     private final Context context;
     private final int resourceID;
+    private final DayType dayType;
 
-    public WeekRowAdapter(Context context, int resource, List<Expense> bah) {
+    public WeekRowAdapter(Context context, int resource, List<Expense> bah, DayType dayType) {
         super(context, resource, bah);
 
         this.context = context;
         this.resourceID = resource;
+        this.dayType = dayType;
     }
 
     @Override
@@ -29,7 +31,14 @@ public class WeekRowAdapter extends ArrayAdapter<Expense> {
         View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
 
         TextView day = (TextView)rowView.findViewById(R.id.week_row_day);
-        day.setText(Dates.getWeekDay(this.getItem(position).Date));
+        switch(dayType){
+            case DayOfWeek:
+                day.setText(Dates.getWeekDay(this.getItem(position).Date));
+                break;
+            case DayOfMonth:
+                day.setText(Dates.getDayOfMonth(this.getItem(position).Date));
+                break;
+        }
 
         TextView name = (TextView)rowView.findViewById(R.id.week_row_name);
         name.setText(this.getItem(position).Description);
