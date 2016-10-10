@@ -31,14 +31,7 @@ public class WeekRowAdapter extends ArrayAdapter<Expense> {
         View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
 
         TextView day = (TextView)rowView.findViewById(R.id.week_row_day);
-        switch(dayType){
-            case DayOfWeek:
-                day.setText(Dates.getWeekDay(this.getItem(position).Date));
-                break;
-            case DayOfMonth:
-                day.setText(Dates.getDayOfMonth(this.getItem(position).Date));
-                break;
-        }
+        day.setText(Dates.getWeekDay(this.getItem(position).Date) + "\n" + Dates.getDayOfMonth(this.getItem(position).Date));
 
         TextView name = (TextView)rowView.findViewById(R.id.week_row_name);
         name.setText(this.getItem(position).Description);

@@ -422,15 +422,6 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
     private void setUpOnLongClick()
     {
         ListView lv = (ListView)this.findViewById(R.id.category_week_expense_list);
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int position, long id) {
-                parent.setTag(parent.getItemAtPosition(position));
-                CategoryWeekActivity.this.openContextMenu(parent);
-                return false;
-            }
-        });
         registerForContextMenu(lv);
     }
 
@@ -438,6 +429,9 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        ListView lv = (ListView)v;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        lv.setTag(lv.getAdapter().getItem(info.position));
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.category_week_context, menu);
     }
