@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-public class AddExpenseActivity extends Activity implements AdapterView.OnItemSelectedListener {
+public class AddExpenseActivity extends Activity implements AdapterView.OnItemSelectedListener, DatePicker.OnDateChangedListener {
 	
 	private boolean _isEdit = false;
 	private Expense _expense;
@@ -30,6 +30,7 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 		Intent i = this.getIntent();
 		String expenseString = i.getStringExtra("expense");
 		DatePicker dp = (DatePicker)findViewById(R.id.add_date);
+		TextView dateLabel = (TextView)findViewById(R.id.label_add_date);
 		
 		if(expenseString != null)
 		{
@@ -42,7 +43,9 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 				int year = c.get(Calendar.YEAR);
 				int month = c.get(Calendar.MONTH);
 				int day = c.get(Calendar.DAY_OF_MONTH);
-				dp.init(year, month, day, null);
+				String dow = Dates.getLongWeekDay(_expense.Date);
+				dp.init(year, month, day, this);
+				dateLabel.setText(getString(R.string.add_date) + " (" + dow + ")");
 				this.setTitle(R.string.edit_expense_title);
 				EditText description = (EditText)findViewById(R.id.add_description);
 				description.setText(_expense.Description);
@@ -65,8 +68,9 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 			int year = c.get(Calendar.YEAR);
 			int month = c.get(Calendar.MONTH);
 			int day = c.get(Calendar.DAY_OF_MONTH);
-			
-			dp.init(year, month, day, null);
+			String dow = Dates.getLongWeekDay(c.getTime());
+			dateLabel.setText(getString(R.string.add_date) + " (" + dow + ")");
+			dp.init(year, month, day, this);
 		}
 	}
 
@@ -223,4 +227,12 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 
         addCategory.setVisibility(View.GONE);
     }
+
+	@Override
+	public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
+		Date d = new GregorianCalendar(year, month, day).getTime();
+		TextView dateLabel = (TextView)findViewById(R.id.label_add_date);
+		String dow = Dates.getLongWeekDay(d);
+		dateLabel.setText(getString(R.string.add_date) + " (" + dow + ")");
+	}
 }

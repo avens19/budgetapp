@@ -262,15 +262,6 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
     private void setUpOnLongClick()
     {
         ListView lv = (ListView)this.findViewById(R.id.category_list);
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int position, long id) {
-                parent.setTag(parent.getItemAtPosition(position));
-                CategoryActivity.this.openContextMenu(parent);
-                return false;
-            }
-        });
         registerForContextMenu(lv);
     }
 
@@ -278,6 +269,9 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        ListView lv = (ListView)v;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        lv.setTag(lv.getAdapter().getItem(info.position));
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.category_context, menu);
     }

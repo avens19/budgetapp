@@ -10,10 +10,10 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="-1dp"
         android:gravity="center_vertical"
-        android:padding="10dp"
+        android:padding="8dp"
 	    android:layout_alignParentLeft="true"
-        android:background="@drawable/border" />
-	
+        android:background="@drawable/border"/>
+
 	<TextView
 	    android:id="@+id/week_row_name"
 	    android:layout_width="wrap_content"

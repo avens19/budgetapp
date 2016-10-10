@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/label_add_date"
             android:layout_centerHorizontal="true"
-            android:calendarViewShown="false" />
+            android:calendarViewShown="false"/>
 
         <TextView
             android:id="@+id/label_add_description"

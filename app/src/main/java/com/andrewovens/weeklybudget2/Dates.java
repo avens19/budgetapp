@@ -18,6 +18,12 @@ public class Dates {
 		return sdf.format(date);
 	}
 
+    public static String getLongWeekDay(Date date)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("E", Locale.getDefault());
+        return sdf.format(date);
+    }
+
     public static String getDayOfMonth(Date date){
         DateFormat formatter = new SimpleDateFormat("d", Locale.getDefault());
         return formatter.format(date);

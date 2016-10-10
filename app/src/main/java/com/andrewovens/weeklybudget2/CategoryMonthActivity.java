@@ -429,15 +429,6 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
     private void setUpOnLongClick()
     {
         ListView lv = (ListView)this.findViewById(R.id.category_month_expense_list);
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int position, long id) {
-                parent.setTag(parent.getItemAtPosition(position));
-                CategoryMonthActivity.this.openContextMenu(parent);
-                return false;
-            }
-        });
         registerForContextMenu(lv);
     }
 
@@ -445,6 +436,9 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        ListView lv = (ListView)v;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        lv.setTag(lv.getAdapter().getItem(info.position));
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.week_context, menu);
     }

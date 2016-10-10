@@ -87,7 +87,6 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 				this);
 
 		setUpSwipe();
-        setUpOnLongClick();
         ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
         registerForContextMenu(lv);
 
@@ -351,24 +350,13 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 		loadData();
 	}
 
-	private void setUpOnLongClick()
-	{
-		ListView lv = (ListView)WeekActivity.this.findViewById(R.id.week_list);
-		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				parent.setTag(parent.getAdapter().getItem(position));
-				WeekActivity.this.openContextMenu(parent);
-				return false;
-			}
-		});
-	}
-
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
+		ListView lv = (ListView)v;
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+		lv.setTag(lv.getAdapter().getItem(info.position));
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.week_context, menu);
 	}
