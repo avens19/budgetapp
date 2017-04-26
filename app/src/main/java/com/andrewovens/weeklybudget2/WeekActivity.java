@@ -379,6 +379,9 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			case R.id.context_delete:
 				deleteExpense(e);
 				break;
+			case R.id.context_copy:
+				copyExpense(e);
+				break;
 			}
 		}
 		catch(Exception ex)
@@ -397,6 +400,27 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 			DBHelper.EditExpense(e, DBHelper.DELETEDSTATEKEY);
 		loadData();
         SyncService.startSync(this);
+	}
+
+	private void copyExpense(Expense e)
+	{
+		Calendar start=Calendar.getInstance();
+		start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+		while((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay)
+		{
+			start.add(Calendar.DAY_OF_YEAR, -1);
+		}
+		start.add(Calendar.DAY_OF_YEAR, 7);
+		Expense ex = new Expense();
+		ex.Amount = e.Amount;
+		ex.Date = new GregorianCalendar(start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH)).getTime();
+		ex.BudgetId = _budget.UniqueId;
+		ex.Id = Settings.getNextId(WeekActivity.this);
+		ex.Description = e.Description;
+		ex.CategoryId = e.CategoryId;
+		DBHelper.AddExpense(ex, DBHelper.CREATEDSTATEKEY);
+		loadData();
+		SyncService.startSync(this);
 	}
 
 	@Override

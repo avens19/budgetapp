@@ -11,4 +11,8 @@
         android:id="@+id/context_delete"
         android:title="@string/context_delete"/>
 
+    <item
+        android:id="@+id/context_copy"
+        android:title="@string/context_copy"/>
+
 </menu>
