@@ -30,7 +30,9 @@ public class FirstActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
-		if(resultCode == Activity.RESULT_OK)
+		if(resultCode == Activity.RESULT_OK) {
+			this.setResult(RESULT_OK);
 			this.finish();
+		}
 	}
 }

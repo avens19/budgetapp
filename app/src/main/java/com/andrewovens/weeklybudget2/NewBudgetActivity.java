@@ -158,9 +158,7 @@ public class NewBudgetActivity extends Activity {
                         }
 
                         Settings.setBudgets(NewBudgetActivity.this, newBudgets);
-						
-						Intent i = new Intent(NewBudgetActivity.this, WeekActivity.class);
-						startActivity(i);
+
 						NewBudgetActivity.this.setResult(RESULT_OK);
 						NewBudgetActivity.this.finish();
 					}

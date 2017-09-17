@@ -32,7 +32,7 @@ public class Settings {
 	{
 		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putString(BUDGET, b.toJson(false).toString());
+		editor.putString(BUDGET, b != null ? b.toJson(false).toString() : null);
 		editor.commit();
 	}
 
@@ -60,11 +60,15 @@ public class Settings {
 	{
 		SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
-		JSONArray array = new JSONArray();
-		for (Budget b : bs){
-			array.put(b.toJson(false).toString());
+		if (bs != null) {
+			JSONArray array = new JSONArray();
+			for (Budget b : bs) {
+				array.put(b.toJson(false).toString());
+			}
+			editor.putString(BUDGETS, array.toString());
+		} else {
+			editor.putString(BUDGETS, null);
 		}
-		editor.putString(BUDGETS, array.toString());
 		editor.commit();
 	}
 	
