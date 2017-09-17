@@ -68,4 +68,5 @@
     <string name="carry_balance_message">Transfer balance to next week?</string>
     <string name="carry_balance_expense_description">Carried Balance</string>
     <string name="already_carried">This week\'s balance has already been carried over</string>
+    <string name="context_remove_budget">Remove Budget</string>
 </resources>

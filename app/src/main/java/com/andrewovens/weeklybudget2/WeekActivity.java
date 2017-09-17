@@ -51,6 +51,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 	private static final int CATEGORY_WEEK_ACTIVITY = 102;
 	private static final int CATEGORY_MONTH_ACTIVITY = 103;
     private static final int CATEGORY_ACTIVITY = 104;
+	private static final int FIRST_ACTIVITY = 105;
 
 	public static final String GOTO_ACTIVITY = "GOTO_ACTIVITY";
 
@@ -101,7 +102,6 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
                         if (spinner != null) {
                             spinner.setVisibility(View.INVISIBLE);
                         }
-                        loadData();
                     }
                 });
             }
@@ -194,8 +194,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 		if(_budget == null)
 		{
 			Intent k = new Intent(this, FirstActivity.class);
-			startActivity(k);
-			this.finish();
+			startActivityForResult(k, FIRST_ACTIVITY);
 			return;
 		}
 
@@ -589,6 +588,11 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
+		if (requestCode == FIRST_ACTIVITY && resultCode != Activity.RESULT_OK) {
+			this.finish();
+			return;
+		}
+
         int days = -1;
         int activity = GOTO_WEEK;
         if (data != null)
@@ -599,7 +603,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         if (days != -1) {
             _daysBackFromToday = data.getIntExtra("days", 0);
         }
-        loadData();
+
         gotoActivity(activity);
 	}
 }

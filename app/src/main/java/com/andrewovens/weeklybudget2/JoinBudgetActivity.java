@@ -51,9 +51,7 @@ public class JoinBudgetActivity extends Activity {
                     }
 
                     Settings.setBudgets(JoinBudgetActivity.this, newBudgets);
-					
-					Intent i = new Intent(JoinBudgetActivity.this, WeekActivity.class);
-					startActivity(i);
+
 					JoinBudgetActivity.this.setResult(RESULT_OK);
 					JoinBudgetActivity.this.finish();
 					
