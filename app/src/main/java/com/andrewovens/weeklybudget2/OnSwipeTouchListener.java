@@ -1,5 +1,6 @@
 package com.andrewovens.weeklybudget2;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -8,9 +9,9 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 public class OnSwipeTouchListener implements OnTouchListener {
-	protected final GestureDetector gestureDetector;
+    final GestureDetector gestureDetector;
 
-    public OnSwipeTouchListener (Context ctx){
+    OnSwipeTouchListener(Context ctx) {
         gestureDetector = new GestureDetector(ctx, new GestureListener());
     }
 
@@ -26,7 +27,6 @@ public class OnSwipeTouchListener implements OnTouchListener {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            boolean result = false;
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
@@ -38,19 +38,11 @@ public class OnSwipeTouchListener implements OnTouchListener {
                             onSwipeLeft();
                         }
                     }
-                } else {
-                    if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffY > 0) {
-                            onSwipeBottom();
-                        } else {
-                            onSwipeTop();
-                        }
-                    }
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-            return result;
+            return false;
         }
     }
 
@@ -60,14 +52,9 @@ public class OnSwipeTouchListener implements OnTouchListener {
     public void onSwipeLeft() {
     }
 
-    public void onSwipeTop() {
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return true;
     }
-
-    public void onSwipeBottom() {
-    }
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		return true;
-	}
 }

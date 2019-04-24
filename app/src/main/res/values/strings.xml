@@ -33,7 +33,7 @@
     <string name="error_network">Cannot connect to the network</string>
     <string name="title_activity_add_expense">Add Expense</string>
     <string name="copied_unique_id">Copied unique ID to clipboard</string>
-    <string name="add_date">Date</string>
+    <string name="add_date">Date (%1$s)</string>
     <string name="add_description">Description</string>
     <string name="add_amount">Amount</string>
     <string name="add_add">Add</string>
@@ -69,4 +69,8 @@
     <string name="carry_balance_expense_description">Carried Balance</string>
     <string name="already_carried">This week\'s balance has already been carried over</string>
     <string name="context_remove_budget">Remove Budget</string>
+    <string name="month_activity_total">Total</string>
+    <string name="week_activity_amount_remaining">Remaining: %1$s</string>
+    <string name="week_activity_amount_over">Over: %1$s</string>
+    <string name="two_string_newline">%1$s\n%2$s</string>
 </resources>

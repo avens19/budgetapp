@@ -7,64 +7,58 @@ import java.util.*;
 import org.json.*;
 
 public class Budget {
-	public String Name;
-	public String UniqueId;
-	public int StartDay;
-	public double Amount;
-	public String Watermark;
-	
-	public Budget(boolean newBudget)
-	{
-		if(newBudget)
-		{
-			UUID uniqueId = UUID.randomUUID();
-			UniqueId = uniqueId.toString();
-		}
-	}
-	
-	public JSONObject toJson(boolean forServer) throws JSONException
-	{
-		JSONObject jo = new JSONObject();
-        if(Name != null)
-		    jo.put("Name", Name);
-		jo.put("UniqueId", UniqueId);
-		jo.put("StartDay", StartDay);
-		jo.put("Amount", Amount);
+    public String Name;
+    public String UniqueId;
+    public double Amount;
+    int StartDay;
+    String Watermark;
 
-		if(!forServer)
-			jo.put("Watermark", Watermark);
+    public Budget(boolean newBudget) {
+        if (newBudget) {
+            UUID uniqueId = UUID.randomUUID();
+            UniqueId = uniqueId.toString();
+        }
+    }
 
-		return jo;
-	}
-	
-	public static Budget fromJson(JSONObject json) throws JSONException
-	{
-		Budget b = new Budget(false);
-		b.Name = json.optString("Name");
-		b.UniqueId = json.getString("UniqueId");
-		b.StartDay = json.getInt("StartDay");
-		b.Amount = json.getDouble("Amount");
-		b.Watermark = json.optString("Watermark");
-		return b;
-	}
+    public JSONObject toJson(boolean forServer) throws JSONException {
+        JSONObject jo = new JSONObject();
+        if (Name != null)
+            jo.put("Name", Name);
+        jo.put("UniqueId", UniqueId);
+        jo.put("StartDay", StartDay);
+        jo.put("Amount", Amount);
 
-	public static Budget update(Budget original, Budget updated)
-	{
-		if(original == null)
-			return updated;
+        if (!forServer)
+            jo.put("Watermark", Watermark);
 
-		original.Amount = updated.Amount;
-		original.Name = updated.Name;
-		original.StartDay = updated.StartDay;
-		original.UniqueId = updated.UniqueId;
-		if(updated.Watermark != null)
-			original.Watermark = updated.Watermark;
+        return jo;
+    }
 
-		return original;
-	}
+    public static Budget fromJson(JSONObject json) throws JSONException {
+        Budget b = new Budget(false);
+        b.Name = json.optString("Name");
+        b.UniqueId = json.getString("UniqueId");
+        b.StartDay = json.getInt("StartDay");
+        b.Amount = json.getDouble("Amount");
+        b.Watermark = json.optString("Watermark");
+        return b;
+    }
 
-    public static void updateStoredBudget(Context c, Budget b)
-    {
+    static Budget update(Budget original, Budget updated) {
+        if (original == null)
+            return updated;
+
+        original.Amount = updated.Amount;
+        original.Name = updated.Name;
+        original.StartDay = updated.StartDay;
+        original.UniqueId = updated.UniqueId;
+        if (updated.Watermark != null)
+            original.Watermark = updated.Watermark;
+
+        return original;
+    }
+
+    static void updateStoredBudget(Context c, Budget b) {
         try {
             Settings.setBudget(c, b);
 
@@ -85,8 +79,7 @@ public class Budget {
             }
 
             Settings.setBudgets(c, newBudgets);
-        }
-        catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

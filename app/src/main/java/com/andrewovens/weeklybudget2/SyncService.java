@@ -4,12 +4,7 @@ import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +17,7 @@ import java.util.TimeZone;
  */
 public class SyncService extends IntentService {
 
-    public static final String SYNCCOMPLETE = "SYNCCOMPLETE";
+    public static final String SYNC_COMPLETE = "SYNCCOMPLETE";
 
     // The IntentService class will only ever run one intent at a time. Since our syncs are all the same
     // it is redundant to run a bunch in a row. Instead, we will track the number of running + queued intents
@@ -33,15 +28,14 @@ public class SyncService extends IntentService {
         super("SyncService");
     }
 
-    public static void startSync(Context c)
-    {
+    public static void startSync(Context c) {
         Intent intent = new Intent(c, SyncService.class);
         c.startService(intent);
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId){
-        if(queuedIntents < 2) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (queuedIntents < 2) {
             queuedIntents++;
             return super.onStartCommand(intent, flags, startId);
         }
@@ -54,7 +48,7 @@ public class SyncService extends IntentService {
         try {
             Budget budget = Settings.getBudget(this);
 
-            if(budget == null){
+            if (budget == null) {
                 return;
             }
 
@@ -62,42 +56,52 @@ public class SyncService extends IntentService {
 
             budget = Budget.update(budget, API.GetBudget(budget.UniqueId));
 
-            ArrayList<Category> categories = new ArrayList<Category>();
+            ArrayList<Category> categories = new ArrayList<>();
 
-            categories.addAll(DBHelper.GetUnsyncedCategories(budget.UniqueId, DBHelper.CREATEDSTATEKEY));
-            categories.addAll(DBHelper.GetUnsyncedCategories(budget.UniqueId, DBHelper.EDITEDSTATEKEY));
-            categories.addAll(DBHelper.GetUnsyncedCategories(budget.UniqueId, DBHelper.DELETEDSTATEKEY));
+            categories.addAll(DBHelper.GetUnsyncedCategories(budget.UniqueId, DBHelper.CREATED_STATE_KEY));
+            categories.addAll(DBHelper.GetUnsyncedCategories(budget.UniqueId, DBHelper.EDITED_STATE_KEY));
+            categories.addAll(DBHelper.GetUnsyncedCategories(budget.UniqueId, DBHelper.DELETED_STATE_KEY));
 
-            ArrayList<Expense> expenses = new ArrayList<Expense>();
+            ArrayList<Expense> expenses = new ArrayList<>();
 
-            expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.CREATEDSTATEKEY));
-            expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.EDITEDSTATEKEY));
-            expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.DELETEDSTATEKEY));
+            expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.CREATED_STATE_KEY));
+            expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.EDITED_STATE_KEY));
+            expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.DELETED_STATE_KEY));
 
             for (Category c : categories) {
-                if (c.State.equals(DBHelper.CREATEDSTATEKEY)) {
-                    Category category = API.AddCategory(c);
-                    DBHelper.ReplaceCategory(c, category, DBHelper.SYNCEDSTATEKEY);
-                } else if (c.State.equals(DBHelper.EDITEDSTATEKEY)) {
-                    API.EditCategory(c);
-                    DBHelper.EditCategory(c, DBHelper.SYNCEDSTATEKEY);
-                } else if (c.State.equals(DBHelper.DELETEDSTATEKEY)) {
-                    Category category = API.DeleteCategory(c);
-                    DBHelper.EditCategory(category, DBHelper.SYNCEDSTATEKEY);
+                switch (c.State) {
+                    case DBHelper.CREATED_STATE_KEY: {
+                        Category category = API.AddCategory(c);
+                        DBHelper.ReplaceCategory(c, category);
+                        break;
+                    }
+                    case DBHelper.EDITED_STATE_KEY:
+                        API.EditCategory(c);
+                        DBHelper.EditCategory(c, DBHelper.SYNCED_STATE_KEY);
+                        break;
+                    case DBHelper.DELETED_STATE_KEY: {
+                        Category category = API.DeleteCategory(c);
+                        DBHelper.EditCategory(category, DBHelper.SYNCED_STATE_KEY);
+                        break;
+                    }
                 }
             }
 
             for (Expense e : expenses) {
-                if (e.State.equals(DBHelper.CREATEDSTATEKEY)) {
-                    Expense expense = API.AddExpense(e);
-                    DBHelper.DeleteExpense(e);
-                    DBHelper.AddExpense(expense, DBHelper.SYNCEDSTATEKEY);
-                } else if (e.State.equals(DBHelper.EDITEDSTATEKEY)) {
-                    API.EditExpense(e);
-                    DBHelper.EditExpense(e, DBHelper.SYNCEDSTATEKEY);
-                } else if (e.State.equals(DBHelper.DELETEDSTATEKEY)) {
-                    API.DeleteExpense(e);
-                    DBHelper.DeleteExpense(e);
+                switch (e.State) {
+                    case DBHelper.CREATED_STATE_KEY:
+                        Expense expense = API.AddExpense(e);
+                        DBHelper.DeleteExpense(e);
+                        DBHelper.AddExpense(expense, DBHelper.SYNCED_STATE_KEY);
+                        break;
+                    case DBHelper.EDITED_STATE_KEY:
+                        API.EditExpense(e);
+                        DBHelper.EditExpense(e, DBHelper.SYNCED_STATE_KEY);
+                        break;
+                    case DBHelper.DELETED_STATE_KEY:
+                        API.DeleteExpense(e);
+                        DBHelper.DeleteExpense(e);
+                        break;
                 }
             }
 
@@ -108,28 +112,27 @@ public class SyncService extends IntentService {
             Budget.updateStoredBudget(this, budget);
 
             for (Category c : newCategories) {
-                DBHelper.AddCategory(c, DBHelper.SYNCEDSTATEKEY);
+                DBHelper.AddCategory(c, DBHelper.SYNCED_STATE_KEY);
             }
 
             for (Expense e : newExpenses) {
                 if (!e.IsDeleted)
-                    DBHelper.AddExpense(e, DBHelper.SYNCEDSTATEKEY);
+                    DBHelper.AddExpense(e, DBHelper.SYNCED_STATE_KEY);
                 else
                     DBHelper.DeleteExpense(e);
             }
         } catch (InterruptedException e) {
             // Restore interrupt status.
             Thread.currentThread().interrupt();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
-            Intent i = new Intent(SYNCCOMPLETE);
+            Intent i = new Intent(SYNC_COMPLETE);
             sendBroadcast(i);
             queuedIntents--;
         }
     }
 
-    private static String UTCTimeString()
-    {
+    private static String UTCTimeString() {
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("UTC"));
 
