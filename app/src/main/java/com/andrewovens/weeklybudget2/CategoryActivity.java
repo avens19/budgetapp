@@ -46,8 +46,8 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
                 // Specify a SpinnerAdapter to populate the dropdown list.
                 new ArrayAdapter<>(
                         actionBar.getThemedContext(),
-                        android.R.layout.simple_list_item_1,
-                        android.R.id.text1,
+                        R.layout.main_menu_item,
+                        R.id.main_menu_item_text,
                         new String[]{
                                 getString(R.string.title_week),
                                 getString(R.string.title_month),
