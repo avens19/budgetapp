@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.andrewovens.weeklybudget2"
-        minSdkVersion 16
-        targetSdkVersion 19
+        minSdkVersion 17
+        targetSdkVersion 28
     }
 
     buildTypes {
@@ -23,6 +22,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.1.0'
-    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    api 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    implementation 'com.android.support:support-annotations:28.0.0'
 }

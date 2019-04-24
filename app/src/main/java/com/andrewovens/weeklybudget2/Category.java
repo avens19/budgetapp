@@ -1,33 +1,29 @@
 package com.andrewovens.weeklybudget2;
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by andrew on 01/05/16.
  */
 public class Category {
-    public long Id;
+    long Id;
     public String Name;
-    public String BudgetId;
-    public String State;
-    public boolean IsDeleted;
+    String BudgetId;
+    String State;
+    boolean IsDeleted;
 
-    public Category(){}
+    Category() {
+    }
 
-    public Category(String name, String budgetId)
-    {
+    Category(String name, String budgetId) {
         Name = name;
         BudgetId = budgetId;
     }
 
-    public static Category fromJson(JSONObject jo) throws ParseException, JSONException
-    {
+    public static Category fromJson(JSONObject jo) throws JSONException {
         Category c = new Category();
         c.Id = jo.getLong("Id");
         c.Name = jo.getString("Name");
@@ -36,8 +32,7 @@ public class Category {
         return c;
     }
 
-    public JSONObject toJson() throws JSONException
-    {
+    public JSONObject toJson() throws JSONException {
         JSONObject jo = new JSONObject();
         jo.put("Id", Id);
         jo.put("Name", Name);
@@ -46,9 +41,9 @@ public class Category {
         return jo;
     }
 
+    @NonNull
     @Override
-    public String toString()
-    {
+    public String toString() {
         return Name;
     }
 }

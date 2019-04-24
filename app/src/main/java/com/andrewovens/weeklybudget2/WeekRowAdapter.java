@@ -1,6 +1,7 @@
 package com.andrewovens.weeklybudget2;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,29 +16,31 @@ import java.util.List;
 public class WeekRowAdapter extends ArrayAdapter<Expense> {
     private final Context context;
     private final int resourceID;
-    private final DayType dayType;
 
-    public WeekRowAdapter(Context context, int resource, List<Expense> bah, DayType dayType) {
+    WeekRowAdapter(Context context, int resource, List<Expense> bah) {
         super(context, resource, bah);
 
         this.context = context;
         this.resourceID = resource;
-        this.dayType = dayType;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
+        Expense e = this.getItem(position);
 
-        TextView day = (TextView)rowView.findViewById(R.id.week_row_day);
-        day.setText(Dates.getWeekDay(this.getItem(position).Date) + "\n" + Dates.getDayOfMonth(this.getItem(position).Date));
+        assert e != null;
 
-        TextView name = (TextView)rowView.findViewById(R.id.week_row_name);
-        name.setText(this.getItem(position).Description);
+        TextView day = rowView.findViewById(R.id.week_row_day);
+        day.setText(context.getString(R.string.two_string_newline, Dates.getWeekDay(e.Date), Dates.getDayOfMonth(e.Date)));
 
-        TextView amount = (TextView)rowView.findViewById(R.id.week_row_amount);
-        amount.setText(Helpers.currencyString(this.getItem(position).Amount));
+        TextView name = rowView.findViewById(R.id.week_row_name);
+        name.setText(e.Description);
+
+        TextView amount = rowView.findViewById(R.id.week_row_amount);
+        amount.setText(Helpers.currencyString(e.Amount));
 
         return rowView;
     }

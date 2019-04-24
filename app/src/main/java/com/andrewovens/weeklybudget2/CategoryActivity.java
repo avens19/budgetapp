@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,32 +19,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class CategoryActivity extends Activity implements ActionBar.OnNavigationListener {
 
     private Budget _budget;
     private BroadcastReceiver _syncReceiver;
-    private int _daysBackFromToday;
-
-    private final int EDIT_BUDGET = 1;
-    private final int SWITCH_BUDGET = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +37,18 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
 
         // Set up the action bar to show a dropdown list.
         ActionBar actionBar = getActionBar();
+        assert actionBar != null;
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         // Set up the dropdown list navigation in the action bar.
         actionBar.setListNavigationCallbacks(
                 // Specify a SpinnerAdapter to populate the dropdown list.
-                new ArrayAdapter<String>(
+                new ArrayAdapter<>(
                         actionBar.getThemedContext(),
                         android.R.layout.simple_list_item_1,
                         android.R.id.text1,
-                        new String[] {
+                        new String[]{
                                 getString(R.string.title_week),
                                 getString(R.string.title_month),
                                 getString(R.string.title_category_week),
@@ -75,20 +59,16 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
 
         setUpOnLongClick();
 
-        try
-        {
+        try {
             Intent i = getIntent();
             String budgetString = i.getStringExtra("budget");
             _budget = Budget.fromJson(new JSONObject(budgetString));
-            _daysBackFromToday = i.getIntExtra("days", 0);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             this.finish();
             e.printStackTrace();
         }
 
-        IntentFilter syncFilter = new IntentFilter(SyncService.SYNCCOMPLETE);
+        IntentFilter syncFilter = new IntentFilter(SyncService.SYNC_COMPLETE);
         _syncReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -104,17 +84,16 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         unregisterReceiver(_syncReceiver);
         super.onDestroy();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         ActionBar actionBar = getActionBar();
+        assert actionBar != null;
         actionBar.setSelectedNavigationItem(4);
 
         loadData();
@@ -124,22 +103,20 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
         SyncService.startSync(this);
     }
 
-    private void loadData()
-    {
+    private void loadData() {
         _budget = Settings.getBudget(this);
 
 
+        assert _budget != null;
         List<Category> list = DBHelper.GetActiveCategories(_budget.UniqueId, null);
 
-        ListView lv = (ListView)findViewById(R.id.category_list);
+        ListView lv = findViewById(R.id.category_list);
 
-        if(lv.getAdapter() == null) {
+        if (lv.getAdapter() == null) {
             CategoryAdapter a = new CategoryAdapter(this, R.layout.category_row, list);
             lv.setAdapter(a);
-        }
-        else
-        {
-            CategoryAdapter a = (CategoryAdapter)lv.getAdapter();
+        } else {
+            CategoryAdapter a = (CategoryAdapter) lv.getAdapter();
             a.clear();
             a.addAll(list);
         }
@@ -147,59 +124,40 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
 
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
-        if(position == 0)
-        {
-            try
-            {
+        if (position == 0) {
+            try {
                 Intent i = new Intent();
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_WEEK);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if(position == 1)
-        {
-            try
-            {
+        } else if (position == 1) {
+            try {
                 Intent i = new Intent();
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_MONTH);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if(position == 2)
-        {
-            try
-            {
+        } else if (position == 2) {
+            try {
                 Intent i = new Intent();
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY_WEEK);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else if(position == 3)
-        {
-            try
-            {
+        } else if (position == 3) {
+            try {
                 Intent i = new Intent();
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY_MONTH);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -211,7 +169,7 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.month, menu);
-        if(_budget != null) {
+        if (_budget != null) {
             MenuItem s = menu.findItem(R.id.action_current_budget);
             s.setTitle(this.getString(R.string.current_budget) + " " + _budget.Name);
         }
@@ -224,33 +182,26 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if(id == R.id.action_current_budget)
-        {
-            if(_budget != null)
-            {
-                try
-                {
+        if (id == R.id.action_current_budget) {
+            if (_budget != null) {
+                try {
                     Intent i = new Intent(this, SwitchBudgetActivity.class);
+                    int SWITCH_BUDGET = 2;
                     startActivityForResult(i, SWITCH_BUDGET);
-                }
-                catch(Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             return true;
         }
         if (id == R.id.action_settings) {
-            if(_budget != null)
-            {
-                try
-                {
+            if (_budget != null) {
+                try {
                     Intent i = new Intent(this, NewBudgetActivity.class);
                     i.putExtra("budget", _budget.toJson(false).toString());
+                    int EDIT_BUDGET = 1;
                     startActivityForResult(i, EDIT_BUDGET);
-                }
-                catch(Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -259,9 +210,8 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
         return super.onOptionsItemSelected(item);
     }
 
-    private void setUpOnLongClick()
-    {
-        ListView lv = (ListView)this.findViewById(R.id.category_list);
+    private void setUpOnLongClick() {
+        ListView lv = this.findViewById(R.id.category_list);
         registerForContextMenu(lv);
     }
 
@@ -269,8 +219,8 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        ListView lv = (ListView)v;
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        ListView lv = (ListView) v;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         lv.setTag(lv.getAdapter().getItem(info.position));
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.category_context, menu);
@@ -278,14 +228,12 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        ListView lv = (ListView)findViewById(R.id.category_list);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        ListView lv = findViewById(R.id.category_list);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Category c = (Category) lv.getItemAtPosition(info.position);
 
-        try
-        {
-            switch(item.getItemId())
-            {
+        try {
+            switch (item.getItemId()) {
                 case R.id.category_context_rename:
                     showRenameDialog(c);
                     break;
@@ -293,60 +241,54 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
                     showDeleteDialog(c);
                     break;
             }
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         return true;
     }
 
-    private void showRenameDialog(final Category c)
-    {
+    private void showRenameDialog(final Category c) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View v = inflater.inflate(R.layout.rename_category, null);
+        final View v = View.inflate(this, R.layout.rename_category, null);
 
         builder
-            .setTitle(getString(R.string.category_context_rename))
-            .setCancelable(true)
-            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            })
-            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    EditText et = (EditText)v.findViewById(R.id.new_category_name);
-                    String categoryName = et.getText().toString().trim();
-
-                    if(categoryName.isEmpty())
-                    {
-                        Toast.makeText(CategoryActivity.this, "You must enter a category name", Toast.LENGTH_SHORT).show();
-                        return;
+                .setTitle(getString(R.string.category_context_rename))
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
                     }
+                })
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText et = v.findViewById(R.id.new_category_name);
+                        String categoryName = et.getText().toString().trim();
 
-                    c.Name = categoryName;
+                        if (categoryName.isEmpty()) {
+                            Toast.makeText(CategoryActivity.this, "You must enter a category name", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                    DBHelper.EditCategory(c, c.State == DBHelper.CREATEDSTATEKEY ? DBHelper.CREATEDSTATEKEY : DBHelper.EDITEDSTATEKEY);
+                        c.Name = categoryName;
 
-                    loadData();
+                        DBHelper.EditCategory(c, c.State.equals(DBHelper.CREATED_STATE_KEY) ? DBHelper.CREATED_STATE_KEY : DBHelper.EDITED_STATE_KEY);
 
-                    SyncService.startSync(CategoryActivity.this);
-                }
-            })
-            .setView(v);
+                        loadData();
+
+                        SyncService.startSync(CategoryActivity.this);
+                    }
+                })
+                .setView(v);
 
         Dialog d = builder.create();
 
         d.show();
     }
 
-    private void showDeleteDialog(final Category c)
-    {
+    private void showDeleteDialog(final Category c) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder
@@ -363,11 +305,11 @@ public class CategoryActivity extends Activity implements ActionBar.OnNavigation
                     public void onClick(DialogInterface dialog, int which) {
                         c.IsDeleted = true;
 
-                        DBHelper.EditCategory(c, c.State == DBHelper.CREATEDSTATEKEY ? DBHelper.CREATEDSTATEKEY : DBHelper.EDITEDSTATEKEY);
+                        DBHelper.EditCategory(c, c.State.equals(DBHelper.CREATED_STATE_KEY) ? DBHelper.CREATED_STATE_KEY : DBHelper.EDITED_STATE_KEY);
 
-                        ListView lv = (ListView)findViewById(R.id.category_list);
+                        ListView lv = findViewById(R.id.category_list);
 
-                        ((CategoryAdapter)lv.getAdapter()).remove(c);
+                        ((CategoryAdapter) lv.getAdapter()).remove(c);
 
                         SyncService.startSync(CategoryActivity.this);
                     }

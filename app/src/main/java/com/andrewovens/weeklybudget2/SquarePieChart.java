@@ -1,5 +1,6 @@
 package com.andrewovens.weeklybudget2;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
@@ -34,7 +35,7 @@ public class SquarePieChart extends PieChart {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        Point size = new Point();
+        @SuppressLint("DrawAllocation") Point size = new Point();
         display.getSize(size);
         int screenHeight = size.y - 150;
         int width = getMeasuredWidth();

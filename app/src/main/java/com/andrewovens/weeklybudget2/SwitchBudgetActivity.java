@@ -3,26 +3,23 @@ package com.andrewovens.weeklybudget2;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -37,12 +34,10 @@ public class SwitchBudgetActivity extends Activity {
 
         Budget[] budgets = Settings.getBudgets(this);
 
-        ListView lv = (ListView)findViewById(R.id.switch_list);
+        ListView lv = findViewById(R.id.switch_list);
 
-        ArrayList<Budget> bs = new ArrayList<Budget>();
-        for (int i = 0; i < budgets.length; i++) {
-            bs.add(budgets[i]);
-        }
+        ArrayList<Budget> bs = new ArrayList<>();
+        Collections.addAll(bs, budgets);
 
         _adapter = new BudgetAdapter(this, R.layout.budget_row, bs);
 
@@ -58,7 +53,7 @@ public class SwitchBudgetActivity extends Activity {
                     SwitchBudgetActivity.this.finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Helpers.showToastOnUi(SwitchBudgetActivity.this, R.string.error_network, Toast.LENGTH_SHORT);
+                    Helpers.showNetworkErrorToastOnUi(SwitchBudgetActivity.this);
                 }
             }
         });
@@ -70,8 +65,8 @@ public class SwitchBudgetActivity extends Activity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        ListView lv = (ListView)v;
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        ListView lv = (ListView) v;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         lv.setTag(lv.getAdapter().getItem(info.position));
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.switch_budget_context, menu);
@@ -79,66 +74,56 @@ public class SwitchBudgetActivity extends Activity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        ListView lv = (ListView)findViewById(R.id.switch_list);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        Budget b = (Budget)lv.getItemAtPosition(info.position);
+        ListView lv = findViewById(R.id.switch_list);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Budget b = (Budget) lv.getItemAtPosition(info.position);
 
-        try
-        {
-            switch(item.getItemId())
-            {
-                case R.id.remove_budget:
-                    if (_adapter.getLength() <= 1) {
-                        Settings.setBudget(this, null);
-                        Settings.setBudgets(this, null);
-                        SwitchBudgetActivity.this.setResult(Activity.RESULT_OK);
-                        SwitchBudgetActivity.this.finish();
-                        return true;
-                    } else {
-                        _adapter.removeBudget(b);
-                        Settings.setBudgets(this, _adapter.getBudgets());
-                        Budget currentBudget = Settings.getBudget(this);
-                        if (currentBudget != null && b.UniqueId.equals(currentBudget.UniqueId)) {
-                            Settings.setBudget(this, _adapter.getItem(0));
-                        }
+        try {
+            if (item.getItemId() == R.id.remove_budget) {
+                if (_adapter.getLength() <= 1) {
+                    Settings.setBudget(this, null);
+                    Settings.setBudgets(this, null);
+                    SwitchBudgetActivity.this.setResult(Activity.RESULT_OK);
+                    SwitchBudgetActivity.this.finish();
+                    return true;
+                } else {
+                    _adapter.removeBudget(b);
+                    Settings.setBudgets(this, _adapter.getBudgets());
+                    Budget currentBudget = Settings.getBudget(this);
+                    if (currentBudget != null && b.UniqueId.equals(currentBudget.UniqueId)) {
+                        Settings.setBudget(this, _adapter.getItem(0));
                     }
-                    break;
+                }
             }
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         return true;
     }
 
-    public void newBudgetOnClick(View view)
-    {
+    public void newBudgetOnClick(View view) {
         Intent i = new Intent(this, NewBudgetActivity.class);
-        startActivityForResult(i,1);
+        startActivityForResult(i, 1);
     }
 
-    public void joinBudgetOnClick(View view)
-    {
+    public void joinBudgetOnClick(View view) {
         Intent i = new Intent(this, JoinBudgetActivity.class);
-        startActivityForResult(i,1);
+        startActivityForResult(i, 1);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(resultCode == Activity.RESULT_OK)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK)
             this.finish();
     }
 
-    public class BudgetAdapter extends ArrayAdapter<Budget>
-    {
+    public class BudgetAdapter extends ArrayAdapter<Budget> {
         private final Context context;
         private final int resourceID;
         private final List<Budget> _budgets;
 
-        public BudgetAdapter(Context context, int resource, ArrayList<Budget> budgets) {
+        BudgetAdapter(Context context, int resource, ArrayList<Budget> budgets) {
             super(context, resource, budgets);
 
             this.context = context;
@@ -146,7 +131,7 @@ public class SwitchBudgetActivity extends Activity {
             this._budgets = budgets;
         }
 
-        public int getLength() {
+        int getLength() {
             return _budgets.size();
         }
 
@@ -154,13 +139,13 @@ public class SwitchBudgetActivity extends Activity {
             return _budgets.get(index);
         }
 
-        public Budget[] getBudgets() {
+        Budget[] getBudgets() {
             Budget[] array = new Budget[_budgets.size()];
             _budgets.toArray(array);
             return array;
         }
 
-        public void removeBudget(Budget b) {
+        void removeBudget(Budget b) {
             int index = -1;
             for (int i = 0; i < _budgets.size(); i++) {
                 if (_budgets.get(i).UniqueId.equals(b.UniqueId)) {
@@ -174,14 +159,16 @@ public class SwitchBudgetActivity extends Activity {
             }
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
 
             Budget c = this.getItem(position);
 
-            TextView name = (TextView)rowView.findViewById(R.id.budget_row_name);
+            TextView name = rowView.findViewById(R.id.budget_row_name);
+            assert c != null;
             name.setText(c.Name);
 
             return rowView;

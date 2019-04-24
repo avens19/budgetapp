@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,33 +13,32 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
-public class DBHelper{
+class DBHelper {
 
-	public static final String DBNAME = "BUDGETDB";
-	public static final String EXPENSESTABLENAME = "Expenses";
-	public static final String CATEGORIESTABLENAME = "Categories";
-    public static final String CREATEDSTATEKEY = "created";
-    public static final String EDITEDSTATEKEY = "edited";
-    public static final String DELETEDSTATEKEY = "deleted";
-    public static final String SYNCEDSTATEKEY = "synced";
-	private static SQLiteDatabase myDB;
+    private static final String DB_NAME = "BUDGETDB";
+    private static final String EXPENSES_TABLE_NAME = "Expenses";
+    private static final String CATEGORIES_TABLE_NAME = "Categories";
+    static final String CREATED_STATE_KEY = "created";
+    static final String EDITED_STATE_KEY = "edited";
+    static final String DELETED_STATE_KEY = "deleted";
+    static final String SYNCED_STATE_KEY = "synced";
+    private static SQLiteDatabase myDB;
     private static final Object locker = new Object();
-	
-	/* Expense State column
-	 * 
-	 * created - created but not synced
-	 * edited - edited but not synced
-	 * deleted - deleted but not synced
-	 * synced - synced to DB
-	 */
 
-	public static void OpenDB(Context c)
-	{
+    /* Expense State column
+     *
+     * created - created but not synced
+     * edited - edited but not synced
+     * deleted - deleted but not synced
+     * synced - synced to DB
+     */
+
+    static void OpenDB(Context c) {
         synchronized (locker) {
             if (myDB == null || !myDB.isOpen())
-                myDB = c.openOrCreateDatabase(DBNAME, SQLiteDatabase.OPEN_READWRITE, null);
+                myDB = c.openOrCreateDatabase(DB_NAME, SQLiteDatabase.OPEN_READWRITE, null);
 
             CreateExpensesTable();
 
@@ -58,55 +56,49 @@ public class DBHelper{
                 myDB.setVersion(0);
             }
         }
-	}
-
-	public static void CreateExpensesTable()
-	{
-		myDB.execSQL(
-				"CREATE TABLE IF NOT EXISTS "+
-						EXPENSESTABLENAME +
-						"(Id int PRIMARY KEY, "+
-						"Date text, "+
-						"Description text, "+
-						"Amount real, "+
-						"BudgetId text," +
-						"State text)"
-				);
-	}
-
-	public static void CreateCategoriesTable()
-	{
-		myDB.execSQL(
-				"CREATE TABLE IF NOT EXISTS "+
-						CATEGORIESTABLENAME +
-						"(Id int PRIMARY KEY, "+
-						"Name text, "+
-						"BudgetId text," +
-						"State text, "+
-                        "IsDeleted int)"
-		);
-	}
-
-	public static void AddCategoryFK()
-	{
-        myDB.execSQL("ALTER TABLE " + EXPENSESTABLENAME + " ADD COLUMN CategoryId int");
-	}
-
-    public static void AddIsSystem()
-    {
-        myDB.execSQL("ALTER TABLE " + EXPENSESTABLENAME + " ADD COLUMN IsSystem int");
-        myDB.execSQL("UPDATE " + EXPENSESTABLENAME + " SET IsSystem = 0");
     }
 
-	public static void AddExpense(Expense e, String state)
-	{
-		ContentValues cv = addExpenseValues(e, state);
+    private static void CreateExpensesTable() {
+        myDB.execSQL(
+                "CREATE TABLE IF NOT EXISTS " +
+                        EXPENSES_TABLE_NAME +
+                        "(Id int PRIMARY KEY, " +
+                        "Date text, " +
+                        "Description text, " +
+                        "Amount real, " +
+                        "BudgetId text," +
+                        "State text)"
+        );
+    }
 
-		myDB.insertWithOnConflict(EXPENSESTABLENAME, null, cv,SQLiteDatabase.CONFLICT_REPLACE);
-	}
+    private static void CreateCategoriesTable() {
+        myDB.execSQL(
+                "CREATE TABLE IF NOT EXISTS " +
+                        CATEGORIES_TABLE_NAME +
+                        "(Id int PRIMARY KEY, " +
+                        "Name text, " +
+                        "BudgetId text," +
+                        "State text, " +
+                        "IsDeleted int)"
+        );
+    }
 
-    private static ContentValues addExpenseValues(Expense e, String state)
-    {
+    private static void AddCategoryFK() {
+        myDB.execSQL("ALTER TABLE " + EXPENSES_TABLE_NAME + " ADD COLUMN CategoryId int");
+    }
+
+    private static void AddIsSystem() {
+        myDB.execSQL("ALTER TABLE " + EXPENSES_TABLE_NAME + " ADD COLUMN IsSystem int");
+        myDB.execSQL("UPDATE " + EXPENSES_TABLE_NAME + " SET IsSystem = 0");
+    }
+
+    static void AddExpense(Expense e, String state) {
+        ContentValues cv = addExpenseValues(e, state);
+
+        myDB.insertWithOnConflict(EXPENSES_TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    private static ContentValues addExpenseValues(@NonNull Expense e, String state) {
         ContentValues cv = new ContentValues();
 
         cv.put("Id", e.Id);
@@ -121,15 +113,13 @@ public class DBHelper{
         return cv;
     }
 
-    public static void AddCategory(Category c, String state)
-    {
+    static void AddCategory(Category c, String state) {
         ContentValues cv = addCategoryValues(c, state);
 
-        myDB.insertWithOnConflict(CATEGORIESTABLENAME, null, cv,SQLiteDatabase.CONFLICT_REPLACE);
+        myDB.insertWithOnConflict(CATEGORIES_TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    private static ContentValues addCategoryValues(Category c, String state)
-    {
+    private static ContentValues addCategoryValues(@NonNull Category c, String state) {
         ContentValues cv = new ContentValues();
 
         cv.put("Id", c.Id);
@@ -140,47 +130,42 @@ public class DBHelper{
 
         return cv;
     }
-	
-	public static void EditExpense(Expense e, String state)
-	{
-		ContentValues cv = addExpenseValues(e, state);
-		
-		String where = "Id = ?";
-		String[] whereArgs = new String[]{Long.toString(e.Id)};
 
-		myDB.update(EXPENSESTABLENAME, cv, where, whereArgs);
-	}
+    static void EditExpense(Expense e, String state) {
+        ContentValues cv = addExpenseValues(e, state);
 
-    public static void EditCategory(Category c, String state)
-    {
+        String where = "Id = ?";
+        String[] whereArgs = new String[]{Long.toString(e.Id)};
+
+        myDB.update(EXPENSES_TABLE_NAME, cv, where, whereArgs);
+    }
+
+    static void EditCategory(Category c, String state) {
         ContentValues cv = addCategoryValues(c, state);
 
         String where = "Id = ?";
         String[] whereArgs = new String[]{Long.toString(c.Id)};
 
-        myDB.update(CATEGORIESTABLENAME, cv, where, whereArgs);
+        myDB.update(CATEGORIES_TABLE_NAME, cv, where, whereArgs);
     }
-	
-	public static void DeleteExpense(Expense e)
-	{
-		String where = "Id = ?";
-		String[] whereArgs = new String[]{Long.toString(e.Id)};
-		
-		myDB.delete(EXPENSESTABLENAME, where, whereArgs);		
-	}
 
-    private static void DeleteCategory(Category c)
-    {
+    static void DeleteExpense(@NonNull Expense e) {
+        String where = "Id = ?";
+        String[] whereArgs = new String[]{Long.toString(e.Id)};
+
+        myDB.delete(EXPENSES_TABLE_NAME, where, whereArgs);
+    }
+
+    private static void DeleteCategory(@NonNull Category c) {
         String where = "Id = ?";
         String[] whereArgs = new String[]{Long.toString(c.Id)};
 
-        myDB.delete(CATEGORIESTABLENAME, where, whereArgs);
+        myDB.delete(CATEGORIES_TABLE_NAME, where, whereArgs);
     }
 
-    public static void ReplaceCategory(Category oldCategory, Category newCategory, String state)
-    {
+    static void ReplaceCategory(Category oldCategory, Category newCategory) {
         DeleteCategory(oldCategory);
-        AddCategory(newCategory, state);
+        AddCategory(newCategory, DBHelper.SYNCED_STATE_KEY);
         ContentValues cv = new ContentValues();
 
         cv.put("CategoryId", newCategory.Id);
@@ -188,28 +173,26 @@ public class DBHelper{
         String where = "CategoryId = ?";
         String[] whereArgs = new String[]{Long.toString(oldCategory.Id)};
 
-        myDB.update(EXPENSESTABLENAME, cv, where, whereArgs);
+        myDB.update(EXPENSES_TABLE_NAME, cv, where, whereArgs);
     }
-	
-	public static Expense GetExpense(long id)
-	{
+
+    static Expense GetExpense(long id) {
         String where = "Id = ?";
         String[] whereArgs = new String[]{Long.toString(id)};
 
-		return queryExpenses(where, whereArgs, null).get(0);
-	}
+        return queryExpenses(where, whereArgs, null).get(0);
+    }
 
-    private static List<Expense> queryExpenses(String where, String[] whereArgs, String orderBy){
+    private static List<Expense> queryExpenses(String where, String[] whereArgs, String orderBy) {
         String[] columns = new String[]{"Id", "Date", "Description", "Amount", "BudgetId", "CategoryId", "State", "IsSystem"};
 
-        Cursor c = myDB.query(EXPENSESTABLENAME, columns, where, whereArgs, null, null, orderBy);
+        Cursor c = myDB.query(EXPENSES_TABLE_NAME, columns, where, whereArgs, null, null, orderBy);
 
-        List<Expense> list = new ArrayList<Expense>();
+        List<Expense> list = new ArrayList<>();
 
         c.moveToFirst();
 
-        while(!c.isAfterLast())
-        {
+        while (!c.isAfterLast()) {
             Expense e = new Expense();
             e.Id = c.getLong(0);
             e.Date = getDate(c.getString(1));
@@ -229,17 +212,13 @@ public class DBHelper{
         return list;
     }
 
-    public static List<Category> GetActiveCategories(String budgetId, Long categoryId)
-    {
+    static List<Category> GetActiveCategories(String budgetId, Long categoryId) {
         String where;
         String[] whereArgs;
-        if(categoryId != null)
-        {
+        if (categoryId != null) {
             where = "BudgetId = ? AND (IsDeleted = ? OR Id = ?)";
             whereArgs = new String[]{budgetId, "0", Long.toString(categoryId)};
-        }
-        else
-        {
+        } else {
             where = "BudgetId = ? AND IsDeleted = ?";
             whereArgs = new String[]{budgetId, "0"};
         }
@@ -248,18 +227,16 @@ public class DBHelper{
         return queryCategories(where, whereArgs, orderBy);
     }
 
-    private static List<Category> queryCategories(String where, String[] whereArgs, String orderBy)
-    {
+    private static List<Category> queryCategories(String where, String[] whereArgs, String orderBy) {
         String[] columns = new String[]{"Id", "Name", "BudgetId", "State", "IsDeleted"};
 
-        Cursor cur = myDB.query(CATEGORIESTABLENAME, columns, where, whereArgs,null,null, orderBy);
+        Cursor cur = myDB.query(CATEGORIES_TABLE_NAME, columns, where, whereArgs, null, null, orderBy);
 
-        List<Category> list = new ArrayList<Category>();
+        List<Category> list = new ArrayList<>();
 
         cur.moveToFirst();
 
-        while(!cur.isAfterLast())
-        {
+        while (!cur.isAfterLast()) {
             Category c = new Category();
             c.Id = cur.getLong(0);
             c.Name = cur.getString(1);
@@ -275,42 +252,37 @@ public class DBHelper{
 
         return list;
     }
-	
-	public static List<Expense> GetUnsyncedExpenses(String budgetId, String state)
-	{
+
+    static List<Expense> GetUnsyncedExpenses(String budgetId, String state) {
         String where = "BudgetId = ? AND State = ?";
         String[] whereArgs = new String[]{budgetId, state};
 
         return queryExpenses(where, whereArgs, null);
-	}
+    }
 
-    public static List<Category> GetUnsyncedCategories(String budgetId, String state)
-    {
+    static List<Category> GetUnsyncedCategories(String budgetId, String state) {
         String where = "BudgetId = ? AND State = ?";
         String[] whereArgs = new String[]{budgetId, state};
 
         return queryCategories(where, whereArgs, null);
     }
 
-	public static List<Expense> GetExpensesForWeek(String budgetId, int daysBackFromToday, int startDay)
-	{
-		String[] dates = getStartAndEndDatesForWeek(daysBackFromToday, startDay);
+    static List<Expense> GetExpensesForWeek(String budgetId, int daysBackFromToday, int startDay) {
+        String[] dates = getStartAndEndDatesForWeek(daysBackFromToday, startDay);
         String startString = dates[0];
         String endString = dates[1];
 
-    	String where = "BudgetId = ? AND Date >= ? AND Date < ? AND State != ?";
-    	String[] whereArgs = new String[]{budgetId, startString, endString, DELETEDSTATEKEY};
-    	String orderBy = "Date asc";
-		
-		return queryExpenses(where, whereArgs, orderBy);
-	}
+        String where = "BudgetId = ? AND Date >= ? AND Date < ? AND State != ?";
+        String[] whereArgs = new String[]{budgetId, startString, endString, DELETED_STATE_KEY};
+        String orderBy = "Date asc";
 
-    private static String[] getStartAndEndDatesForWeek(int daysBackFromToday, int startDay)
-    {
-        Calendar start=Calendar.getInstance();
+        return queryExpenses(where, whereArgs, orderBy);
+    }
+
+    private static String[] getStartAndEndDatesForWeek(int daysBackFromToday, int startDay) {
+        Calendar start = Calendar.getInstance();
         start.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);
-        while((start.get(Calendar.DAY_OF_WEEK) - 1) != startDay)
-        {
+        while ((start.get(Calendar.DAY_OF_WEEK) - 1) != startDay) {
             start.add(Calendar.DAY_OF_YEAR, -1);
         }
         Calendar end = (Calendar) start.clone();
@@ -322,12 +294,10 @@ public class DBHelper{
         return new String[]{startString, endString};
     }
 
-    private static String[] getStartAndEndDatesForMonth(int daysBackFromToday)
-    {
+    private static String[] getStartAndEndDatesForMonth(int daysBackFromToday) {
         Calendar start = Calendar.getInstance();
         start.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);
-        while(start.get(Calendar.DAY_OF_MONTH) > 1)
-        {
+        while (start.get(Calendar.DAY_OF_MONTH) > 1) {
             start.add(Calendar.DAY_OF_YEAR, -1);
         }
 
@@ -340,20 +310,18 @@ public class DBHelper{
         return new String[]{startString, endString};
     }
 
-    private static List<CategoryAmount> getCategoryAmounts(String budgetId, String startString, String endString, String uncategorizedString)
-    {
-        String query = "SELECT e.CategoryId, c.Name, SUM(e.Amount) FROM "+ EXPENSESTABLENAME +" e LEFT OUTER JOIN "+ CATEGORIESTABLENAME +" c ON c.Id = e.CategoryId WHERE e.BudgetId = ? AND e.Date >= ? AND e.Date < ? AND e.IsSystem = 0 GROUP BY e.CategoryId, c.Name HAVING SUM(e.Amount) > 0 ORDER BY SUM(e.Amount) DESC";
+    private static List<CategoryAmount> getCategoryAmounts(String budgetId, String startString, String endString, String uncategorizedString) {
+        String query = "SELECT e.CategoryId, c.Name, SUM(e.Amount) FROM " + EXPENSES_TABLE_NAME + " e LEFT OUTER JOIN " + CATEGORIES_TABLE_NAME + " c ON c.Id = e.CategoryId WHERE e.BudgetId = ? AND e.Date >= ? AND e.Date < ? AND e.IsSystem = 0 GROUP BY e.CategoryId, c.Name HAVING SUM(e.Amount) > 0 ORDER BY SUM(e.Amount) DESC";
 
         String[] whereArgs = new String[]{budgetId, startString, endString};
 
         Cursor c = myDB.rawQuery(query, whereArgs);
 
-        List<CategoryAmount> list = new ArrayList<CategoryAmount>();
+        List<CategoryAmount> list = new ArrayList<>();
 
         c.moveToFirst();
 
-        while(!c.isAfterLast())
-        {
+        while (!c.isAfterLast()) {
             CategoryAmount ca = new CategoryAmount();
             ca.CategoryId = !c.isNull(0) ? c.getLong(0) : null;
             String name = c.getString(1);
@@ -369,8 +337,7 @@ public class DBHelper{
         return list;
     }
 
-    public static List<CategoryAmount> GetCategoryAmountsForWeek(String budgetId, int daysBackFromToday, int startDay, String uncategorizedString)
-    {
+    static List<CategoryAmount> GetCategoryAmountsForWeek(String budgetId, int daysBackFromToday, int startDay, String uncategorizedString) {
         String[] dates = getStartAndEndDatesForWeek(daysBackFromToday, startDay);
         String startString = dates[0];
         String endString = dates[1];
@@ -378,8 +345,7 @@ public class DBHelper{
         return getCategoryAmounts(budgetId, startString, endString, uncategorizedString);
     }
 
-    public static List<CategoryAmount> GetCategoryAmountsForMonth(String budgetId, int daysBackFromToday, String uncategorizedString)
-    {
+    static List<CategoryAmount> GetCategoryAmountsForMonth(String budgetId, int daysBackFromToday, String uncategorizedString) {
         String[] dates = getStartAndEndDatesForMonth(daysBackFromToday);
         String startString = dates[0];
         String endString = dates[1];
@@ -387,21 +353,17 @@ public class DBHelper{
         return getCategoryAmounts(budgetId, startString, endString, uncategorizedString);
     }
 
-    private static List<Expense> getExpensesForCategory(String budgetId, String categoryId, String startString, String endString)
-    {
+    private static List<Expense> getExpensesForCategory(String budgetId, String categoryId, String startString, String endString) {
         String where = "BudgetId = ? AND Date >= ? AND Date < ? AND State != ? AND IsSystem = 0";
-        List<String> whereArgs = new ArrayList<String>();
+        List<String> whereArgs = new ArrayList<>();
         whereArgs.add(budgetId);
         whereArgs.add(startString);
         whereArgs.add(endString);
-        whereArgs.add(DELETEDSTATEKEY);
-        if(categoryId != null)
-        {
+        whereArgs.add(DELETED_STATE_KEY);
+        if (categoryId != null) {
             where += " AND CategoryId = ?";
             whereArgs.add(categoryId);
-        }
-        else
-        {
+        } else {
             where += " AND CategoryId IS NULL";
         }
 
@@ -410,8 +372,7 @@ public class DBHelper{
         return queryExpenses(where, whereArgs.toArray(new String[0]), orderBy);
     }
 
-    public static List<Expense> GetExpensesForCategoryForWeek(String budgetId, String categoryId, int daysBackFromToday, int startDay)
-    {
+    static List<Expense> GetExpensesForCategoryForWeek(String budgetId, String categoryId, int daysBackFromToday, int startDay) {
         String[] dates = getStartAndEndDatesForWeek(daysBackFromToday, startDay);
         String startString = dates[0];
         String endString = dates[1];
@@ -419,108 +380,105 @@ public class DBHelper{
         return getExpensesForCategory(budgetId, categoryId, startString, endString);
     }
 
-    public static List<Expense> GetExpensesForCategoryForMonth(String budgetId, String categoryId, int daysBackFromToday)
-    {
+    static List<Expense> GetExpensesForCategoryForMonth(String budgetId, String categoryId, int daysBackFromToday) {
         String[] dates = getStartAndEndDatesForMonth(daysBackFromToday);
         String startString = dates[0];
         String endString = dates[1];
 
         return getExpensesForCategory(budgetId, categoryId, startString, endString);
     }
-	
-	public static double GetTotalForMonth(String budgetId, int daysBackFromToday)
-	{
+
+    static double GetTotalForMonth(String budgetId, int daysBackFromToday) {
         String[] dates = getStartAndEndDatesForMonth(daysBackFromToday);
         String startString = dates[0];
         String endString = dates[1];
-    	
-    	String[] columns = new String[]{"SUM(Amount)"};
-    	String where = "BudgetId = ? AND Date >= ? AND Date < ? AND State != ? AND IsSystem = 0";
-    	String[] whereArgs = new String[]{budgetId, startString, endString, DELETEDSTATEKEY};
-		
-		Cursor c = myDB.query(EXPENSESTABLENAME, columns, where, whereArgs,null,null, null);
-		c.moveToFirst();
-		
-		double total = c.getDouble(0);
-		
-		return total;
-	}
-	
-	public static List<DateTotal> GetTotalsForMonth(String budgetId, int daysBackFromToday, int startDay)
-	{
-		Calendar start = Calendar.getInstance();
-		start.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);
-		int month = start.get(Calendar.MONTH);
-		while(start.get(Calendar.DAY_OF_MONTH) > 1)
-		{
-			start.add(Calendar.DAY_OF_YEAR, -1);
-		}
-		while((start.get(Calendar.DAY_OF_WEEK) - 1) != startDay)
-		{
-			start.add(Calendar.DAY_OF_YEAR, -1);
-		}
-		
-		Calendar end = (Calendar) start.clone();
-		end.add(Calendar.DAY_OF_YEAR, 7);
-		boolean first = true;
-		
-		List<DateTotal> list = new ArrayList<DateTotal>();
-		
-		while(first || start.get(Calendar.MONTH) == month)
-		{
-			if(first)
-				first = false;
-			
-			String startString = getDateString(start.getTime());
-	    	String endString = getDateString(end.getTime());
-	    	
-	    	String[] columns = new String[]{"Amount"};
-	    	String where = "BudgetId = ? AND Date >= ? AND Date < ? AND State != ? AND IsSystem = 0";
-	    	String[] whereArgs = new String[]{budgetId, startString, endString, DELETEDSTATEKEY};
-	    	String orderBy = "Date asc";
-	    	
-	    	DateTotal dt = new DateTotal(start, 0);
-			
-			Cursor c = myDB.query(EXPENSESTABLENAME, columns, where, whereArgs,null,null, orderBy);
-			c.moveToFirst();
-			while(!c.isAfterLast())
-			{
-				dt.Total += c.getDouble(0);
 
-				c.moveToNext();
-			}
-			c.close();
-			
-			list.add(dt);
-			
-			start.add(Calendar.DAY_OF_YEAR, 7);
-			end.add(Calendar.DAY_OF_YEAR, 7);
-		}
+        String[] columns = new String[]{"SUM(Amount)"};
+        String where = "BudgetId = ? AND Date >= ? AND Date < ? AND State != ? AND IsSystem = 0";
+        String[] whereArgs = new String[]{budgetId, startString, endString, DELETED_STATE_KEY};
 
-		return list;
-	}
+        Cursor c = myDB.query(EXPENSES_TABLE_NAME, columns, where, whereArgs, null, null, null);
+        c.moveToFirst();
 
-    public static boolean SystemExpenseExistsForWeek(String budgetId, int daysBackFromToday, int startDay)
-    {
+        double total = c.getDouble(0);
+
+        c.close();
+
+        return total;
+    }
+
+    static List<DateTotal> GetTotalsForMonth(String budgetId, int daysBackFromToday, int startDay) {
+        Calendar start = Calendar.getInstance();
+        start.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);
+        int month = start.get(Calendar.MONTH);
+        while (start.get(Calendar.DAY_OF_MONTH) > 1) {
+            start.add(Calendar.DAY_OF_YEAR, -1);
+        }
+        while ((start.get(Calendar.DAY_OF_WEEK) - 1) != startDay) {
+            start.add(Calendar.DAY_OF_YEAR, -1);
+        }
+
+        Calendar end = (Calendar) start.clone();
+        end.add(Calendar.DAY_OF_YEAR, 7);
+        boolean first = true;
+
+        List<DateTotal> list = new ArrayList<>();
+
+        while (first || start.get(Calendar.MONTH) == month) {
+            if (first)
+                first = false;
+
+            String startString = getDateString(start.getTime());
+            String endString = getDateString(end.getTime());
+
+            String[] columns = new String[]{"Amount"};
+            String where = "BudgetId = ? AND Date >= ? AND Date < ? AND State != ? AND IsSystem = 0";
+            String[] whereArgs = new String[]{budgetId, startString, endString, DELETED_STATE_KEY};
+            String orderBy = "Date asc";
+
+            DateTotal dt = new DateTotal(start, 0);
+
+            Cursor c = myDB.query(EXPENSES_TABLE_NAME, columns, where, whereArgs, null, null, orderBy);
+            c.moveToFirst();
+            while (!c.isAfterLast()) {
+                dt.Total += c.getDouble(0);
+
+                c.moveToNext();
+            }
+            c.close();
+
+            list.add(dt);
+
+            start.add(Calendar.DAY_OF_YEAR, 7);
+            end.add(Calendar.DAY_OF_YEAR, 7);
+        }
+
+        return list;
+    }
+
+    static boolean SystemExpenseExistsForWeek(String budgetId, int daysBackFromToday, int startDay) {
         String[] dates = getStartAndEndDatesForWeek(daysBackFromToday, startDay);
         String startString = dates[0];
         String endString = dates[1];
 
-        String query = "SELECT 1 FROM " + EXPENSESTABLENAME + " WHERE BudgetId = ? AND IsSystem = 1 AND State != ? AND Date >= ? AND Date < ?";
-        String[] args = new String[]{budgetId, DELETEDSTATEKEY, startString, endString};
+        String query = "SELECT 1 FROM " + EXPENSES_TABLE_NAME + " WHERE BudgetId = ? AND IsSystem = 1 AND State != ? AND Date >= ? AND Date < ?";
+        String[] args = new String[]{budgetId, DELETED_STATE_KEY, startString, endString};
 
         Cursor c = myDB.rawQuery(query, args);
 
-        return c.getCount() >= 1;
+        boolean systemExists = c.getCount() >= 1;
+
+        c.close();
+
+        return systemExists;
     }
 
-    private static String getDateString(Date date)
-    {
+    private static String getDateString(Date date) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         return formatter.format(date);
     }
-    private static Date getDate(String date)
-    {
+
+    private static Date getDate(String date) {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         try {
             return formatter.parse(date);
