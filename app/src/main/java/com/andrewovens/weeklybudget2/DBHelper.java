@@ -14,6 +14,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 class DBHelper {
 
@@ -176,11 +177,16 @@ class DBHelper {
         myDB.update(EXPENSES_TABLE_NAME, cv, where, whereArgs);
     }
 
+    @Nullable
     static Expense GetExpense(long id) {
         String where = "Id = ?";
         String[] whereArgs = new String[]{Long.toString(id)};
 
-        return queryExpenses(where, whereArgs, null).get(0);
+        List<Expense> foundExpenses = queryExpenses(where, whereArgs, null);
+        if (foundExpenses.size() > 0) {
+            return foundExpenses.get(0);
+        }
+        return null;
     }
 
     private static List<Expense> queryExpenses(String where, String[] whereArgs, String orderBy) {

@@ -30,7 +30,9 @@ public class SyncService extends IntentService {
 
     public static void startSync(Context c) {
         Intent intent = new Intent(c, SyncService.class);
-        c.startService(intent);
+        try {
+            c.startService(intent);
+        } catch (Exception ignore) {}
     }
 
     @Override
