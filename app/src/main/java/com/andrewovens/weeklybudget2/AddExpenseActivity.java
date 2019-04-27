@@ -161,12 +161,18 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 
             if (_isEdit) {
                 e.Id = _expense.Id;
-                String state = DBHelper.GetExpense(e.Id).State;
 
-                if (state.equals(DBHelper.CREATED_STATE_KEY)) {
-                    DBHelper.EditExpense(e, DBHelper.CREATED_STATE_KEY);
+                Expense savedExpense = DBHelper.GetExpense(e.Id);
+                if (savedExpense != null) {
+                    String state = savedExpense.State;
+
+                    if (state.equals(DBHelper.CREATED_STATE_KEY)) {
+                        DBHelper.EditExpense(e, DBHelper.CREATED_STATE_KEY);
+                    } else {
+                        DBHelper.EditExpense(e, DBHelper.EDITED_STATE_KEY);
+                    }
                 } else {
-                    DBHelper.EditExpense(e, DBHelper.EDITED_STATE_KEY);
+                    Helpers.showNetworkErrorToastOnUi(this, R.string.error_cant_edit);
                 }
 
             } else {

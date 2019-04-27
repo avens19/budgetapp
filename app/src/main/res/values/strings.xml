@@ -31,6 +31,7 @@
     <string name="label_new_amount">Enter the amount you would like to spend each week</string>
     <string name="label_new_unique">Here is the unique ID for your budget. You may share it or use it to sync to a different device. Click to copy</string>
     <string name="error_network">Cannot connect to the network</string>
+    <string name="error_cant_edit">Error editing expense, please try again</string>
     <string name="title_activity_add_expense">Add Expense</string>
     <string name="copied_unique_id">Copied unique ID to clipboard</string>
     <string name="add_date">Date (%1$s)</string>

@@ -7,12 +7,12 @@ import android.app.Activity;
 import android.widget.Toast;
 
 public class Helpers {
-    static void showNetworkErrorToastOnUi(final Activity a) {
+    static void showNetworkErrorToastOnUi(final Activity a, final int resourceId) {
         a.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
-                Toast.makeText(a, R.string.error_network, Toast.LENGTH_SHORT).show();
+                Toast.makeText(a, resourceId, Toast.LENGTH_SHORT).show();
             }
 
         });

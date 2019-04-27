@@ -216,7 +216,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
                         _budget = Budget.update(_budget, budget);
                     } catch (Exception e) {
-                        Helpers.showNetworkErrorToastOnUi(WeekActivity.this);
+                        Helpers.showNetworkErrorToastOnUi(WeekActivity.this, R.string.error_network);
                         e.printStackTrace();
                     }
                 }

@@ -147,7 +147,7 @@ public class NewBudgetActivity extends Activity {
                     }
 
                 } catch (Exception e) {
-                    Helpers.showNetworkErrorToastOnUi(NewBudgetActivity.this);
+                    Helpers.showNetworkErrorToastOnUi(NewBudgetActivity.this, R.string.error_network);
                     e.printStackTrace();
                 }
             }

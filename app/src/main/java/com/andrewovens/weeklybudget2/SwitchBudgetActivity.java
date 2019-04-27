@@ -53,7 +53,7 @@ public class SwitchBudgetActivity extends Activity {
                     SwitchBudgetActivity.this.finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Helpers.showNetworkErrorToastOnUi(SwitchBudgetActivity.this);
+                    Helpers.showNetworkErrorToastOnUi(SwitchBudgetActivity.this, R.string.error_network);
                 }
             }
         });

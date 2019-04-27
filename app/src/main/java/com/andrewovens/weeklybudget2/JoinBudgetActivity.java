@@ -49,7 +49,7 @@ public class JoinBudgetActivity extends Activity {
                     JoinBudgetActivity.this.finish();
 
                 } catch (Exception e) {
-                    Helpers.showNetworkErrorToastOnUi(JoinBudgetActivity.this);
+                    Helpers.showNetworkErrorToastOnUi(JoinBudgetActivity.this, R.string.error_network);
                     e.printStackTrace();
                 }
             }
