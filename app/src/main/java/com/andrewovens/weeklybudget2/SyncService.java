@@ -93,8 +93,7 @@ public class SyncService extends IntentService {
                 switch (e.State) {
                     case DBHelper.CREATED_STATE_KEY:
                         Expense expense = API.AddExpense(e);
-                        DBHelper.DeleteExpense(e);
-                        DBHelper.AddExpense(expense, DBHelper.SYNCED_STATE_KEY);
+                        DBHelper.ReplaceExpense(e, expense);
                         break;
                     case DBHelper.EDITED_STATE_KEY:
                         API.EditExpense(e);

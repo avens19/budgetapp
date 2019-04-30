@@ -53,6 +53,11 @@ class DBHelper {
                     AddIsSystem();
                     myDB.setVersion(2);
                 }
+                if (myDB.needUpgrade(3)) {
+                    AddExpenseOriginalId();
+                    AddCategoryOriginalId();
+                    myDB.setVersion(3);
+                }
             } catch (Exception e) {
                 myDB.setVersion(0);
             }
@@ -93,16 +98,38 @@ class DBHelper {
         myDB.execSQL("UPDATE " + EXPENSES_TABLE_NAME + " SET IsSystem = 0");
     }
 
+    private static void AddExpenseOriginalId() {
+        myDB.execSQL("ALTER TABLE " + EXPENSES_TABLE_NAME + " ADD COLUMN OriginalId int");
+    }
+
+    private static void AddCategoryOriginalId() {
+        myDB.execSQL("ALTER TABLE " + CATEGORIES_TABLE_NAME + " ADD COLUMN OriginalId int");
+    }
+
     static void AddExpense(Expense e, String state) {
         ContentValues cv = addExpenseValues(e, state);
 
         myDB.insertWithOnConflict(EXPENSES_TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    static void ReplaceExpense(Expense oldExpense, Expense newExpense) {
+        DeleteExpense(oldExpense);
+        ContentValues cv = addExpenseValues(newExpense, DBHelper.SYNCED_STATE_KEY);
+        cv.put("OriginalId", oldExpense.Id);
+        myDB.insertWithOnConflict(EXPENSES_TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
     private static ContentValues addExpenseValues(@NonNull Expense e, String state) {
-        ContentValues cv = new ContentValues();
+        ContentValues cv = addExpenseValuesForExisting(e, state);
 
         cv.put("Id", e.Id);
+
+        return cv;
+    }
+
+    private static ContentValues addExpenseValuesForExisting(@NonNull Expense e, String state) {
+        ContentValues cv = new ContentValues();
+
         cv.put("Date", getDateString(e.Date));
         cv.put("Description", e.Description);
         cv.put("Amount", e.Amount);
@@ -121,9 +148,16 @@ class DBHelper {
     }
 
     private static ContentValues addCategoryValues(@NonNull Category c, String state) {
-        ContentValues cv = new ContentValues();
+        ContentValues cv = addCategoryValuesForExisting(c, state);
 
         cv.put("Id", c.Id);
+
+        return cv;
+    }
+
+    private static ContentValues addCategoryValuesForExisting(@NonNull Category c, String state) {
+        ContentValues cv = new ContentValues();
+
         cv.put("Name", c.Name);
         cv.put("BudgetId", c.BudgetId);
         cv.put("State", state);
@@ -133,19 +167,19 @@ class DBHelper {
     }
 
     static void EditExpense(Expense e, String state) {
-        ContentValues cv = addExpenseValues(e, state);
+        ContentValues cv = addExpenseValuesForExisting(e, state);
 
-        String where = "Id = ?";
-        String[] whereArgs = new String[]{Long.toString(e.Id)};
+        String where = "Id = ? OR OriginalId = ?";
+        String[] whereArgs = new String[]{Long.toString(e.Id), Long.toString(e.Id)};
 
         myDB.update(EXPENSES_TABLE_NAME, cv, where, whereArgs);
     }
 
     static void EditCategory(Category c, String state) {
-        ContentValues cv = addCategoryValues(c, state);
+        ContentValues cv = addCategoryValuesForExisting(c, state);
 
-        String where = "Id = ?";
-        String[] whereArgs = new String[]{Long.toString(c.Id)};
+        String where = "Id = ? OR OriginalId = ?";
+        String[] whereArgs = new String[]{Long.toString(c.Id), Long.toString(c.Id)};
 
         myDB.update(CATEGORIES_TABLE_NAME, cv, where, whereArgs);
     }
@@ -166,9 +200,11 @@ class DBHelper {
 
     static void ReplaceCategory(Category oldCategory, Category newCategory) {
         DeleteCategory(oldCategory);
-        AddCategory(newCategory, DBHelper.SYNCED_STATE_KEY);
-        ContentValues cv = new ContentValues();
+        ContentValues cv = addCategoryValues(newCategory, DBHelper.SYNCED_STATE_KEY);
+        cv.put("OriginalId", oldCategory.Id);
+        myDB.insertWithOnConflict(CATEGORIES_TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
 
+        cv = new ContentValues();
         cv.put("CategoryId", newCategory.Id);
 
         String where = "CategoryId = ?";
@@ -179,8 +215,8 @@ class DBHelper {
 
     @Nullable
     static Expense GetExpense(long id) {
-        String where = "Id = ?";
-        String[] whereArgs = new String[]{Long.toString(id)};
+        String where = "Id = ? OR OriginalId = ?";
+        String[] whereArgs = new String[]{Long.toString(id), Long.toString(id)};
 
         List<Expense> foundExpenses = queryExpenses(where, whereArgs, null);
         if (foundExpenses.size() > 0) {
