@@ -40,7 +40,8 @@
         android:layout_below="@id/weekday_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_new_amount" />
+        android:text="@string/label_new_amount"
+        android:digits="-0123456789.," />
     
     <EditText
         android:id="@+id/text_new_amount"

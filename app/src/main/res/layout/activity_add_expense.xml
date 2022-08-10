@@ -69,7 +69,8 @@
             android:layout_centerHorizontal="true"
             android:imeOptions="actionDone"
             android:ems="10"
-            android:inputType="numberDecimal|numberSigned" />
+            android:inputType="numberDecimal|numberSigned"
+            android:digits="-0123456789.," />
 
         <TextView
             android:id="@+id/label_pick_category"

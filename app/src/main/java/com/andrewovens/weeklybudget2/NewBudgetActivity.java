@@ -87,7 +87,7 @@ public class NewBudgetActivity extends Activity {
         }
 
         try {
-            _budget.Amount = Double.parseDouble(amount.getText().toString());
+            _budget.Amount = Double.parseDouble(amount.getText().toString().replace(',', '.'));
         } catch (Exception e) {
             Toast.makeText(this, "Amount must be a valid decimal number", Toast.LENGTH_SHORT).show();
             return;
