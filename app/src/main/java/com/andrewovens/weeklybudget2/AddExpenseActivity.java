@@ -128,7 +128,7 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
                 return;
             }
             try {
-                e.Amount = Double.parseDouble(amountString);
+                e.Amount = Double.parseDouble(amountString.replace(',', '.'));
             } catch (Exception ex) {
                 Toast.makeText(this, "Amount must be a valid decimal number", Toast.LENGTH_SHORT).show();
                 return;
