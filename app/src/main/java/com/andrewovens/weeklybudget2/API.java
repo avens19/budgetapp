@@ -12,7 +12,7 @@ import org.json.*;
 
 @SuppressLint("SimpleDateFormat")
 class API {
-    private static String baseUrl = "https://budgetapp.azurewebsites.net/api/";
+    private static String baseUrl = "https://budget.andrewovens.com/api/";
 
     static Budget CreateBudget(@NonNull Budget b) throws JSONException, IOException {
         String urlString = baseUrl + "budget";
