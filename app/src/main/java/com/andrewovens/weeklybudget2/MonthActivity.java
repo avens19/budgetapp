@@ -83,7 +83,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
                 MonthRowAdapter adapter = (MonthRowAdapter) parent.getAdapter();
                 DateTotal dt = adapter.get(position);
                 int daysBackFromToday = (int) ((Calendar.getInstance().getTimeInMillis() - dt.Date.getTimeInMillis()) / (24 * 60 * 60 * 1000));
-                Intent i = new Intent();
+                Intent i = new Intent(MonthActivity.this, WeekActivity.class);
                 i.putExtra("days", daysBackFromToday);
                 MonthActivity.this.setResult(Activity.RESULT_OK, i);
                 MonthActivity.this.finish();
@@ -252,7 +252,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
     public boolean onNavigationItemSelected(int position, long id) {
         if (position == 0) {
             try {
-                Intent i = new Intent();
+                Intent i = new Intent(this, WeekActivity.class);
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_WEEK);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
@@ -261,7 +261,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
             }
         } else if (position == 2) {
             try {
-                Intent i = new Intent();
+                Intent i = new Intent(this, WeekActivity.class);
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY_WEEK);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
@@ -270,7 +270,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
             }
         } else if (position == 3) {
             try {
-                Intent i = new Intent();
+                Intent i = new Intent(this, WeekActivity.class);
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY_MONTH);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
@@ -279,7 +279,7 @@ public class MonthActivity extends Activity implements OnNavigationListener {
             }
         } else if (position == 4) {
             try {
-                Intent i = new Intent();
+                Intent i = new Intent(this, WeekActivity.class);
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
