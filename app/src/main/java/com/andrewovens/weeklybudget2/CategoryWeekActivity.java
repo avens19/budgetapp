@@ -256,7 +256,7 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
     public boolean onNavigationItemSelected(int position, long id) {
         if (position == 0) {
             try {
-                Intent i = new Intent();
+                Intent i = new Intent(this, WeekActivity.class);
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_WEEK);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
@@ -265,7 +265,7 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
             }
         } else if (position == 1) {
             try {
-                Intent i = new Intent();
+                Intent i = new Intent(this, WeekActivity.class);
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_MONTH);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
@@ -274,7 +274,7 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
             }
         } else if (position == 3) {
             try {
-                Intent i = new Intent();
+                Intent i = new Intent(this, WeekActivity.class);
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY_MONTH);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
@@ -283,7 +283,7 @@ public class CategoryWeekActivity extends Activity implements ActionBar.OnNaviga
             }
         } else if (position == 4) {
             try {
-                Intent i = new Intent();
+                Intent i = new Intent(this, WeekActivity.class);
                 i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY);
                 this.setResult(Activity.RESULT_OK, i);
                 this.finish();
