@@ -2,4 +2,17 @@
 <resources>
     <color name="light_grey">#ffcccccc</color>
     <color name="black">#ff000000</color>
+
+    <color name="primary">#ff1b5e20</color>
+    <color name="primary_dark">#ff003300</color>
+    <color name="accent">#ff2e7d32</color>
+
+    <!-- Running totals: within budget vs. overspent. Overridden in values-night. -->
+    <color name="amount_within_budget">#ff000000</color>
+    <color name="amount_over_budget">#ffd32f2f</color>
+
+    <!-- Table rules and the app-widget surface. Overridden in values-night. -->
+    <color name="grid_line">#ff000000</color>
+    <color name="widget_background">#ffffffff</color>
+    <color name="widget_amount">#ff000000</color>
 </resources>

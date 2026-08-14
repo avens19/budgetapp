@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and below (android:fullBackupContent). -->
+<full-backup-content>
+    <include
+        domain="database"
+        path="BUDGETDB" />
+    <include
+        domain="sharedpref"
+        path="WEEKLY_BUDGET_SETTINGS.xml" />
+</full-backup-content>

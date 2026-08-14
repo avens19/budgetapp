@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
     
     <RelativeLayout 
@@ -17,24 +17,28 @@
             android:id="@+id/week_back"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:background="@drawable/ic_action_back"
+            android:backgroundTint="?android:attr/textColorSecondary"
+            android:contentDescription="@string/previous_period"
             android:onClick="weekBackOnClick"/>
         
         <ImageButton 
             android:id="@+id/week_forward"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:background="@drawable/ic_action_forward"
+            android:backgroundTint="?android:attr/textColorSecondary"
+            android:contentDescription="@string/next_period"
             android:onClick="weekForwardOnClick"/>
         
         <TextView 
             android:id="@+id/current_week"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_toRightOf="@id/week_back"
-            android:layout_toLeftOf="@id/week_forward"
+            android:layout_toEndOf="@id/week_back"
+            android:layout_toStartOf="@id/week_forward"
             android:gravity="center"
             android:textSize="20sp"/>
         
@@ -52,7 +56,7 @@
             android:layout_width="40sp"
             android:layout_height="40sp"
             android:padding="10dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:indeterminate="true"
             android:visibility="invisible"/>
@@ -64,7 +68,7 @@
             android:layout_centerVertical="true"
             android:padding="10dp"
             android:textSize="20sp"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>
 
@@ -73,7 +77,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_below="@+id/week_info_wrapper"
         android:layout_centerHorizontal="true"
         android:dividerHeight="0dp"

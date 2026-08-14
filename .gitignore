@@ -1,4 +1,27 @@
+# Build output
 build/
 app/build/
-.idea/
+app/release/
+*.apk
+*.aab
+manifest-merger-*-report.txt
+
+# Gradle / IDE
 .gradle/
+.idea/
+*.iml
+local.properties
+import-summary.txt
+
+# Release signing material. The keystore and its passwords must never be
+# committed; point the build at them with budgetapp.storeFile /
+# budgetapp.storePassword / budgetapp.keyAlias / budgetapp.keyPassword in
+# ~/.gradle/gradle.properties, or the matching BUDGETAPP_* environment
+# variables.
+keystore
+*.jks
+*.keystore
+keystore.properties
+
+# macOS
+.DS_Store

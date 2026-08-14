@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12 and above (android:dataExtractionRules). -->
+<data-extraction-rules>
+    <cloud-backup>
+        <include
+            domain="database"
+            path="BUDGETDB" />
+        <include
+            domain="sharedpref"
+            path="WEEKLY_BUDGET_SETTINGS.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <include
+            domain="database"
+            path="BUDGETDB" />
+        <include
+            domain="sharedpref"
+            path="WEEKLY_BUDGET_SETTINGS.xml" />
+    </device-transfer>
+</data-extraction-rules>

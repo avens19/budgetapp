@@ -1,7 +1,7 @@
 package com.andrewovens.weeklybudget2;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +33,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         Category c = this.getItem(position);
 
         TextView name = rowView.findViewById(R.id.category_row_name);
-        assert c != null;
-        name.setText(c.Name);
+        name.setText(c != null ? c.Name : "");
 
         return rowView;
     }

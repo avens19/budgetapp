@@ -11,7 +11,7 @@
         android:layout_marginBottom="-1dp"
         android:gravity="center_vertical"
         android:padding="8dp"
-	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentStart="true"
         android:background="@drawable/border"/>
 
 	<TextView
@@ -21,16 +21,19 @@
 	    android:layout_marginBottom="-1dp"
 	    android:gravity="center_vertical"
 	    android:padding="10dp"
-	    android:layout_toRightOf="@id/week_row_day" />
+	    android:layout_toEndOf="@id/week_row_day"
+	    android:layout_toStartOf="@+id/week_row_amount"
+	    android:ellipsize="end"
+	    android:maxLines="1" />
 	
 	<TextView
 	    android:id="@+id/week_row_amount"
-	    android:gravity="center_vertical|right"
+	    android:gravity="center_vertical|end"
 	    android:padding="10dp"
 	    android:layout_width="80dp"
         android:layout_height="match_parent"
         android:layout_marginBottom="-1dp"
-	    android:layout_alignParentRight="true"
+	    android:layout_alignParentEnd="true"
         android:background="@drawable/border" />
 
 </RelativeLayout>

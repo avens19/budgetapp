@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="amount_within_budget">#ffe6e6e6</color>
+    <color name="amount_over_budget">#ffef9a9a</color>
+
+    <color name="grid_line">#ff5c5c5c</color>
+    <color name="widget_background">#ff1c1c1c</color>
+    <color name="widget_amount">#ffe6e6e6</color>
+</resources>

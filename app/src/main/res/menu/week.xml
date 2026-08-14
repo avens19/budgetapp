@@ -1,23 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.andrewovens.weeklybudget.WeekActivity" >
+    tools:context="com.andrewovens.weeklybudget2.WeekActivity" >
 
     <item
         android:id="@+id/action_current_budget"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/current_budget"/>
+        android:title="@string/current_budget"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/button_edit_budget"/>
-    
+        android:title="@string/button_edit_budget"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/action_add"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/icon_add"
-        android:title="@string/action_add"/>
+        android:title="@string/action_add"
+        app:showAsAction="ifRoom"/>
 
 </menu>

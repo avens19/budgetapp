@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.andrewovens.weeklybudget2"
-    android:versionCode="28"
-    android:versionName="5.0.3" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="false"
+        tools:targetApi="tiramisu" >
         <activity
             android:name=".WeekActivity"
-            android:label="@string/app_name"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,32 +28,30 @@
         </activity>
         <activity
             android:name=".FirstActivity"
+            android:exported="false"
             android:label="@string/title_activity_first" />
         <activity
             android:name=".NewBudgetActivity"
+            android:exported="false"
             android:label="@string/title_activity_new_budget"
-            android:parentActivityName=".FirstActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.andrewovens.weeklybudget2.FirstActivity" />
-        </activity>
+            android:parentActivityName=".FirstActivity" />
         <activity
             android:name=".JoinBudgetActivity"
+            android:exported="false"
             android:label="@string/title_activity_join_budget"
-            android:parentActivityName=".FirstActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.andrewovens.weeklybudget2.FirstActivity" />
-        </activity>
+            android:parentActivityName=".FirstActivity" />
         <activity
             android:name=".AddExpenseActivity"
+            android:exported="false"
             android:label="@string/title_activity_add_expense" />
         <activity
             android:name=".MonthActivity"
+            android:exported="false"
             android:label="@string/title_activity_month" />
 
-        <receiver android:name=".AddExpenseWidget"
-            android:exported="true" >
+        <receiver
+            android:name=".AddExpenseWidget"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -67,12 +63,17 @@
 
         <activity
             android:name=".SwitchBudgetActivity"
+            android:exported="false"
             android:label="@string/title_activity_switch_budget" />
-        <activity android:name=".CategoryWeekActivity" />
-        <activity android:name=".CategoryMonthActivity" />
-        <activity android:name=".CategoryActivity" >
-        </activity>
-        <service android:name=".SyncService" />
+        <activity
+            android:name=".CategoryWeekActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryMonthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

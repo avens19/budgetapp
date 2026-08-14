@@ -1,12 +1,9 @@
 package com.andrewovens.weeklybudget2;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -15,28 +12,24 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class CategoryMonthActivity extends Activity implements ActionBar.OnNavigationListener, ValueFormatter, OnChartValueSelectedListener {
+public class CategoryMonthActivity extends BaseActivity
+        implements ActionBar.OnNavigationListener, OnChartValueSelectedListener {
 
     private Budget _budget;
     private BroadcastReceiver _syncReceiver;
@@ -47,27 +40,7 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_month);
 
-        // Set up the action bar to show a dropdown list.
-        ActionBar actionBar = getActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-        // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(
-                // Specify a SpinnerAdapter to populate the dropdown list.
-                new ArrayAdapter<>(
-                        actionBar.getThemedContext(),
-                        R.layout.main_menu_item,
-                        R.id.main_menu_item_text,
-                        new String[]{
-                                getString(R.string.title_week),
-                                getString(R.string.title_month),
-                                getString(R.string.title_category_week),
-                                getString(R.string.title_category_month),
-                                getString(R.string.title_category),
-                        }),
-                this);
+        Navigation.setUp(this, this, Navigation.CATEGORY_MONTH);
 
         setUpSwipe();
         setUpOnLongClick();
@@ -83,29 +56,19 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         }
 
         PieChart chart = findViewById(R.id.month_chart);
-        chart.setRotationEnabled(false);
-        chart.setDescription("");
-        chart.setHoleRadius(20f);
-        chart.setTransparentCircleRadius(25f);
-
+        CategoryChart.configure(chart);
         chart.setOnChartValueSelectedListener(this);
 
         NonScrollableListView lv = findViewById(R.id.category_month_expense_list);
         lv.setFocusable(false);
 
-        IntentFilter syncFilter = new IntentFilter(SyncService.SYNC_COMPLETE);
         _syncReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadData();
-                    }
-                });
+                runOnUiThread(CategoryMonthActivity.this::loadData);
             }
         };
-        registerReceiver(_syncReceiver, syncFilter);
+        Sync.registerCompletionReceiver(this, _syncReceiver);
     }
 
     @Override
@@ -117,73 +80,49 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
     @Override
     protected void onResume() {
         super.onResume();
-        ActionBar actionBar = getActionBar();
-        assert actionBar != null;
-        actionBar.setSelectedNavigationItem(3);
+
+        Navigation.select(this, Navigation.CATEGORY_MONTH);
 
         loadData();
 
         this.invalidateOptionsMenu();
 
-        SyncService.startSync(this);
+        Sync.start(this);
     }
 
     private void setUpSwipe() {
-        final View container = findViewById(R.id.category_month_container);
-        View v = findViewById(R.id.month_chart);
+        int[] swipeableIds = {R.id.category_month_container, R.id.month_chart,
+                R.id.category_month_expense_list};
 
-        container.setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
-                monthBack();
-            }
+        for (int id : swipeableIds) {
+            final boolean isContainer = id == R.id.category_month_container;
+            findViewById(id).setOnTouchListener(new OnSwipeTouchListener(this) {
+                public void onSwipeRight() {
+                    monthBack();
+                }
 
-            public void onSwipeLeft() {
-                monthForward();
-            }
+                public void onSwipeLeft() {
+                    monthForward();
+                }
 
-            @SuppressLint("ClickableViewAccessibility")
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return true;
-            }
-        });
-
-        v.setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
-                monthBack();
-            }
-
-            public void onSwipeLeft() {
-                monthForward();
-            }
-
-            @SuppressLint("ClickableViewAccessibility")
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return false;
-            }
-        });
-
-        v = findViewById(R.id.category_month_expense_list);
-        v.setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
-                monthBack();
-            }
-
-            public void onSwipeLeft() {
-                monthForward();
-            }
-
-            @SuppressLint("ClickableViewAccessibility")
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return false;
-            }
-        });
+                @SuppressLint("ClickableViewAccessibility")
+                public boolean onTouch(View v, MotionEvent event) {
+                    gestureDetector.onTouchEvent(event);
+                    // Only the background consumes the gesture; the chart and
+                    // the list still need their own taps.
+                    return isContainer;
+                }
+            });
+        }
     }
 
     private void loadData() {
         _budget = Settings.getBudget(this);
+
+        if (_budget == null) {
+            this.finish();
+            return;
+        }
 
         hideDetails();
 
@@ -193,38 +132,10 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         TextView month = findViewById(R.id.category_current_month);
         month.setText(now.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
 
-        List<CategoryAmount> list = DBHelper.GetCategoryAmountsForMonth(_budget.UniqueId, _daysBackFromToday, this.getString(R.string.uncategorized));
+        List<CategoryAmount> list = DBHelper.GetCategoryAmountsForMonth(_budget.UniqueId,
+                _daysBackFromToday, this.getString(R.string.uncategorized));
 
-        PieChart chart = findViewById(R.id.month_chart);
-
-        List<Entry> entries = new ArrayList<>();
-        List<String> names = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            CategoryAmount categoryAmount = list.get(i);
-            Entry e = new Entry((float) categoryAmount.Amount, i, categoryAmount);
-            entries.add(e);
-            names.add(categoryAmount.Name);
-        }
-
-        PieDataSet pds = new PieDataSet(entries, "");
-
-        ArrayList<Integer> colors = new ArrayList<>();
-
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-
-        pds.setColors(colors);
-
-        PieData data = new PieData(names, pds);
-        data.setValueFormatter(this);
-        chart.setData(data);
-
-        chart.invalidate();
+        CategoryChart.populate(findViewById(R.id.month_chart), list);
     }
 
     public void monthBackOnClick(View v) {
@@ -232,12 +143,7 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
     }
 
     private void monthBack() {
-        Calendar now = Calendar.getInstance();
-        Calendar start = (Calendar) now.clone();
-        start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
-        start.add(Calendar.MONTH, -1);
-        _daysBackFromToday = (int) ((now.getTimeInMillis() - start.getTimeInMillis()) / (24 * 60 * 60 * 1000));
-        loadData();
+        shiftMonths(-1);
     }
 
     public void monthForwardOnClick(View v) {
@@ -246,58 +152,25 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
 
     private void monthForward() {
         if (_daysBackFromToday > 0) {
-            Calendar now = Calendar.getInstance();
-            Calendar start = (Calendar) now.clone();
-            start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
-            start.add(Calendar.MONTH, 1);
-            _daysBackFromToday = (int) ((now.getTimeInMillis() - start.getTimeInMillis()) / (24 * 60 * 60 * 1000));
-            if (_daysBackFromToday < 0)
-                _daysBackFromToday = 0;
-
-            loadData();
+            shiftMonths(1);
         }
+    }
+
+    private void shiftMonths(int months) {
+        Calendar now = Calendar.getInstance();
+        Calendar start = (Calendar) now.clone();
+        start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+        start.add(Calendar.MONTH, months);
+        _daysBackFromToday = Dates.daysBetween(start, now);
+        if (_daysBackFromToday < 0)
+            _daysBackFromToday = 0;
+
+        loadData();
     }
 
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
-        if (position == 0) {
-            try {
-                Intent i = new Intent(this, WeekActivity.class);
-                i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_WEEK);
-                this.setResult(Activity.RESULT_OK, i);
-                this.finish();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (position == 1) {
-            try {
-                Intent i = new Intent(this, WeekActivity.class);
-                i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_MONTH);
-                this.setResult(Activity.RESULT_OK, i);
-                this.finish();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (position == 2) {
-            try {
-                Intent i = new Intent(this, WeekActivity.class);
-                i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY_WEEK);
-                this.setResult(Activity.RESULT_OK, i);
-                this.finish();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (position == 4) {
-            try {
-                Intent i = new Intent(this, WeekActivity.class);
-                i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_CATEGORY);
-                this.setResult(Activity.RESULT_OK, i);
-                this.finish();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return true;
+        return ScreenSwitcher.onNavigationItemSelected(this, Navigation.CATEGORY_MONTH, position);
     }
 
     @Override
@@ -307,52 +180,19 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         getMenuInflater().inflate(R.menu.month, menu);
         if (_budget != null) {
             MenuItem s = menu.findItem(R.id.action_current_budget);
-            s.setTitle(this.getString(R.string.current_budget) + " " + _budget.Name);
+            s.setTitle(getString(R.string.current_budget_named, _budget.Name));
         }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_current_budget) {
-            if (_budget != null) {
-                try {
-                    Intent i = new Intent(this, SwitchBudgetActivity.class);
-                    int SWITCH_BUDGET = 2;
-                    startActivityForResult(i, SWITCH_BUDGET);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return true;
-        }
-        if (id == R.id.action_settings) {
-            if (_budget != null) {
-                try {
-                    Intent i = new Intent(this, NewBudgetActivity.class);
-                    i.putExtra("budget", _budget.toJson(false).toString());
-                    int EDIT_BUDGET = 1;
-                    startActivityForResult(i, EDIT_BUDGET);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return ScreenSwitcher.onOptionsItemSelected(this, item, _budget)
+                || super.onOptionsItemSelected(item);
     }
 
     @Override
-    public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-        return Helpers.currencyString(value);
-    }
-
-    @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+    public void onValueSelected(Entry e, Highlight h) {
         CategoryAmount c = (CategoryAmount) e.getData();
         TextView tv = findViewById(R.id.category_month_selection_name);
         tv.setText(c.Name);
@@ -360,7 +200,8 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
 
         NonScrollableListView lv = findViewById(R.id.category_month_expense_list);
 
-        List<Expense> expenses = DBHelper.GetExpensesForCategoryForMonth(_budget.UniqueId, c.CategoryId != null ? c.CategoryId.toString() : null, _daysBackFromToday);
+        List<Expense> expenses = DBHelper.GetExpensesForCategoryForMonth(_budget.UniqueId,
+                c.CategoryId != null ? c.CategoryId.toString() : null, _daysBackFromToday);
 
         WeekRowAdapter aa = new WeekRowAdapter(this, R.layout.week_row, expenses);
         lv.setAdapter(aa);
@@ -378,8 +219,7 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         tv.setVisibility(View.GONE);
         NonScrollableListView lv = findViewById(R.id.category_month_expense_list);
         lv.setVisibility(View.GONE);
-        PieChart chart = findViewById(R.id.month_chart);
-        chart.highlightValues(new Highlight[0]);
+        CategoryChart.clearHighlights(findViewById(R.id.month_chart));
     }
 
     private void setUpOnLongClick() {
@@ -395,7 +235,7 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         lv.setTag(lv.getAdapter().getItem(info.position));
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.week_context, menu);
+        inflater.inflate(R.menu.category_month_context, menu);
     }
 
     @Override
@@ -405,15 +245,13 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         Expense e = (Expense) lv.getItemAtPosition(info.position);
 
         try {
-            switch (item.getItemId()) {
-                case R.id.context_edit:
-                    Intent i = new Intent(this, AddExpenseActivity.class);
-                    i.putExtra("expense", e.toJson().toString());
-                    this.startActivity(i);
-                    break;
-                case R.id.context_delete:
-                    deleteExpense(e);
-                    break;
+            int id = item.getItemId();
+            if (id == R.id.context_edit) {
+                Intent i = new Intent(this, AddExpenseActivity.class);
+                i.putExtra("expense", e.toJson().toString());
+                this.startActivity(i);
+            } else if (id == R.id.context_delete) {
+                deleteExpense(e);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -428,6 +266,6 @@ public class CategoryMonthActivity extends Activity implements ActionBar.OnNavig
         else
             DBHelper.EditExpense(e, DBHelper.DELETED_STATE_KEY);
         loadData();
-        SyncService.startSync(this);
+        Sync.start(this);
     }
 }

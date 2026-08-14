@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -16,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class SwitchBudgetActivity extends Activity {
+public class SwitchBudgetActivity extends BaseActivity {
+
+    private static final int CREATE_OR_JOIN = 1;
 
     private BudgetAdapter _adapter;
 
@@ -34,27 +37,34 @@ public class SwitchBudgetActivity extends Activity {
 
         Budget[] budgets = Settings.getBudgets(this);
 
-        ListView lv = findViewById(R.id.switch_list);
-
         ArrayList<Budget> bs = new ArrayList<>();
-        Collections.addAll(bs, budgets);
+        if (budgets != null) {
+            // Null until the one-off migration in WeekActivity has run, which
+            // happens on a background thread — reaching this screen first used
+            // to crash here.
+            Collections.addAll(bs, budgets);
+        } else {
+            Budget current = Settings.getBudget(this);
+            if (current != null) {
+                bs.add(current);
+            }
+        }
+
+        ListView lv = findViewById(R.id.switch_list);
 
         _adapter = new BudgetAdapter(this, R.layout.budget_row, bs);
 
         lv.setAdapter(_adapter);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Budget b = _adapter.getItem(i);
-                try {
-                    Settings.setBudget(SwitchBudgetActivity.this, b);
-                    SwitchBudgetActivity.this.setResult(Activity.RESULT_OK);
-                    SwitchBudgetActivity.this.finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Helpers.showNetworkErrorToastOnUi(SwitchBudgetActivity.this, R.string.error_network);
-                }
+        lv.setOnItemClickListener((adapterView, view, i, l) -> {
+            Budget b = _adapter.getItem(i);
+            try {
+                Settings.setBudget(SwitchBudgetActivity.this, b);
+                SwitchBudgetActivity.this.setResult(Activity.RESULT_OK);
+                SwitchBudgetActivity.this.finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Helpers.showNetworkErrorToastOnUi(SwitchBudgetActivity.this, R.string.error_network);
             }
         });
 
@@ -104,21 +114,22 @@ public class SwitchBudgetActivity extends Activity {
 
     public void newBudgetOnClick(View view) {
         Intent i = new Intent(this, NewBudgetActivity.class);
-        startActivityForResult(i, 1);
+        startActivityForResult(i, CREATE_OR_JOIN);
     }
 
     public void joinBudgetOnClick(View view) {
         Intent i = new Intent(this, JoinBudgetActivity.class);
-        startActivityForResult(i, 1);
+        startActivityForResult(i, CREATE_OR_JOIN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK)
             this.finish();
     }
 
-    public class BudgetAdapter extends ArrayAdapter<Budget> {
+    public static class BudgetAdapter extends ArrayAdapter<Budget> {
         private final Context context;
         private final int resourceID;
         private final List<Budget> _budgets;
@@ -168,7 +179,6 @@ public class SwitchBudgetActivity extends Activity {
             Budget c = this.getItem(position);
 
             TextView name = rowView.findViewById(R.id.budget_row_name);
-            assert c != null;
             name.setText(c.Name);
 
             return rowView;

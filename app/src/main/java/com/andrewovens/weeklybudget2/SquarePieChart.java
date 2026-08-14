@@ -1,45 +1,45 @@
 package com.andrewovens.weeklybudget2;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Point;
 import android.util.AttributeSet;
-import android.view.Display;
-import android.view.WindowManager;
+import android.util.TypedValue;
 
 import com.github.mikephil.charting.charts.PieChart;
 
 /**
- * Created by andrew on 02/05/16.
+ * A {@link PieChart} that stays square and never grows taller than the screen.
+ *
+ * <p>The height used to come from {@code WindowManager.getDefaultDisplay()},
+ * which is deprecated and, since API 30, reports the wrong bounds on
+ * multi-window and foldable devices. The display metrics on the view's own
+ * resources track the current configuration instead.
  */
 public class SquarePieChart extends PieChart {
-    Context context;
+
+    /** Rough allowance for the surrounding chrome, so the chart still fits. */
+    private static final int CHROME_ALLOWANCE_DP = 96;
 
     public SquarePieChart(Context context) {
         super(context);
-        this.context = context;
     }
 
     public SquarePieChart(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
     }
 
     public SquarePieChart(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        this.context = context;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        @SuppressLint("DrawAllocation") Point size = new Point();
-        display.getSize(size);
-        int screenHeight = size.y - 150;
-        int width = getMeasuredWidth();
-        int dim = Math.min(width, screenHeight);
+
+        int chrome = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                CHROME_ALLOWANCE_DP, getResources().getDisplayMetrics());
+        int available = getResources().getDisplayMetrics().heightPixels - chrome;
+
+        int dim = Math.min(getMeasuredWidth(), Math.max(available, 0));
         setMeasuredDimension(dim, dim);
     }
 }

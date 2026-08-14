@@ -1,7 +1,6 @@
 package com.andrewovens.weeklybudget2;
 
-import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.net.*;
@@ -10,7 +9,6 @@ import java.util.*;
 
 import org.json.*;
 
-@SuppressLint("SimpleDateFormat")
 class API {
     private static String baseUrl = "https://budget.andrewovens.com/api/";
 

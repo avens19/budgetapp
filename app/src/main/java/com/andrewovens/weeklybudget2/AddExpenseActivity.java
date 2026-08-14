@@ -4,18 +4,18 @@ import java.util.*;
 
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.content.Intent;
 import android.view.View;
 import android.widget.*;
 
-public class AddExpenseActivity extends Activity implements AdapterView.OnItemSelectedListener, DatePicker.OnDateChangedListener {
+public class AddExpenseActivity extends BaseActivity
+        implements AdapterView.OnItemSelectedListener, DatePicker.OnDateChangedListener {
 
     private boolean _isEdit = false;
     private Expense _expense;
-    private final int NEW_ITEM_INDEX = -2;
-    private final int NONE_ITEM_INDEX = -1;
+    private static final int NEW_ITEM_INDEX = -2;
+    private static final int NONE_ITEM_INDEX = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,10 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
 
         try {
             Budget budget = Settings.getBudget(this);
-            assert budget != null;
+            if (budget == null) {
+                this.finish();
+                return;
+            }
             String budgetId = budget.UniqueId;
             categories = DBHelper.GetActiveCategories(budgetId, categoryId);
             Category cat = new Category(getString(R.string.label_no_category), budgetId);
@@ -100,92 +103,100 @@ public class AddExpenseActivity extends Activity implements AdapterView.OnItemSe
         }
     }
 
+    /**
+     * Saves the expense and closes the screen.
+     *
+     * <p>The save used to sit in a {@code try/finally} that called
+     * {@code finish()} unconditionally, so failing validation showed a toast
+     * and then closed the form anyway, throwing away everything the user had
+     * typed. Each validation failure now returns and leaves the form open.
+     */
     public void addButtonOnClick(View v) {
-        try {
-            Budget budget = Settings.getBudget(this);
-            assert budget != null;
-            String budgetId = budget.UniqueId;
-            final Expense e = new Expense();
-            DatePicker dp = findViewById(R.id.add_date);
-            e.Date = new GregorianCalendar(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime();
-            EditText description = findViewById(R.id.add_description);
-
-            String descriptionString = description.getText().toString();
-            descriptionString = descriptionString.trim();
-
-            if (descriptionString.isEmpty()) {
-                Toast.makeText(this, "You must enter a description", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            e.Description = descriptionString;
-            EditText amount = findViewById(R.id.add_amount);
-            String amountString = amount.getText().toString();
-            amountString = amountString.trim();
-
-            if (amountString.isEmpty()) {
-                Toast.makeText(this, "You must enter an amount", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            try {
-                e.Amount = Double.parseDouble(amountString.replace(',', '.'));
-            } catch (Exception ex) {
-                Toast.makeText(this, "Amount must be a valid decimal number", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Spinner s = findViewById(R.id.category_picker);
-            Category c = (Category) s.getSelectedItem();
-
-            if (c.Id == NEW_ITEM_INDEX) {
-                EditText newCategoryTextBox = findViewById(R.id.add_category);
-                String categoryName = newCategoryTextBox.getText().toString().trim();
-
-                if (categoryName.isEmpty()) {
-                    Toast.makeText(this, "You must enter a category name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                c = new Category(categoryName, budgetId);
-                c.Id = Settings.getNextCategoryId(this);
-                c.IsDeleted = false;
-
-                DBHelper.AddCategory(c, DBHelper.CREATED_STATE_KEY);
-            }
-
-            if (c.Id != NONE_ITEM_INDEX) {
-                e.CategoryId = c.Id;
-            }
-
-            e.BudgetId = budgetId;
-
-            if (_isEdit) {
-                e.Id = _expense.Id;
-
-                Expense savedExpense = DBHelper.GetExpense(e.Id);
-                if (savedExpense != null) {
-                    String state = savedExpense.State;
-
-                    if (state.equals(DBHelper.CREATED_STATE_KEY)) {
-                        DBHelper.EditExpense(e, DBHelper.CREATED_STATE_KEY);
-                    } else {
-                        DBHelper.EditExpense(e, DBHelper.EDITED_STATE_KEY);
-                    }
-                } else {
-                    Helpers.showNetworkErrorToastOnUi(this, R.string.error_cant_edit);
-                }
-
-            } else {
-                e.Id = Settings.getNextId(this);
-
-                DBHelper.AddExpense(e, DBHelper.CREATED_STATE_KEY);
-            }
-
-            SyncService.startSync(this);
-
-        } finally {
+        Budget budget = Settings.getBudget(this);
+        if (budget == null) {
             this.finish();
+            return;
         }
+        String budgetId = budget.UniqueId;
+
+        final Expense e = new Expense();
+        DatePicker dp = findViewById(R.id.add_date);
+        e.Date = new GregorianCalendar(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime();
+
+        EditText description = findViewById(R.id.add_description);
+        String descriptionString = description.getText().toString().trim();
+
+        if (descriptionString.isEmpty()) {
+            Toast.makeText(this, R.string.error_description_required, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        e.Description = descriptionString;
+
+        EditText amount = findViewById(R.id.add_amount);
+        String amountString = amount.getText().toString().trim();
+
+        if (amountString.isEmpty()) {
+            Toast.makeText(this, R.string.error_amount_required, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            e.Amount = Double.parseDouble(amountString.replace(',', '.'));
+        } catch (NumberFormatException ex) {
+            Toast.makeText(this, R.string.error_amount_invalid, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Spinner s = findViewById(R.id.category_picker);
+        Category c = (Category) s.getSelectedItem();
+
+        if (c.Id == NEW_ITEM_INDEX) {
+            EditText newCategoryTextBox = findViewById(R.id.add_category);
+            String categoryName = newCategoryTextBox.getText().toString().trim();
+
+            if (categoryName.isEmpty()) {
+                Toast.makeText(this, R.string.error_category_name_required, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            c = new Category(categoryName, budgetId);
+            c.Id = Settings.getNextCategoryId(this);
+            c.IsDeleted = false;
+
+            DBHelper.AddCategory(c, DBHelper.CREATED_STATE_KEY);
+        }
+
+        if (c.Id != NONE_ITEM_INDEX) {
+            e.CategoryId = c.Id;
+        }
+
+        e.BudgetId = budgetId;
+
+        if (_isEdit) {
+            e.Id = _expense.Id;
+
+            Expense savedExpense = DBHelper.GetExpense(e.Id);
+            if (savedExpense != null) {
+                String state = savedExpense.State;
+
+                if (DBHelper.CREATED_STATE_KEY.equals(state)) {
+                    DBHelper.EditExpense(e, DBHelper.CREATED_STATE_KEY);
+                } else {
+                    DBHelper.EditExpense(e, DBHelper.EDITED_STATE_KEY);
+                }
+            } else {
+                Helpers.showNetworkErrorToastOnUi(this, R.string.error_cant_edit);
+            }
+
+        } else {
+            e.Id = Settings.getNextId(this);
+
+            DBHelper.AddExpense(e, DBHelper.CREATED_STATE_KEY);
+        }
+
+        Sync.start(this);
+
+        this.finish();
     }
 
     @Override

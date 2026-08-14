@@ -1,7 +1,7 @@
 package com.andrewovens.weeklybudget2;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +31,9 @@ public class WeekRowAdapter extends ArrayAdapter<Expense> {
         View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
         Expense e = this.getItem(position);
 
-        assert e != null;
+        if (e == null) {
+            return rowView;
+        }
 
         TextView day = rowView.findViewById(R.id.week_row_day);
         day.setText(context.getString(R.string.two_string_newline, Dates.getWeekDay(e.Date), Dates.getDayOfMonth(e.Date)));

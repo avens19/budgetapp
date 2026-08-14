@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        DayNight gives the app automatic light/dark support. The view switcher
+        is the action bar's list navigation, which needs the window-decor action
+        bar, so this deliberately is not a *.NoActionBar theme. The system bars
+        are left to androidx EdgeToEdge, which picks a transparent bar plus the
+        right icon contrast for the current API level and night mode.
+    -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+</resources>

@@ -2,17 +2,15 @@ package com.andrewovens.weeklybudget2;
 
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.View;
 import android.widget.*;
 
-public class NewBudgetActivity extends Activity {
+public class NewBudgetActivity extends BaseActivity {
 
     private Budget _budget;
     private boolean _isEdit = false;
@@ -68,90 +66,78 @@ public class NewBudgetActivity extends Activity {
         Spinner weekday = findViewById(R.id.weekday_spinner);
         EditText amount = findViewById(R.id.text_new_amount);
 
-        _budget.StartDay = weekday.getSelectedItemPosition();
-
-        String nameString = name.getText().toString();
-        String amountString = amount.getText().toString();
-        amountString = amountString.trim();
+        String nameString = name.getText().toString().trim();
+        String amountString = amount.getText().toString().trim();
 
         if (nameString.isEmpty()) {
-            Toast.makeText(this, "You must enter a name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_name_required, Toast.LENGTH_SHORT).show();
             return;
         }
-
-        _budget.Name = nameString;
 
         if (amountString.isEmpty()) {
-            Toast.makeText(this, "You must enter an amount", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_amount_required, Toast.LENGTH_SHORT).show();
             return;
         }
 
+        double amountValue;
         try {
-            _budget.Amount = Double.parseDouble(amount.getText().toString().replace(',', '.'));
-        } catch (Exception e) {
-            Toast.makeText(this, "Amount must be a valid decimal number", Toast.LENGTH_SHORT).show();
+            amountValue = Double.parseDouble(amountString.replace(',', '.'));
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, R.string.error_amount_invalid, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        new Thread(new Runnable() {
+        _budget.StartDay = weekday.getSelectedItemPosition();
+        _budget.Name = nameString;
+        _budget.Amount = amountValue;
 
-            @Override
-            public void run() {
-                try {
-                    Looper.prepare();
-
-                    if (_isEdit) {
-                        API.EditBudget(_budget);
-
-                        Settings.setBudget(NewBudgetActivity.this, _budget);
-
-                        Budget[] budgets = Settings.getBudgets(NewBudgetActivity.this);
-                        Budget[] newBudgets;
-                        if (budgets != null) {
-                            newBudgets = new Budget[budgets.length];
-                            for (int i = 0; i < budgets.length; i++) {
-                                if (budgets[i].UniqueId.equals(_budget.UniqueId)) {
-                                    newBudgets[i] = _budget;
-                                } else {
-                                    newBudgets[i] = budgets[i];
-                                }
-                            }
-                        } else {
-                            newBudgets = new Budget[1];
-                            newBudgets[0] = _budget;
-                        }
-
-                        Settings.setBudgets(NewBudgetActivity.this, newBudgets);
-
-                        NewBudgetActivity.this.finish();
-                    } else {
-                        _budget = API.CreateBudget(_budget);
-
-                        Settings.setBudget(NewBudgetActivity.this, _budget);
-
-                        Budget[] budgets = Settings.getBudgets(NewBudgetActivity.this);
-                        Budget[] newBudgets;
-                        if (budgets != null) {
-                            newBudgets = new Budget[budgets.length + 1];
-                            System.arraycopy(budgets, 0, newBudgets, 0, budgets.length);
-                            newBudgets[budgets.length] = _budget;
-                        } else {
-                            newBudgets = new Budget[1];
-                            newBudgets[0] = _budget;
-                        }
-
-                        Settings.setBudgets(NewBudgetActivity.this, newBudgets);
-
+        // The API call has to leave the main thread; everything that touches
+        // the activity (finish, setResult) is posted back to it.
+        new Thread(() -> {
+            try {
+                if (_isEdit) {
+                    API.EditBudget(_budget);
+                    saveBudget(_budget, false);
+                    runOnUiThread(NewBudgetActivity.this::finish);
+                } else {
+                    final Budget created = API.CreateBudget(_budget);
+                    _budget = created;
+                    saveBudget(created, true);
+                    runOnUiThread(() -> {
                         NewBudgetActivity.this.setResult(RESULT_OK);
                         NewBudgetActivity.this.finish();
-                    }
-
-                } catch (Exception e) {
-                    Helpers.showNetworkErrorToastOnUi(NewBudgetActivity.this, R.string.error_network);
-                    e.printStackTrace();
+                    });
                 }
+            } catch (Exception e) {
+                Helpers.showNetworkErrorToastOnUi(NewBudgetActivity.this, R.string.error_network);
+                e.printStackTrace();
             }
-
         }).start();
+    }
+
+    private void saveBudget(Budget budget, boolean isNew) throws org.json.JSONException {
+        Settings.setBudget(this, budget);
+
+        Budget[] budgets = Settings.getBudgets(this);
+        Budget[] newBudgets;
+
+        if (isNew) {
+            if (budgets != null) {
+                newBudgets = new Budget[budgets.length + 1];
+                System.arraycopy(budgets, 0, newBudgets, 0, budgets.length);
+                newBudgets[budgets.length] = budget;
+            } else {
+                newBudgets = new Budget[]{budget};
+            }
+        } else if (budgets != null) {
+            newBudgets = new Budget[budgets.length];
+            for (int i = 0; i < budgets.length; i++) {
+                newBudgets[i] = budgets[i].UniqueId.equals(budget.UniqueId) ? budget : budgets[i];
+            }
+        } else {
+            newBudgets = new Budget[]{budget};
+        }
+
+        Settings.setBudgets(this, newBudgets);
     }
 }

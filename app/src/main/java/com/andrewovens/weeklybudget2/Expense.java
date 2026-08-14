@@ -1,7 +1,6 @@
 package com.andrewovens.weeklybudget2;
 
-import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,8 +9,16 @@ import java.util.*;
 
 import org.json.*;
 
-@SuppressLint("SimpleDateFormat")
 public class Expense {
+
+    /**
+     * The wire format the API uses. It is a fixed machine format, so it has to
+     * be parsed and printed with {@link Locale#US} — under a locale with a
+     * non-Gregorian calendar or non-ASCII digits (Thai, Hindi, Arabic) the
+     * default locale produces dates the server cannot read.
+     */
+    private static final String WIRE_DATE_FORMAT = "yyyy-MM-dd";
+
     long Id;
     public Date Date;
     String Description;
@@ -29,7 +36,7 @@ public class Expense {
     public static Expense fromJson(@NonNull JSONObject jo) throws ParseException, JSONException {
         Expense e = new Expense();
         e.Id = jo.getLong("Id");
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat formatter = new SimpleDateFormat(WIRE_DATE_FORMAT, Locale.US);
         e.Date = formatter.parse(jo.getString("Date"));
         e.Description = jo.getString("Description");
         e.Amount = jo.getDouble("Amount");
@@ -44,7 +51,7 @@ public class Expense {
     public JSONObject toJson() throws JSONException {
         JSONObject jo = new JSONObject();
         jo.put("Id", Id);
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat formatter = new SimpleDateFormat(WIRE_DATE_FORMAT, Locale.US);
         jo.put("Date", formatter.format(Date));
         jo.put("Description", Description);
         jo.put("Amount", Amount);

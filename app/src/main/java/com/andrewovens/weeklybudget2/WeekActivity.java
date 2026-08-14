@@ -6,25 +6,18 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,7 +27,11 @@ import android.widget.TextView;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-public class WeekActivity extends Activity implements ActionBar.OnNavigationListener {
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
+public class WeekActivity extends BaseActivity implements ActionBar.OnNavigationListener {
 
     private Budget _budget;
     private BroadcastReceiver _syncReceiver;
@@ -51,6 +48,9 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
     public static final String GOTO_ACTIVITY = "GOTO_ACTIVITY";
 
+    /** Set by the home-screen widget to jump straight to the add-expense form. */
+    public static final String EXTRA_ADD_EXPENSE = "ADD";
+
     public static final int GOTO_WEEK = 200;
     public static final int GOTO_MONTH = 201;
     public static final int GOTO_CATEGORY_WEEK = 202;
@@ -62,48 +62,32 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
 
-        // Set up the action bar to show a dropdown list.
-        ActionBar actionBar = getActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-        // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(
-                // Specify a SpinnerAdapter to populate the dropdown list.
-                new ArrayAdapter<>(
-                        actionBar.getThemedContext(),
-                        R.layout.main_menu_item,
-                        R.id.main_menu_item_text,
-                        new String[]{
-                                getString(R.string.title_week),
-                                getString(R.string.title_month),
-                                getString(R.string.title_category_week),
-                                getString(R.string.title_category_month),
-                                getString(R.string.title_category),
-                        }),
-                this);
+        Navigation.setUp(this, this, Navigation.WEEK);
 
         setUpSwipe();
         ListView lv = WeekActivity.this.findViewById(R.id.week_list);
         registerForContextMenu(lv);
 
-        IntentFilter syncFilter = new IntentFilter(SyncService.SYNC_COMPLETE);
         _syncReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 final View spinner = findViewById(R.id.main_load);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (spinner != null) {
-                            spinner.setVisibility(View.INVISIBLE);
-                        }
+                runOnUiThread(() -> {
+                    if (spinner != null) {
+                        spinner.setVisibility(View.INVISIBLE);
                     }
                 });
             }
         };
-        registerReceiver(_syncReceiver, syncFilter);
+        Sync.registerCompletionReceiver(this, _syncReceiver);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // The widget reuses this task, so the "open the add form" extra arrives
+        // here rather than in onCreate. loadData() reads getIntent().
+        setIntent(intent);
     }
 
     @Override
@@ -118,10 +102,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
         DBHelper.OpenDB(this);
 
-        ActionBar actionBar = getActionBar();
-
-        assert actionBar != null;
-        actionBar.setSelectedNavigationItem(0);
+        Navigation.select(this, Navigation.WEEK);
 
         loadData();
 
@@ -133,7 +114,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
     private void startSync() {
         View spinner = findViewById(R.id.main_load);
         spinner.setVisibility(View.VISIBLE);
-        SyncService.startSync(this);
+        Sync.start(this);
     }
 
     private void setUpSwipe() {
@@ -172,7 +153,6 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         });
     }
 
-    @SuppressLint("SimpleDateFormat")
     private String getPeriod() {
         Calendar start = Calendar.getInstance();
         start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
@@ -198,35 +178,12 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
         // Migration to add Budget name and support multiple budgets
         if (budgets == null) {
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        Looper.prepare();
-
-                        Budget budget = API.GetBudget(_budget.UniqueId);
-
-                        Settings.setBudget(WeekActivity.this, budget);
-
-                        Budget[] bs = new Budget[1];
-                        bs[0] = budget;
-
-                        Settings.setBudgets(WeekActivity.this, bs);
-
-                        _budget = Budget.update(_budget, budget);
-                    } catch (Exception e) {
-                        Helpers.showNetworkErrorToastOnUi(WeekActivity.this, R.string.error_network);
-                        e.printStackTrace();
-                    }
-                }
-
-            }).start();
+            migrateToNamedBudgets(_budget.UniqueId);
         }
 
         // Check for open from widget
-        if (this.getIntent().getBooleanExtra("ADD", false)) {
-            this.getIntent().putExtra("ADD", false);
+        if (this.getIntent().getBooleanExtra(EXTRA_ADD_EXPENSE, false)) {
+            this.getIntent().putExtra(EXTRA_ADD_EXPENSE, false);
             Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
             startActivity(i);
             return;
@@ -244,58 +201,12 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         final double rounded = Math.round(remaining * 100) / 100.0;
         if (rounded >= 0) {
             r.setText(getString(R.string.week_activity_amount_remaining, Helpers.currencyString(rounded)));
-            r.setTextColor(Color.BLACK);
+            r.setTextColor(ContextCompat.getColor(this, R.color.amount_within_budget));
         } else {
             r.setText(getString(R.string.week_activity_amount_over, Helpers.currencyString(Math.abs(rounded))));
-            r.setTextColor(Color.RED);
+            r.setTextColor(ContextCompat.getColor(this, R.color.amount_over_budget));
         }
-        r.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DBHelper.SystemExpenseExistsForWeek(_budget.UniqueId, _daysBackFromToday - 7, _budget.StartDay)) {
-                    Toast.makeText(WeekActivity.this, R.string.already_carried, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(WeekActivity.this);
-
-                builder
-                        .setTitle(R.string.carry_balance)
-                        .setMessage(R.string.carry_balance_message)
-                        .setCancelable(true)
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Calendar start = Calendar.getInstance();
-                                start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
-                                while ((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay) {
-                                    start.add(Calendar.DAY_OF_YEAR, -1);
-                                }
-                                start.add(Calendar.DAY_OF_YEAR, 7);
-                                Expense e = new Expense();
-                                e.Amount = -rounded;
-                                e.Date = new GregorianCalendar(start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH)).getTime();
-                                e.BudgetId = _budget.UniqueId;
-                                e.Id = Settings.getNextId(WeekActivity.this);
-                                e.Description = getString(R.string.carry_balance_expense_description);
-                                e.IsSystem = true;
-                                DBHelper.AddExpense(e, DBHelper.CREATED_STATE_KEY);
-                                loadData();
-                                dialog.dismiss();
-                            }
-                        });
-
-                Dialog d = builder.create();
-
-                d.show();
-            }
-        });
+        r.setOnClickListener(v -> confirmCarryBalance(rounded));
         ListView lv = WeekActivity.this.findViewById(R.id.week_list);
         if (lv.getAdapter() == null) {
             WeekRowAdapter adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
@@ -308,6 +219,73 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         TextView dates = findViewById(R.id.current_week);
         dates.setText(getPeriod());
 
+        notifyWidgets();
+    }
+
+    /**
+     * Backfills the budget list for installs that predate multiple-budget
+     * support. The result is applied on the main thread so that the fields the
+     * UI reads are never mutated from a background thread mid-layout.
+     */
+    private void migrateToNamedBudgets(final String uniqueId) {
+        new Thread(() -> {
+            try {
+                final Budget budget = API.GetBudget(uniqueId);
+
+                runOnUiThread(() -> {
+                    try {
+                        Settings.setBudget(WeekActivity.this, budget);
+                        Settings.setBudgets(WeekActivity.this, new Budget[]{budget});
+                        _budget = Budget.update(_budget, budget);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                Helpers.showNetworkErrorToastOnUi(WeekActivity.this, R.string.error_network);
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void confirmCarryBalance(final double rounded) {
+        if (DBHelper.SystemExpenseExistsForWeek(_budget.UniqueId, _daysBackFromToday - 7, _budget.StartDay)) {
+            Toast.makeText(WeekActivity.this, R.string.already_carried, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(WeekActivity.this);
+
+        builder
+                .setTitle(R.string.carry_balance)
+                .setMessage(R.string.carry_balance_message)
+                .setCancelable(true)
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel())
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    Calendar start = Calendar.getInstance();
+                    start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
+                    while ((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay) {
+                        start.add(Calendar.DAY_OF_YEAR, -1);
+                    }
+                    start.add(Calendar.DAY_OF_YEAR, 7);
+                    Expense e = new Expense();
+                    e.Amount = -rounded;
+                    e.Date = new GregorianCalendar(start.get(Calendar.YEAR), start.get(Calendar.MONTH), start.get(Calendar.DAY_OF_MONTH)).getTime();
+                    e.BudgetId = _budget.UniqueId;
+                    e.Id = Settings.getNextId(WeekActivity.this);
+                    e.Description = getString(R.string.carry_balance_expense_description);
+                    e.IsSystem = true;
+                    DBHelper.AddExpense(e, DBHelper.CREATED_STATE_KEY);
+                    loadData();
+                    dialog.dismiss();
+                });
+
+        Dialog d = builder.create();
+
+        d.show();
+    }
+
+    private void notifyWidgets() {
         Intent intent = new Intent(WeekActivity.this, AddExpenseWidget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), AddExpenseWidget.class));
@@ -351,18 +329,15 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         Expense e = (Expense) lv.getItemAtPosition(info.position);
 
         try {
-            switch (item.getItemId()) {
-                case R.id.context_edit:
-                    Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
-                    i.putExtra("expense", e.toJson().toString());
-                    WeekActivity.this.startActivity(i);
-                    break;
-                case R.id.context_delete:
-                    deleteExpense(e);
-                    break;
-                case R.id.context_copy:
-                    copyExpense(e);
-                    break;
+            int id = item.getItemId();
+            if (id == R.id.context_edit) {
+                Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
+                i.putExtra("expense", e.toJson().toString());
+                WeekActivity.this.startActivity(i);
+            } else if (id == R.id.context_delete) {
+                deleteExpense(e);
+            } else if (id == R.id.context_copy) {
+                copyExpense(e);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -377,7 +352,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         else
             DBHelper.EditExpense(e, DBHelper.DELETED_STATE_KEY);
         loadData();
-        SyncService.startSync(this);
+        Sync.start(this);
     }
 
     private void copyExpense(Expense e) {
@@ -396,7 +371,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         ex.CategoryId = e.CategoryId;
         DBHelper.AddExpense(ex, DBHelper.CREATED_STATE_KEY);
         loadData();
-        SyncService.startSync(this);
+        Sync.start(this);
     }
 
     @Override
@@ -405,36 +380,25 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.week, menu);
         MenuItem add = menu.findItem(R.id.action_add);
-        add.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem arg0) {
-                Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
-                startActivity(i);
-                return true;
-            }
+        add.setOnMenuItemClickListener(arg0 -> {
+            Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
+            startActivity(i);
+            return true;
         });
         if (_budget != null) {
             MenuItem s = menu.findItem(R.id.action_current_budget);
-            s.setTitle(this.getString(R.string.current_budget) + " " + _budget.Name);
+            s.setTitle(getString(R.string.current_budget_named, _budget.Name));
         }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_current_budget) {
             if (_budget != null) {
-                try {
-                    Intent i = new Intent(this, SwitchBudgetActivity.class);
-                    startActivityForResult(i, SWITCH_BUDGET);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Intent i = new Intent(this, SwitchBudgetActivity.class);
+                startActivityForResult(i, SWITCH_BUDGET);
             }
             return true;
         }
@@ -456,60 +420,46 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
     @Override
     public boolean onNavigationItemSelected(int position, long id) {
-        if (position == 1 && _budget != null) {
+        if (position == Navigation.WEEK || _budget == null) {
+            return true;
+        }
+        if (position == Navigation.MONTH) {
             gotoMonth();
-        } else if (position == 2 && _budget != null) {
+        } else if (position == Navigation.CATEGORY_WEEK) {
             gotoCategoryWeek();
-        } else if (position == 3 && _budget != null) {
+        } else if (position == Navigation.CATEGORY_MONTH) {
             gotoCategoryMonth();
-        } else if (position == 4 && _budget != null) {
+        } else if (position == Navigation.CATEGORY) {
             gotoCategory();
         }
         return true;
     }
 
-    private void gotoMonth() {
+    private void goTo(Class<?> target, int requestCode) {
         try {
-            Intent i = new Intent(this, MonthActivity.class);
+            Intent i = new Intent(this, target);
             i.putExtra("budget", _budget.toJson(false).toString());
             i.putExtra("days", _daysBackFromToday);
-            startActivityForResult(i, MONTH_ACTIVITY);
+            startActivityForResult(i, requestCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void gotoMonth() {
+        goTo(MonthActivity.class, MONTH_ACTIVITY);
     }
 
     private void gotoCategoryWeek() {
-        try {
-            Intent i = new Intent(this, CategoryWeekActivity.class);
-            i.putExtra("budget", _budget.toJson(false).toString());
-            i.putExtra("days", _daysBackFromToday);
-            startActivityForResult(i, CATEGORY_WEEK_ACTIVITY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        goTo(CategoryWeekActivity.class, CATEGORY_WEEK_ACTIVITY);
     }
 
     private void gotoCategoryMonth() {
-        try {
-            Intent i = new Intent(this, CategoryMonthActivity.class);
-            i.putExtra("budget", _budget.toJson(false).toString());
-            i.putExtra("days", _daysBackFromToday);
-            startActivityForResult(i, CATEGORY_MONTH_ACTIVITY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        goTo(CategoryMonthActivity.class, CATEGORY_MONTH_ACTIVITY);
     }
 
     private void gotoCategory() {
-        try {
-            Intent i = new Intent(this, CategoryActivity.class);
-            i.putExtra("budget", _budget.toJson(false).toString());
-            i.putExtra("days", _daysBackFromToday);
-            startActivityForResult(i, CATEGORY_ACTIVITY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        goTo(CategoryActivity.class, CATEGORY_ACTIVITY);
     }
 
     private void gotoActivity(int go) {
@@ -531,6 +481,8 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == FIRST_ACTIVITY && resultCode != Activity.RESULT_OK) {
             this.finish();
             return;
@@ -543,7 +495,7 @@ public class WeekActivity extends Activity implements ActionBar.OnNavigationList
             activity = data.getIntExtra(GOTO_ACTIVITY, GOTO_WEEK);
         }
         if (days != -1) {
-            _daysBackFromToday = data.getIntExtra("days", 0);
+            _daysBackFromToday = days;
         }
 
         gotoActivity(activity);

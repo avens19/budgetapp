@@ -13,8 +13,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 class DBHelper {
 
@@ -39,7 +39,10 @@ class DBHelper {
     static void OpenDB(Context c) {
         synchronized (locker) {
             if (myDB == null || !myDB.isOpen())
-                myDB = c.openOrCreateDatabase(DB_NAME, SQLiteDatabase.OPEN_READWRITE, null);
+                // openOrCreateDatabase takes a Context.MODE_* flag, not an
+                // SQLiteDatabase.OPEN_* one. The two happened to agree because
+                // both OPEN_READWRITE and MODE_PRIVATE are 0.
+                myDB = c.openOrCreateDatabase(DB_NAME, Context.MODE_PRIVATE, null);
 
             CreateExpensesTable();
 

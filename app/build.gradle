@@ -1,34 +1,95 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
+
+// Release signing is configured out-of-band so the keystore and its passwords
+// never live in the repository. Set these in ~/.gradle/gradle.properties or as
+// environment variables; release builds fall back to unsigned when absent.
+def releaseStorePath = System.getenv('BUDGETAPP_STORE_FILE') ?: project.findProperty('budgetapp.storeFile')
 
 android {
-    namespace "com.andrewovens.weeklybudget2"
-    compileSdkVersion 31
+    namespace 'com.andrewovens.weeklybudget2'
+    compileSdk 37
 
     defaultConfig {
         applicationId "com.andrewovens.weeklybudget2"
-        minSdkVersion 17
-        targetSdkVersion 31
+        minSdk 23
+        targetSdk 37
+        // Must stay above the highest version code already on Play (31 as of
+        // this release). The manifest in git was left at 28, three behind the
+        // store, which is what made the first upload unrolloutable.
+        versionCode 32
+        versionName "5.1.0"
+
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    if (releaseStorePath) {
+        signingConfigs {
+            release {
+                storeFile file(releaseStorePath)
+                storePassword System.getenv('BUDGETAPP_STORE_PASSWORD') ?: project.findProperty('budgetapp.storePassword')
+                keyAlias System.getenv('BUDGETAPP_KEY_ALIAS') ?: project.findProperty('budgetapp.keyAlias')
+                keyPassword System.getenv('BUDGETAPP_KEY_PASSWORD') ?: project.findProperty('budgetapp.keyPassword')
+            }
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (releaseStorePath) {
+                signingConfig signingConfigs.release
+            }
+        }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+    }
+
+    lint {
+        warningsAsErrors true
+        checkDependencies true
+        // MPAndroidChart 3.1.0 is the last upstream release and still ships an
+        // older minSdk/target; nothing we can act on from here.
+        disable 'GradleDependency', 'ObsoleteLintCustomCheck'
+        abortOnError true
+    }
+
+    packaging {
+        resources {
+            excludes += ['META-INF/*.kotlin_module', 'DebugProbesKt.bin']
         }
     }
 }
 
+// Pins the JDK that compiles the project, so the build does not depend on
+// whichever JVM happens to be on PATH. compileOptions above still decides the
+// bytecode level that ships in the APK.
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-repositories {
-    maven { url "https://jitpack.io" }
-}
-
 dependencies {
-    api 'com.github.PhilJay:MPAndroidChart:v2.2.4'
-    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.8.0'
+    implementation 'androidx.core:core:1.19.0'
+    implementation 'androidx.activity:activity:1.13.0'
+    implementation 'androidx.annotation:annotation:1.10.0'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    testImplementation 'junit:junit:4.13.2'
+    // android.jar's org.json is a stub that throws; the real implementation
+    // takes precedence on the unit-test classpath.
+    testImplementation 'org.json:json:20250517'
 }
