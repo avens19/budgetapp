@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/space_xs"
+    android:paddingTop="@dimen/space_l"
+    android:paddingEnd="@dimen/space_xs"
+    android:paddingBottom="@dimen/space_s">
+
+    <TextView
+        android:id="@+id/day_header_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAppearance="@style/TextAppearance.Budget.SectionHeader"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        tools:text="Wednesday 12" />
+
+    <TextView
+        android:id="@+id/day_header_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Budget.SectionHeader"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        tools:text="$51.24" />
+
+</LinearLayout>

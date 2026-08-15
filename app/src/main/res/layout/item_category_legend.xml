@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A chart slice, restated as a row. The pie alone cannot label small
+     slices, so the legend carries the name, amount and share, and selecting
+     either one highlights the other. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/legend_card"
+    style="@style/Widget.Budget.Card.Row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/space_s"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:minHeight="56dp"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_l"
+        android:paddingEnd="@dimen/space_l">
+
+        <ImageView
+            android:id="@+id/legend_dot"
+            android:layout_width="@dimen/category_dot"
+            android:layout_height="@dimen/category_dot"
+            android:contentDescription="@null"
+            android:src="@drawable/category_dot" />
+
+        <TextView
+            android:id="@+id/legend_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_m"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="?attr/colorOnSurface"
+            tools:text="Groceries" />
+
+        <TextView
+            android:id="@+id/legend_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_s"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:text="34%" />
+
+        <TextView
+            android:id="@+id/legend_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_m"
+            android:textAppearance="@style/TextAppearance.Budget.Money.Row"
+            android:textColor="?attr/colorOnSurface"
+            tools:text="$412.90" />
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

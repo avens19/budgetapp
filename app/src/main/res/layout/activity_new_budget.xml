@@ -1,88 +1,170 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/new_budget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/label_budget_name"
-        android:labelFor="@+id/text_budget_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_budget_name" />
-
-    <EditText
-        android:id="@+id/text_budget_name"
-        android:inputType="textCapWords"
-        android:importantForAutofill="no"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Budget.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/label_budget_name"
-        android:imeOptions="actionDone"
-        android:ems="10" />
+        app:navigationIcon="@drawable/ic_arrow_back" />
 
-    <TextView
-        android:id="@+id/label_start_day"
-        android:layout_below="@id/text_budget_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_start_day" />
-    
-    <Spinner
-        android:id="@+id/weekday_spinner"
-        android:layout_below="@id/label_start_day"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/new_budget_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/screen_gutter"
+            android:paddingTop="@dimen/space_s"
+            android:paddingEnd="@dimen/screen_gutter"
+            android:paddingBottom="@dimen/space_xl">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/budget_name_layout"
+                style="@style/Widget.Budget.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/label_budget_name"
+                app:helperText="@string/label_budget_name_helper"
+                app:helperTextEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_budget_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapWords"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/budget_amount_layout"
+                style="@style/Widget.Budget.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:hint="@string/label_new_amount">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_new_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Budget.TextInputLayout.Dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:hint="@string/label_start_day">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/weekday_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:inputType="none"
+                    app:simpleItems="@array/array_weekdays"
+                    tools:ignore="LabelFor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/budget_id_card"
+                style="@style/Widget.Budget.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/space_l"
+                    android:paddingTop="@dimen/space_m"
+                    android:paddingEnd="@dimen/space_m"
+                    android:paddingBottom="@dimen/space_m">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_new_unique"
+                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+
+                        <TextView
+                            android:id="@+id/text_new_unique"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            android:fontFamily="monospace"
+                            android:textAppearance="?attr/textAppearanceBodyMedium"
+                            android:textColor="?attr/colorOnSurface"
+                            tools:text="3f2a9c14-6b7d-4e21-9a05-8c1f2d7e4b60" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            android:text="@string/label_new_unique_helper"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:textColor="?attr/colorOnSurfaceVariant" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="@dimen/space_s"
+                        android:contentDescription="@string/copy_budget_id"
+                        android:src="@drawable/ic_copy"
+                        app:tint="?attr/colorOnSurfaceVariant" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/new_budget_actions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/array_weekdays" />
-    
-    <TextView
-        android:id="@+id/label_new_amount"
-        android:labelFor="@+id/text_new_amount"
-        android:layout_below="@id/weekday_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_new_amount" />
-    
-    <EditText
-        android:id="@+id/text_new_amount"
-        android:importantForAutofill="no"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/label_new_amount"
-        android:imeOptions="actionDone"
-        android:inputType="numberDecimal"
-        android:ems="10" />
-    
-    <TextView
-        android:id="@+id/label_new_unique"
-        android:layout_below="@id/text_new_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/label_new_unique" />
+        android:orientation="vertical"
+        android:paddingStart="@dimen/screen_gutter"
+        android:paddingTop="@dimen/space_s"
+        android:paddingEnd="@dimen/screen_gutter"
+        android:paddingBottom="@dimen/space_l">
 
-    <TextView
-        android:id="@+id/text_new_unique"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/label_new_unique"
-        android:layout_alignEnd="@+id/label_new_unique"
-        android:layout_below="@+id/label_new_unique"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="uniqueIdOnClick" />
-    
-    <Button
-        android:id="@+id/button_create_budget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_new_unique"
-        android:layout_centerHorizontal="true"
-        android:text="@string/button_create_budget"
-        android:onClick="goButtonOnClick" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_create_budget"
+            style="@style/Widget.Budget.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_create_budget" />
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

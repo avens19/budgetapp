@@ -1,8 +1,10 @@
 package com.andrewovens.weeklybudget2;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.text.ParseException;
 import java.util.*;
@@ -10,7 +12,34 @@ import java.util.*;
 import org.json.*;
 
 class API {
-    private static String baseUrl = "https://budget.andrewovens.com/api/";
+    private static final String baseUrl = BuildConfig.API_BASE_URL;
+
+    /**
+     * The header the server stamps its own clock into on the two change-feed
+     * endpoints. Reading the watermark back from here is what keeps the sync
+     * off the device clock.
+     */
+    static final String WATERMARK_HEADER = "X-Watermark";
+
+    /**
+     * A page of changes, plus the point in the server's clock that the page is
+     * complete up to.
+     *
+     * <p>{@code watermark} is null when the server did not send the header —
+     * an older deployment, or a proxy that stripped it. The caller must then
+     * leave its stored watermark alone rather than guess: guessing is what the
+     * device clock used to do.
+     */
+    static final class Page<T> {
+        final List<T> items;
+        @Nullable
+        final String watermark;
+
+        Page(List<T> items, @Nullable String watermark) {
+            this.items = items;
+            this.watermark = watermark;
+        }
+    }
 
     static Budget CreateBudget(@NonNull Budget b) throws JSONException, IOException {
         String urlString = baseUrl + "budget";
@@ -46,13 +75,13 @@ class API {
         return Budget.fromJson(responseBudget);
     }
 
-    static List<Expense> GetExpenses(String id, String watermarkString) throws IOException, JSONException, ParseException {
-        String urlString = baseUrl + "budget/" + id + "/Expenses?watermark=" + watermarkString;
+    static Page<Expense> GetExpenses(String id, String watermarkString) throws IOException, JSONException, ParseException {
+        String urlString = baseUrl + "budget/" + id + "/Expenses?watermark=" + encode(watermarkString);
         URL url = new URL(urlString);
 
-        String response = NetworkOperations.HttpGet(url);
+        NetworkOperations.Response response = NetworkOperations.HttpGetWithHeaders(url);
 
-        JSONArray responseArray = new JSONArray(response);
+        JSONArray responseArray = new JSONArray(response.body);
 
         List<Expense> expenses = new ArrayList<>();
 
@@ -61,16 +90,16 @@ class API {
             expenses.add(Expense.fromJson(jo));
         }
 
-        return expenses;
+        return new Page<>(expenses, response.header(WATERMARK_HEADER));
     }
 
-    static List<Category> GetCategories(String id, String watermarkString) throws IOException, JSONException, ParseException {
-        String urlString = baseUrl + "budget/" + id + "/Categories?watermark=" + watermarkString;
+    static Page<Category> GetCategories(String id, String watermarkString) throws IOException, JSONException, ParseException {
+        String urlString = baseUrl + "budget/" + id + "/Categories?watermark=" + encode(watermarkString);
         URL url = new URL(urlString);
 
-        String response = NetworkOperations.HttpGet(url);
+        NetworkOperations.Response response = NetworkOperations.HttpGetWithHeaders(url);
 
-        JSONArray responseArray = new JSONArray(response);
+        JSONArray responseArray = new JSONArray(response.body);
 
         List<Category> categories = new ArrayList<>();
 
@@ -79,7 +108,16 @@ class API {
             categories.add(Category.fromJson(jo));
         }
 
-        return categories;
+        return new Page<>(categories, response.header(WATERMARK_HEADER));
+    }
+
+    /**
+     * The watermark is an ISO-8601 timestamp, whose ':' and '+' are reserved
+     * in a query string. It used to be pasted in raw, which a strict proxy or
+     * a future non-UTC offset would reject.
+     */
+    private static String encode(@Nullable String watermark) throws UnsupportedEncodingException {
+        return watermark != null ? URLEncoder.encode(watermark, "UTF-8") : "";
     }
 
     static Expense AddExpense(@NonNull Expense e) throws JSONException, IOException, ParseException {

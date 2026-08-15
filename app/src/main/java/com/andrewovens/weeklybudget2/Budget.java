@@ -40,7 +40,12 @@ public class Budget {
         b.UniqueId = json.getString("UniqueId");
         b.StartDay = json.getInt("StartDay");
         b.Amount = json.getDouble("Amount");
-        b.Watermark = json.optString("Watermark");
+        // optString's no-fallback overload returns "" for a missing key, not
+        // null. The server's budget payload has no Watermark at all, so every
+        // budget parsed from a response carried an empty one, and
+        // Budget.update's null check then wrote that empty string over the
+        // real stored watermark.
+        b.Watermark = json.isNull("Watermark") ? null : json.optString("Watermark", null);
         return b;
     }
 

@@ -1,6 +1,8 @@
-# The default proguard-android-optimize.txt already keeps Activity methods used
-# as android:onClick handlers, and AGP generates keep rules for the custom views
-# referenced from layout XML (SquarePieChart, NonScrollableListView).
+# AGP generates keep rules for views referenced from layout XML, which now
+# means the Material and AndroidX widgets plus MPAndroidChart's PieChart. The
+# app's own custom views are gone: the screens bind their listeners in code
+# rather than through android:onClick, so nothing is reached by name any more
+# except the chart animation below.
 
 # MPAndroidChart resolves a handful of animation properties by name through
 # ObjectAnimator, which R8 cannot see.

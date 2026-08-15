@@ -27,27 +27,38 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".TutorialActivity"
+            android:exported="false"
+            android:label="@string/tutorial_title" />
+        <activity
             android:name=".FirstActivity"
             android:exported="false"
             android:label="@string/title_activity_first" />
+
+        <!--
+            The form screens resize for the IME so that the action button
+            pinned at the foot of the layout stays above the keyboard;
+            BaseActivity folds the IME inset into their bottom padding.
+        -->
         <activity
             android:name=".NewBudgetActivity"
             android:exported="false"
             android:label="@string/title_activity_new_budget"
-            android:parentActivityName=".FirstActivity" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".JoinBudgetActivity"
             android:exported="false"
             android:label="@string/title_activity_join_budget"
-            android:parentActivityName=".FirstActivity" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".AddExpenseActivity"
             android:exported="false"
-            android:label="@string/title_activity_add_expense" />
+            android:label="@string/title_activity_add_expense"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MonthActivity"
             android:exported="false"
-            android:label="@string/title_activity_month" />
+            android:label="@string/title_month" />
 
         <receiver
             android:name=".AddExpenseWidget"
@@ -67,13 +78,16 @@
             android:label="@string/title_activity_switch_budget" />
         <activity
             android:name=".CategoryWeekActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_categories" />
         <activity
             android:name=".CategoryMonthActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_categories" />
         <activity
             android:name=".CategoryActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_category" />
     </application>
 
 </manifest>

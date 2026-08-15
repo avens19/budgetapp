@@ -1,9 +1,10 @@
 package com.andrewovens.weeklybudget2;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Locale;
 
@@ -13,20 +14,27 @@ public class JoinBudgetActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_budget);
+
+        MaterialButton go = findViewById(R.id.button_go);
+        go.setOnClickListener(v -> join(go));
     }
 
-    public void goButtonOnClick(View v) {
+    private void join(MaterialButton go) {
         EditText id = findViewById(R.id.text_join_unique_id);
+        TextInputLayout layout = findViewById(R.id.join_id_layout);
 
         // Budget IDs are lowercase UUIDs, so the fold is over a fixed machine
         // format and must not follow the device locale (a Turkish locale maps
         // 'I' to a dotless 'ı').
         final String budgetId = id.getText().toString().trim().toLowerCase(Locale.ROOT);
 
+        layout.setError(null);
         if (budgetId.isEmpty()) {
-            Toast.makeText(this, R.string.error_budget_id_required, Toast.LENGTH_SHORT).show();
+            layout.setError(getString(R.string.error_budget_id_required));
             return;
         }
+
+        go.setEnabled(false);
 
         new Thread(() -> {
             try {
@@ -53,9 +61,9 @@ public class JoinBudgetActivity extends BaseActivity {
 
             } catch (Exception e) {
                 Helpers.showNetworkErrorToastOnUi(JoinBudgetActivity.this, R.string.error_network);
+                runOnUiThread(() -> go.setEnabled(true));
                 e.printStackTrace();
             }
         }).start();
     }
-
 }

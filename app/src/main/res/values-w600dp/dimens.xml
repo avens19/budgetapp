@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Wider gutters keep line lengths readable on tablets and on phones in
+         landscape, where a full-bleed list would otherwise stretch edge to
+         edge. -->
+    <dimen name="screen_gutter">32dp</dimen>
+    <dimen name="chart_size">320dp</dimen>
+
+</resources>

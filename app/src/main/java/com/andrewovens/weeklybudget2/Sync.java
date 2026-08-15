@@ -5,14 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -138,28 +135,60 @@ final class Sync {
             }
         }
 
-        String d = UTCTimeString();
-        List<Category> newCategories = API.GetCategories(budget.UniqueId, watermark);
-        List<Expense> newExpenses = API.GetExpenses(budget.UniqueId, watermark);
-        budget.Watermark = d;
-        Budget.updateStoredBudget(context, budget);
+        API.Page<Category> incomingCategories = API.GetCategories(budget.UniqueId, watermark);
+        API.Page<Expense> incomingExpenses = API.GetExpenses(budget.UniqueId, watermark);
 
-        for (Category c : newCategories) {
+        // Apply first, advance the watermark second. A crash in between costs
+        // one redundant re-fetch; the other order would lose the changes.
+        for (Category c : incomingCategories.items) {
             DBHelper.AddCategory(c, DBHelper.SYNCED_STATE_KEY);
         }
 
-        for (Expense e : newExpenses) {
+        for (Expense e : incomingExpenses.items) {
             if (!e.IsDeleted)
                 DBHelper.AddExpense(e, DBHelper.SYNCED_STATE_KEY);
             else
                 DBHelper.DeleteExpense(e);
         }
+
+        String next = nextWatermark(incomingCategories.watermark, incomingExpenses.watermark);
+        if (next != null) {
+            budget.Watermark = next;
+            Budget.updateStoredBudget(context, budget);
+        }
     }
 
-    private static String UTCTimeString() {
-        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        return dateFormatGmt.format(new Date());
+    /**
+     * The point both change feeds are complete up to.
+     *
+     * <p>This used to be the device's own clock, read just before the two
+     * GETs. The server compares the watermark against timestamps it stamped
+     * from <em>its</em> clock, so any skew between the two was silent data
+     * loss: a device running even a minute fast would store a watermark ahead
+     * of the server's real time, and anything another device wrote inside that
+     * minute was never handed over again. Taking the server's own answer for
+     * "now" removes the device clock from the sync entirely.
+     *
+     * <p>The two feeds are fetched in separate requests, so their watermarks
+     * are separate instants. One value is stored for both, and it has to be
+     * the <em>earlier</em>: the later one would skip anything written to the
+     * other collection between the two requests. The earlier one can only
+     * cause a small overlap on the next sync, and re-applying a row that is
+     * already stored is a no-op.
+     *
+     * <p>Null means the server sent no header at all — an older deployment, or
+     * a proxy that stripped it. The caller then leaves the stored watermark
+     * alone: syncing the same window twice is wasteful but correct, and it is
+     * the only answer available that is not a guess.
+     */
+    @Nullable
+    static String nextWatermark(@Nullable String a, @Nullable String b) {
+        if (a == null || b == null) {
+            return null;
+        }
+        // Both come from the same server in the same fixed-width UTC format
+        // ("yyyy-MM-ddTHH:mm:ss.fffffffZ"), so ordering them as text orders
+        // them chronologically.
+        return a.compareTo(b) <= 0 ? a : b;
     }
 }

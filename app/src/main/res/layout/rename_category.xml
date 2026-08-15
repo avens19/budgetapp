@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/space_xl"
+    android:paddingTop="@dimen/space_s"
+    android:paddingEnd="@dimen/space_xl">
 
-    <EditText
-        android:id="@+id/new_category_name"
-        android:hint="@string/label_category_name_hint"
-        android:importantForAutofill="no"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Budget.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:lines="1"
-        android:inputType="textCapSentences"
-        android:singleLine="true"
-        android:imeOptions="actionDone" />
+        android:hint="@string/label_category_name_hint">
 
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/new_category_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</FrameLayout>

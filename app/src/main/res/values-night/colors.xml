@@ -1,9 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="amount_within_budget">#ffe6e6e6</color>
-    <color name="amount_over_budget">#ffef9a9a</color>
 
-    <color name="grid_line">#ff5c5c5c</color>
-    <color name="widget_background">#ff1c1c1c</color>
-    <color name="widget_amount">#ffe6e6e6</color>
+    <!-- Material 3 dark scheme. Mirrors every role in values/colors.xml. -->
+
+    <color name="md_primary">#ff8bd6ac</color>
+    <color name="md_on_primary">#ff00391f</color>
+    <color name="md_primary_container">#ff00522f</color>
+    <color name="md_on_primary_container">#ffa6f2c8</color>
+
+    <color name="md_secondary">#ffb4ccbc</color>
+    <color name="md_on_secondary">#ff203529</color>
+    <color name="md_secondary_container">#ff364b3e</color>
+    <color name="md_on_secondary_container">#ffd0e8d8</color>
+
+    <color name="md_tertiary">#ffa4cdde</color>
+    <color name="md_on_tertiary">#ff053543</color>
+    <color name="md_tertiary_container">#ff234c5a</color>
+    <color name="md_on_tertiary_container">#ffc0e9fa</color>
+
+    <color name="md_error">#ffffb4ab</color>
+    <color name="md_on_error">#ff690005</color>
+    <color name="md_error_container">#ff93000a</color>
+    <color name="md_on_error_container">#ffffdad6</color>
+
+    <color name="md_background">#ff0f1511</color>
+    <color name="md_on_background">#ffdfe5de</color>
+    <color name="md_surface">#ff0f1511</color>
+    <color name="md_on_surface">#ffdfe5de</color>
+    <color name="md_surface_variant">#ff404943</color>
+    <color name="md_on_surface_variant">#ffbfc9c1</color>
+
+    <color name="md_surface_container_lowest">#ff0a0f0c</color>
+    <color name="md_surface_container_low">#ff171d19</color>
+    <color name="md_surface_container">#ff1b211d</color>
+    <color name="md_surface_container_high">#ff252b27</color>
+    <color name="md_surface_container_highest">#ff303632</color>
+
+    <color name="md_outline">#ff8a938c</color>
+    <color name="md_outline_variant">#ff404943</color>
+
+    <color name="md_inverse_surface">#ffdfe5de</color>
+    <color name="md_inverse_on_surface">#ff2c322d</color>
+    <color name="md_inverse_primary">#ff146c43</color>
+
+    <color name="amount_within_budget">#ffdfe5de</color>
+    <color name="amount_over_budget">#ffffb4ab</color>
+
+    <color name="widget_background">#ff1b211d</color>
+    <color name="widget_amount">#ffdfe5de</color>
+    <color name="widget_accent">#ff8bd6ac</color>
+    <color name="widget_on_accent">#ff00391f</color>
+
+    <color name="chart_1">#ff6cc79b</color>
+    <color name="chart_2">#ff7fb2e0</color>
+    <color name="chart_3">#ffe0b872</color>
+    <color name="chart_4">#ffc7a2e0</color>
+    <color name="chart_5">#ffef9a9a</color>
+    <color name="chart_6">#ff76ccc6</color>
+    <color name="chart_7">#ffd6bb72</color>
+    <color name="chart_8">#ffa8b4e8</color>
+    <color name="chart_9">#ffdb9ab8</color>
+    <color name="chart_10">#ff9dc784</color>
+
 </resources>

@@ -3,7 +3,6 @@ package com.andrewovens.weeklybudget2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 public class FirstActivity extends BaseActivity {
 
@@ -13,16 +12,20 @@ public class FirstActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
-    }
 
-    public void newBudgetOnClick(View view) {
-        Intent i = new Intent(this, NewBudgetActivity.class);
-        startActivityForResult(i, CREATE_OR_JOIN);
-    }
+        // First run only. Launched from here rather than from WeekActivity so
+        // that it appears before the create-or-join choice, which is the point
+        // at which "what is this app for?" needs answering.
+        if (!Settings.hasSeenTutorial(this)) {
+            Settings.setSeenTutorial(this);
+            startActivity(new Intent(this, TutorialActivity.class));
+        }
 
-    public void joinBudgetOnClick(View view) {
-        Intent i = new Intent(this, JoinBudgetActivity.class);
-        startActivityForResult(i, CREATE_OR_JOIN);
+        findViewById(R.id.new_budget).setOnClickListener(v ->
+                startActivityForResult(new Intent(this, NewBudgetActivity.class), CREATE_OR_JOIN));
+
+        findViewById(R.id.join_budget).setOnClickListener(v ->
+                startActivityForResult(new Intent(this, JoinBudgetActivity.class), CREATE_OR_JOIN));
     }
 
     @Override

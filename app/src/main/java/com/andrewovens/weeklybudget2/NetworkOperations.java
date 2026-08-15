@@ -1,6 +1,7 @@
 package com.andrewovens.weeklybudget2;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +11,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 
 class NetworkOperations {
 
@@ -20,6 +23,40 @@ class NetworkOperations {
     private static final int CONNECT_TIMEOUT_MS = 15_000;
     private static final int READ_TIMEOUT_MS = 30_000;
 
+    /**
+     * A response body plus the headers that came with it.
+     *
+     * <p>The sync needs the server's clock, which it reads out of a response
+     * header, so the plain body-only calls are not enough for those requests.
+     */
+    static final class Response {
+        final String body;
+        private final Map<String, List<String>> headers;
+
+        Response(String body, Map<String, List<String>> headers) {
+            this.body = body;
+            this.headers = headers;
+        }
+
+        /** Header field names are case-insensitive, and proxies do re-case them. */
+        @Nullable
+        String header(String name) {
+            if (headers == null) {
+                return null;
+            }
+            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+                String key = entry.getKey();
+                if (key != null && key.equalsIgnoreCase(name)) {
+                    List<String> values = entry.getValue();
+                    if (values != null && !values.isEmpty()) {
+                        return values.get(0);
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
     @NonNull
     static String HttpGet(URL url) throws IOException {
         return HttpGet(url, "GET");
@@ -27,9 +64,20 @@ class NetworkOperations {
 
     @NonNull
     static String HttpGet(@NonNull URL url, String method) throws IOException {
+        return HttpGetWithHeaders(url, method).body;
+    }
+
+    @NonNull
+    static Response HttpGetWithHeaders(@NonNull URL url) throws IOException {
+        return HttpGetWithHeaders(url, "GET");
+    }
+
+    @NonNull
+    private static Response HttpGetWithHeaders(@NonNull URL url, String method) throws IOException {
         HttpURLConnection urlConnection = open(url, method);
         try {
-            return readResponse(urlConnection);
+            String body = readResponse(urlConnection);
+            return new Response(body, urlConnection.getHeaderFields());
         } finally {
             urlConnection.disconnect();
         }

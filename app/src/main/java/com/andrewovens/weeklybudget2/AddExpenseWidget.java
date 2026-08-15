@@ -54,14 +54,23 @@ public class AddExpenseWidget extends AppWidgetProvider {
         if (budget != null) {
             List<Expense> expenses = DBHelper.GetExpensesForWeek(budget.UniqueId, 0, budget.StartDay);
             double total = 0;
-            for (int i = 0; i < expenses.size(); i++) {
-                total += expenses.get(i).Amount;
+            for (Expense expense : expenses) {
+                total += expense.Amount;
             }
             double remaining = budget.Amount - total;
             double rounded = Math.round(remaining * 100) / 100.0;
+            boolean over = rounded < 0;
+
             views.setTextViewText(R.id.appwidget_amount, Helpers.currencyString(Math.abs(rounded)));
             views.setTextColor(R.id.appwidget_amount, ContextCompat.getColor(context,
-                    remaining >= 0 ? R.color.widget_amount : R.color.amount_over_budget));
+                    over ? R.color.amount_over_budget : R.color.widget_amount));
+
+            // "left" vs "over" is what the number means; without it a bare
+            // amount on an overspent week reads as money still available.
+            views.setTextViewText(R.id.appwidget_label,
+                    context.getString(over ? R.string.widget_over_label : R.string.widget_left_label));
+            views.setTextColor(R.id.appwidget_label, ContextCompat.getColor(context,
+                    over ? R.color.amount_over_budget : R.color.widget_amount));
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

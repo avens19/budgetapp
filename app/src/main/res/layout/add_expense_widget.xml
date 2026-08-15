@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- RemoteViews cannot resolve theme attributes, so this uses the explicit
+     widget_* colours, which have their own values-night variants. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_bg_white" >
+    android:background="@drawable/widget_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/appwidget_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="3dp"
+        android:maxLines="1"
         android:textColor="@color/widget_amount"
-        android:textSize="12sp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/appwidget_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/widget_left_label"
+        android:textColor="@color/widget_amount"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/appwidget_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_bg" >
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/widget_add_button"
+        android:contentDescription="@string/add_expense_widget_description"
+        android:gravity="center"
+        android:text="@string/add_expense_widget_text"
+        android:textColor="@color/widget_on_accent"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/appwidget_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="-4dp"
-            android:contentDescription="@string/add_expense_widget_description"
-            android:text="@string/add_expense_widget_text"
-            android:textColor="#ffffff"
-            android:textSize="48sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
-</RelativeLayout>
+</LinearLayout>

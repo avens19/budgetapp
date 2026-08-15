@@ -2,19 +2,158 @@
 <resources>
 
     <string name="app_name">Weekly Budget</string>
-    <string name="title_week">Week</string>
+
+    <!-- Navigation -->
     <string name="title_month">Month</string>
-    <string name="title_category_week">Categories (Week)</string>
-    <string name="title_category_month">Categories (Month)</string>
-    <string name="title_category">Edit Categories</string>
-    <string name="action_add">+</string>
+    <string name="title_categories">Categories</string>
+    <string name="title_category">Manage categories</string>
+    <string name="nav_week">Week</string>
+    <string name="nav_month">Month</string>
+    <string name="nav_categories">Categories</string>
+    <string name="segment_week">This week</string>
+    <string name="segment_month">This month</string>
+
+    <string name="action_add">Add expense</string>
+    <string name="action_edit_categories">Manage categories</string>
     <string name="previous_period">Previous period</string>
     <string name="next_period">Next period</string>
+
+    <!-- Week screen -->
+    <string name="week_remaining_label">Left to spend</string>
+    <string name="week_over_label">Over budget</string>
+    <string name="week_spent_of">%1$s spent of %2$s</string>
+    <string name="week_this_week">This week</string>
+    <string name="week_subtitle">%1$s · %2$s</string>
+    <string name="week_last_day">Last day</string>
+    <string name="week_empty_title">Nothing spent yet</string>
+    <string name="week_empty_body">Expenses you add for this week will show up here.</string>
+
+    <!-- Month screen -->
+    <string name="month_total_label">Spent this month</string>
+    <string name="month_weekly_budget">Weekly budget %1$s</string>
+    <string name="month_week_range">%1$s – %2$s</string>
+    <string name="month_over_by">Over by %1$s</string>
+    <string name="month_under_by">%1$s left</string>
+    <string name="month_empty_title">No expenses this month</string>
+    <string name="month_empty_body">Add expenses on the Week tab and they will roll up here.</string>
+
+    <!-- Category screens -->
+    <string name="category_share">%1$s%%</string>
+    <string name="category_tap_hint">Tap a category to see its expenses</string>
+    <string name="category_empty_title">Nothing to chart yet</string>
+    <string name="category_empty_body">Once you tag expenses with a category, the breakdown appears here.</string>
+    <string name="category_manage_empty_title">No categories yet</string>
+    <string name="category_manage_empty_body">Create a category while adding an expense and it will appear here.</string>
+    <string name="uncategorized">Uncategorized</string>
+    <string name="category_context_rename">Rename category</string>
+    <string name="category_context_delete">Delete category</string>
+    <string name="category_delete_message">Expenses in "%1$s" stay, but lose their category.</string>
+    <string name="category_more_options">More options for %1$s</string>
+
+    <!-- Add / edit expense -->
+    <string name="title_activity_add_expense">Add expense</string>
+    <string name="edit_expense_title">Edit expense</string>
+    <string name="add_date">Date</string>
+    <string name="add_description">Description</string>
+    <string name="add_amount">Amount</string>
+    <!-- Placeholder shown in the empty amount field. -->
+    <string name="add_amount_hint">0</string>
+    <string name="add_add">Add expense</string>
+    <string name="edit_button">Save changes</string>
+    <string name="label_pick_category">Category</string>
+    <string name="label_new_category">New category…</string>
+    <string name="label_new_category_hint">New category name</string>
+    <string name="label_category_name_hint">Category name</string>
+    <string name="label_no_category">No category</string>
+    <string name="pick_date">Pick a date</string>
+    <string name="context_edit">Edit expense</string>
+    <string name="context_delete">Delete expense</string>
+    <string name="context_copy">Copy to next week</string>
+    <string name="expense_options">Options for %1$s</string>
+
+    <!-- Budgets -->
     <string name="title_activity_first">Weekly Budget</string>
-    <string name="title_activity_new_budget">New Budget</string>
-    <string name="label_start_day">Choose the day your weekly budget will start on</string>
-    <string name="button_new_budget">New Budget</string>
-    <string name="button_join_budget">Join Budget</string>
+    <string name="title_activity_new_budget">New budget</string>
+    <string name="title_activity_join_budget">Join a budget</string>
+    <string name="title_activity_switch_budget">Your budgets</string>
+    <string name="edit_budget_title">Edit budget</string>
+    <string name="first_headline">Track a weekly spend, together</string>
+    <string name="first_body">Set an amount for the week, add expenses as you go, and see what is left at a glance. Share one budget across devices.</string>
+    <string name="button_new_budget">Create a budget</string>
+    <string name="button_join_budget">Join with an ID</string>
+    <string name="button_create_budget">Create budget</string>
+    <string name="button_edit_budget">Save budget</string>
+    <string name="button_go">Join budget</string>
+    <string name="label_budget_name">Budget name</string>
+    <string name="label_budget_name_helper">For example: Household, or Groceries</string>
+    <string name="label_start_day">Week starts on</string>
+    <string name="label_new_amount">Weekly amount</string>
+    <string name="label_new_unique">Budget ID</string>
+    <string name="label_new_unique_helper">Share this ID to let another device join. Tap to copy.</string>
+    <string name="label_join_unique_id">Budget ID</string>
+    <string name="label_join_helper">Paste the ID from the device that already has the budget.</string>
+    <string name="current_budget">Current budget</string>
+    <string name="current_budget_named">Current: %1$s</string>
+    <string name="context_remove_budget">Remove from this device</string>
+    <string name="budget_weekly_amount">%1$s a week</string>
+    <string name="budget_selected">Current budget</string>
+    <string name="copied_unique_id">Budget ID copied</string>
+    <string name="copy_budget_id">Copy budget ID</string>
+
+    <!-- How this works: the post-install tutorial -->
+    <string name="tutorial_title">How this works</string>
+    <string name="tutorial_skip">Skip</string>
+    <string name="tutorial_next">Next</string>
+    <string name="tutorial_done">Get started</string>
+    <string name="tutorial_close">Done</string>
+    <string name="tutorial_page">Page %1$d of %2$d</string>
+
+    <string name="tutorial_1_title">Budget your spending money</string>
+    <string name="tutorial_1_body">Start outside the app. Take what you earn, subtract the bills that never change — rent, insurance, subscriptions, loan payments — and whatever is left is your spending money.\n\nSplit that across the weeks in the month, and you have your weekly target.</string>
+
+    <string name="tutorial_2_title">Bills don\'t belong in here</string>
+    <string name="tutorial_2_body">There is deliberately nowhere to enter recurring income or expenses. Those amounts are already fixed, so leaving them out keeps the app focused on the one number that actually moves: what you spent this week.\n\nIf money comes in mid-week — a refund, a gift, cash back — add it as an expense with a minus sign.</string>
+
+    <string name="tutorial_3_title">Share it with your partner</string>
+    <string name="tutorial_3_body">One budget can live on as many devices as you like, and they all stay in step.\n\nOpen Edit budget, tap the budget ID to copy it, and enter it on the other device with Join with an ID. You will both see the same running total.</string>
+
+    <string name="tutorial_4_title">On iPhone? Use the web app</string>
+    <string name="tutorial_4_body">There is no iPhone app, but budget.andrewovens.com opens in any browser and works on the same budget as this one.\n\nAdd it to the home screen and it behaves much like an app.</string>
+
+    <string name="action_how_it_works">How this works</string>
+
+    <!-- Carry balance -->
+    <string name="carry_balance">Carry balance</string>
+    <string name="carry_balance_message">Move the remaining %1$s into next week?</string>
+    <string name="carry_balance_expense_description">Carried Balance</string>
+    <string name="already_carried">This week\'s balance has already been carried over</string>
+
+    <!-- Errors -->
+    <string name="error_network">Cannot connect to the network</string>
+    <string name="error_cant_edit">Error editing expense, please try again</string>
+    <string name="error_description_required">Enter a description</string>
+    <string name="error_amount_required">Enter an amount</string>
+    <string name="error_amount_invalid">Enter a valid amount</string>
+    <string name="error_category_name_required">Enter a category name</string>
+    <string name="error_name_required">Enter a name</string>
+    <string name="error_budget_id_required">Enter a budget ID</string>
+
+    <!-- Widget -->
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_expense_widget_description">Add an expense to your weekly budget</string>
+    <string name="widget_left_label">left</string>
+    <string name="widget_over_label">over</string>
+
+    <!-- Shared -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+
+    <plurals name="week_days_left">
+        <item quantity="one">%1$d day left</item>
+        <item quantity="other">%1$d days left</item>
+    </plurals>
 
     <string-array name="array_weekdays">
         <item>Sunday</item>
@@ -26,61 +165,4 @@
         <item>Saturday</item>
     </string-array>
 
-    <string name="title_activity_join_budget">Join Budget</string>
-    <string name="label_join_unique_id">Please enter the unique ID of the budget you wish to join</string>
-    <string name="button_go">Go</string>
-    <string name="label_new_amount">Enter the amount you would like to spend each week</string>
-    <string name="label_new_unique">Here is the unique ID for your budget. You may share it or use it to sync to a different device. Click to copy</string>
-    <string name="error_network">Cannot connect to the network</string>
-    <string name="error_cant_edit">Error editing expense, please try again</string>
-    <string name="error_description_required">You must enter a description</string>
-    <string name="error_amount_required">You must enter an amount</string>
-    <string name="error_amount_invalid">Amount must be a valid decimal number</string>
-    <string name="error_category_name_required">You must enter a category name</string>
-    <string name="error_name_required">You must enter a name</string>
-    <string name="error_budget_id_required">You must enter a budget ID</string>
-    <string name="title_activity_add_expense">Add Expense</string>
-    <string name="copied_unique_id">Copied unique ID to clipboard</string>
-    <string name="add_date">Date (%1$s)</string>
-    <string name="add_description">Description</string>
-    <string name="add_amount">Amount</string>
-    <string name="add_add">Add</string>
-    <string name="context_edit">Edit Expense</string>
-    <string name="context_delete">Delete Expense</string>
-    <string name="context_copy">Copy to Next Week</string>
-    <string name="edit_expense_title">Edit Expense</string>
-    <string name="edit_button">Edit</string>
-    <string name="button_create_budget">Create Budget</string>
-    <string name="button_edit_budget">Edit Budget</string>
-    <string name="edit_budget_title">Edit Budget</string>
-    <string name="title_activity_month">Month</string>
-    <string name="month_total_row_title">Total for month: </string>
-    <string name="add_expense_widget_text">+</string>
-    <string name="add_expense_widget_description">Add an expense to your weekly budget</string>
-    <string name="label_budget_name">Give your budget a name</string>
-    <!-- Static menu title, replaced at runtime by current_budget_named once a budget is loaded. -->
-    <string name="current_budget">Current budget</string>
-    <string name="current_budget_named">Current: %1$s</string>
-    <string name="title_activity_switch_budget">Switch Budget</string>
-    <string name="label_switch_budget">Pick the budget to switch to</string>
-    <string name="label_add_budget">Add another budget</string>
-    <string name="label_pick_category">Category (Optional)</string>
-    <string name="label_new_category">New Category…</string>
-    <string name="label_new_category_hint">New category name</string>
-    <string name="label_category_name_hint">Category name</string>
-    <string name="label_no_category">No Category</string>
-    <string name="uncategorized">Uncategorized</string>
-    <string name="category_context_rename">Rename Category</string>
-    <string name="category_context_delete">Delete Category</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="carry_balance">Carry Balance</string>
-    <string name="carry_balance_message">Transfer balance to next week?</string>
-    <string name="carry_balance_expense_description">Carried Balance</string>
-    <string name="already_carried">This week\'s balance has already been carried over</string>
-    <string name="context_remove_budget">Remove Budget</string>
-    <string name="month_activity_total">Total</string>
-    <string name="week_activity_amount_remaining">Remaining: %1$s</string>
-    <string name="week_activity_amount_over">Over: %1$s</string>
-    <string name="two_string_newline">%1$s\n%2$s</string>
 </resources>

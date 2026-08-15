@@ -5,77 +5,95 @@ import org.json.JSONObject;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class NewBudgetActivity extends BaseActivity {
 
     private Budget _budget;
     private boolean _isEdit = false;
+    private int _startDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_budget);
 
-        Intent i = getIntent();
-        String budget = i.getStringExtra("budget");
+        MaterialButton save = findViewById(R.id.button_create_budget);
+        save.setOnClickListener(v -> goButtonOnClick(save));
 
+        findViewById(R.id.budget_id_card).setOnClickListener(v -> copyUniqueId());
+
+        String budget = getIntent().getStringExtra("budget");
         TextView uniqueId = findViewById(R.id.text_new_unique);
 
         if (budget == null) {
             _budget = new Budget(true);
-
+            setTitle(R.string.title_activity_new_budget);
             uniqueId.setText(_budget.UniqueId);
+            setStartDay(0);
         } else {
             try {
                 _isEdit = true;
-                this.setTitle(R.string.edit_budget_title);
-
                 _budget = Budget.fromJson(new JSONObject(budget));
 
-                EditText name = findViewById(R.id.text_budget_name);
-                Spinner weekday = findViewById(R.id.weekday_spinner);
-                EditText amount = findViewById(R.id.text_new_amount);
-                Button edit = findViewById(R.id.button_create_budget);
+                setTitle(R.string.edit_budget_title);
+                save.setText(R.string.button_edit_budget);
 
-                name.setText(_budget.Name);
-                weekday.setSelection(_budget.StartDay);
-                amount.setText(Helpers.doubleString(_budget.Amount));
+                ((EditText) findViewById(R.id.text_budget_name)).setText(_budget.Name);
+                ((EditText) findViewById(R.id.text_new_amount)).setText(Helpers.doubleString(_budget.Amount));
                 uniqueId.setText(_budget.UniqueId);
-                edit.setText(R.string.button_edit_budget);
+                setStartDay(_budget.StartDay);
             } catch (Exception e) {
                 this.finish();
+                return;
             }
         }
+
+        MaterialAutoCompleteTextView weekday = findViewById(R.id.weekday_spinner);
+        weekday.setOnItemClickListener((parent, view, position, id) -> _startDay = position);
     }
 
-    public void uniqueIdOnClick(View v) {
-        ClipboardManager clipboard = (ClipboardManager)
-                getSystemService(Context.CLIPBOARD_SERVICE);
+    /** Keeps the field text and {@link #_startDay} in step. */
+    private void setStartDay(int day) {
+        _startDay = day;
+        MaterialAutoCompleteTextView weekday = findViewById(R.id.weekday_spinner);
+        weekday.setText(getResources().getStringArray(R.array.array_weekdays)[day], false);
+    }
 
+    private void copyUniqueId() {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setPrimaryClip(ClipData.newPlainText("uniqueId", _budget.UniqueId));
 
         Toast.makeText(this, R.string.copied_unique_id, Toast.LENGTH_SHORT).show();
     }
 
-    public void goButtonOnClick(View v) {
+    private void goButtonOnClick(MaterialButton save) {
         EditText name = findViewById(R.id.text_budget_name);
-        Spinner weekday = findViewById(R.id.weekday_spinner);
         EditText amount = findViewById(R.id.text_new_amount);
 
         String nameString = name.getText().toString().trim();
         String amountString = amount.getText().toString().trim();
 
+        TextInputLayout nameLayout = findViewById(R.id.budget_name_layout);
+        nameLayout.setError(null);
         if (nameString.isEmpty()) {
-            Toast.makeText(this, R.string.error_name_required, Toast.LENGTH_SHORT).show();
+            nameLayout.setError(getString(R.string.error_name_required));
+            name.requestFocus();
             return;
         }
 
+        TextInputLayout amountLayout = findViewById(R.id.budget_amount_layout);
+        amountLayout.setError(null);
         if (amountString.isEmpty()) {
-            Toast.makeText(this, R.string.error_amount_required, Toast.LENGTH_SHORT).show();
+            amountLayout.setError(getString(R.string.error_amount_required));
+            amount.requestFocus();
             return;
         }
 
@@ -83,13 +101,16 @@ public class NewBudgetActivity extends BaseActivity {
         try {
             amountValue = Double.parseDouble(amountString.replace(',', '.'));
         } catch (NumberFormatException e) {
-            Toast.makeText(this, R.string.error_amount_invalid, Toast.LENGTH_SHORT).show();
+            amountLayout.setError(getString(R.string.error_amount_invalid));
+            amount.requestFocus();
             return;
         }
 
-        _budget.StartDay = weekday.getSelectedItemPosition();
+        _budget.StartDay = _startDay;
         _budget.Name = nameString;
         _budget.Amount = amountValue;
+
+        save.setEnabled(false);
 
         // The API call has to leave the main thread; everything that touches
         // the activity (finish, setResult) is posted back to it.
@@ -110,6 +131,7 @@ public class NewBudgetActivity extends BaseActivity {
                 }
             } catch (Exception e) {
                 Helpers.showNetworkErrorToastOnUi(NewBudgetActivity.this, R.string.error_network);
+                runOnUiThread(() -> save.setEnabled(true));
                 e.printStackTrace();
             }
         }).start();

@@ -1,48 +1,40 @@
 package com.andrewovens.weeklybudget2;
 
-import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-
-import org.json.JSONObject;
-
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MonthActivity extends BaseActivity implements ActionBar.OnNavigationListener {
+import org.json.JSONObject;
+
+public class MonthActivity extends BaseActivity
+        implements Navigation.OnDestinationSelected, WeekSummaryAdapter.OnWeekSelected {
 
     private Budget _budget;
     private BroadcastReceiver _syncReceiver;
     private int _daysBackFromToday;
+    private WeekSummaryAdapter _adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_month);
 
-        Navigation.setUp(this, this, Navigation.MONTH);
-
-        setUpSwipe();
+        Navigation.setUp(this, Navigation.MONTH, this);
 
         try {
             Intent i = getIntent();
@@ -52,17 +44,18 @@ public class MonthActivity extends BaseActivity implements ActionBar.OnNavigatio
         } catch (Exception e) {
             this.finish();
             e.printStackTrace();
+            return;
         }
 
-        ListView lv = MonthActivity.this.findViewById(R.id.month_list);
-        lv.setOnItemClickListener((parent, view, position, id) -> {
-            MonthRowAdapter adapter = (MonthRowAdapter) parent.getAdapter();
-            DateTotal dt = adapter.get(position);
-            Intent i = new Intent(MonthActivity.this, WeekActivity.class);
-            i.putExtra("days", Dates.daysBetween(dt.Date, Calendar.getInstance()));
-            MonthActivity.this.setResult(Activity.RESULT_OK, i);
-            MonthActivity.this.finish();
-        });
+        _adapter = new WeekSummaryAdapter(this);
+        RecyclerView list = findViewById(R.id.month_list);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.setAdapter(_adapter);
+
+        findViewById(R.id.month_back).setOnClickListener(v -> shiftMonths(-1));
+        findViewById(R.id.month_forward).setOnClickListener(v -> shiftMonths(1));
+
+        setUpSwipe();
 
         _syncReceiver = new BroadcastReceiver() {
             @Override
@@ -92,35 +85,32 @@ public class MonthActivity extends BaseActivity implements ActionBar.OnNavigatio
         Sync.start(this);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setUpSwipe() {
-        final View container = findViewById(R.id.month_container);
-        View v = findViewById(R.id.month_list);
-
-        container.setOnTouchListener(new OnSwipeTouchListener(this) {
+        findViewById(R.id.month_container).setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeRight() {
-                monthBack();
+                shiftMonths(-1);
             }
 
             public void onSwipeLeft() {
-                monthForward();
+                shiftMonths(1);
             }
 
-            @SuppressLint("ClickableViewAccessibility")
             public boolean onTouch(View v, MotionEvent event) {
                 gestureDetector.onTouchEvent(event);
                 return true;
             }
         });
-        v.setOnTouchListener(new OnSwipeTouchListener(this) {
+
+        findViewById(R.id.month_list).setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeRight() {
-                monthBack();
+                shiftMonths(-1);
             }
 
             public void onSwipeLeft() {
-                monthForward();
+                shiftMonths(1);
             }
 
-            @SuppressLint("ClickableViewAccessibility")
             public boolean onTouch(View v, MotionEvent event) {
                 gestureDetector.onTouchEvent(event);
                 return false;
@@ -136,26 +126,6 @@ public class MonthActivity extends BaseActivity implements ActionBar.OnNavigatio
             return;
         }
 
-        int startDay = _budget.StartDay;
-
-        Calendar start = Calendar.getInstance();
-        while ((start.get(Calendar.DAY_OF_WEEK) - 1) != startDay) {
-            start.add(Calendar.DAY_OF_YEAR, -1);
-        }
-
-        View headingsRowView = findViewById(R.id.month_headings);
-
-        int[] dayIds = {R.id.month_row_day1, R.id.month_row_day2, R.id.month_row_day3,
-                R.id.month_row_day4, R.id.month_row_day5, R.id.month_row_day6, R.id.month_row_day7};
-        for (int dayId : dayIds) {
-            TextView day = headingsRowView.findViewById(dayId);
-            day.setText(Dates.getWeekDay(start.getTime()));
-            start.add(Calendar.DAY_OF_YEAR, 1);
-        }
-
-        TextView totalHeading = headingsRowView.findViewById(R.id.month_row_total);
-        totalHeading.setText(getString(R.string.month_activity_total));
-
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
 
@@ -163,33 +133,27 @@ public class MonthActivity extends BaseActivity implements ActionBar.OnNavigatio
         month.setText(now.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
 
         List<DateTotal> list = DBHelper.GetTotalsForMonth(_budget.UniqueId, _daysBackFromToday, _budget.StartDay);
-
-        ListView lv = MonthActivity.this.findViewById(R.id.month_list);
-        MonthRowAdapter _adapter = new MonthRowAdapter(MonthActivity.this, R.layout.month_row, list);
-        lv.setAdapter(_adapter);
-
-        View rowView = findViewById(R.id.month_total_row);
-        TextView total = rowView.findViewById(R.id.month_total_row_total);
+        _adapter.setWeeks(list, _budget.Amount);
 
         double amount = DBHelper.GetTotalForMonth(_budget.UniqueId, _daysBackFromToday);
+        ((TextView) findViewById(R.id.month_total)).setText(Helpers.currencyString(amount));
 
-        total.setText(Helpers.currencyString(amount));
-    }
+        // Deliberately not an average: the headline is the calendar month,
+        // while the cards below are whole weeks that can start in the previous
+        // month, so month-total-over-week-count divides two different spans and
+        // reads as a real figure. The weekly budget is the number the bars are
+        // actually measured against.
+        TextView budgetLine = findViewById(R.id.month_average);
+        budgetLine.setText(getString(R.string.month_weekly_budget,
+                Helpers.currencyString(_budget.Amount)));
 
-    public void monthBackOnClick(View v) {
-        monthBack();
-    }
-
-    private void monthBack() {
-        shiftMonths(-1);
-    }
-
-    public void monthForwardOnClick(View v) {
-        monthForward();
-    }
-
-    private void monthForward() {
-        shiftMonths(1);
+        View empty = findViewById(R.id.month_empty);
+        if (amount == 0) {
+            EmptyState.show(empty, R.drawable.ic_nav_month, R.string.month_empty_title,
+                    R.string.month_empty_body);
+        } else {
+            empty.setVisibility(View.GONE);
+        }
     }
 
     private void shiftMonths(int months) {
@@ -205,14 +169,20 @@ public class MonthActivity extends BaseActivity implements ActionBar.OnNavigatio
     }
 
     @Override
-    public boolean onNavigationItemSelected(int position, long id) {
-        return ScreenSwitcher.onNavigationItemSelected(this, Navigation.MONTH, position);
+    public void onWeekSelected(DateTotal week) {
+        Intent i = new Intent(this, WeekActivity.class);
+        i.putExtra("days", Dates.daysBetween(week.Date, Calendar.getInstance()));
+        setResult(Activity.RESULT_OK, i);
+        finish();
+    }
+
+    @Override
+    public void onDestinationSelected(int position) {
+        ScreenSwitcher.goToPosition(this, position);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.month, menu);
         if (_budget != null) {
             MenuItem s = menu.findItem(R.id.action_current_budget);
@@ -225,51 +195,5 @@ public class MonthActivity extends BaseActivity implements ActionBar.OnNavigatio
     public boolean onOptionsItemSelected(MenuItem item) {
         return ScreenSwitcher.onOptionsItemSelected(this, item, _budget)
                 || super.onOptionsItemSelected(item);
-    }
-
-    public class MonthRowAdapter extends ArrayAdapter<DateTotal> {
-        private final Context context;
-        private final int resourceID;
-        private final List<DateTotal> list;
-
-        MonthRowAdapter(Context context, int resource, List<DateTotal> bah) {
-            super(context, resource, bah);
-
-            this.context = context;
-            this.resourceID = resource;
-            this.list = bah;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = convertView != null ? convertView : inflater.inflate(resourceID, parent, false);
-
-            DateTotal dt = list.get(position);
-
-            Calendar current = (Calendar) dt.Date.clone();
-
-            int[] dayIds = {R.id.month_row_day1, R.id.month_row_day2, R.id.month_row_day3,
-                    R.id.month_row_day4, R.id.month_row_day5, R.id.month_row_day6, R.id.month_row_day7};
-            for (int dayId : dayIds) {
-                TextView day = rowView.findViewById(dayId);
-                day.setText(NumberFormat.getInstance().format(current.get(Calendar.DAY_OF_MONTH)));
-                current.add(Calendar.DAY_OF_YEAR, 1);
-            }
-
-            TextView total = rowView.findViewById(R.id.month_row_total);
-            total.setText(Helpers.currencyString(dt.Total));
-            total.setTextColor(ContextCompat.getColor(context, dt.Total > _budget.Amount
-                    ? R.color.amount_over_budget
-                    : R.color.amount_within_budget));
-
-            return rowView;
-        }
-
-        DateTotal get(int position) {
-            return list.get(position);
-        }
-
     }
 }

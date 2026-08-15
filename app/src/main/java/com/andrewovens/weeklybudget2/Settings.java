@@ -13,6 +13,7 @@ public class Settings {
     private static final String BUDGETS = "BUDGETS";
     private static final String CURRENT_ID = "CURRENTID";
     private static final String CURRENT_CATEGORY_ID = "CURRENTCATEGORYID";
+    private static final String SEEN_TUTORIAL = "SEENTUTORIAL";
 
     public static Budget getBudget(Context cxt) {
         SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
@@ -69,6 +70,20 @@ public class Settings {
             editor.putString(BUDGETS, null);
         }
         editor.apply();
+    }
+
+    /**
+     * Whether the "how this works" pages have been shown. Existing installs
+     * have no flag, so they would see the tutorial once on upgrade; the caller
+     * only asks on first run, when there is no budget yet, so they do not.
+     */
+    static boolean hasSeenTutorial(Context cxt) {
+        return cxt.getSharedPreferences(SETTINGS_NAME, 0).getBoolean(SEEN_TUTORIAL, false);
+    }
+
+    static void setSeenTutorial(Context cxt) {
+        SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+        settings.edit().putBoolean(SEEN_TUTORIAL, true).apply();
     }
 
     static long getNextId(Context cxt) {

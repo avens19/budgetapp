@@ -1,18 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="light_grey">#ffcccccc</color>
-    <color name="black">#ff000000</color>
 
-    <color name="primary">#ff1b5e20</color>
-    <color name="primary_dark">#ff003300</color>
-    <color name="accent">#ff2e7d32</color>
+    <!--
+        Material 3 light scheme. The app's heritage colour is a deep forest
+        green, so the scheme is built around an emerald primary with a cool
+        teal tertiary for the data views. values-night/colors.xml redefines
+        every role below; nothing here is night-safe on its own.
+    -->
 
-    <!-- Running totals: within budget vs. overspent. Overridden in values-night. -->
-    <color name="amount_within_budget">#ff000000</color>
-    <color name="amount_over_budget">#ffd32f2f</color>
+    <color name="md_primary">#ff146c43</color>
+    <color name="md_on_primary">#ffffffff</color>
+    <color name="md_primary_container">#ffa6f2c8</color>
+    <color name="md_on_primary_container">#ff00210f</color>
 
-    <!-- Table rules and the app-widget surface. Overridden in values-night. -->
-    <color name="grid_line">#ff000000</color>
-    <color name="widget_background">#ffffffff</color>
-    <color name="widget_amount">#ff000000</color>
+    <color name="md_secondary">#ff4e6355</color>
+    <color name="md_on_secondary">#ffffffff</color>
+    <color name="md_secondary_container">#ffd0e8d8</color>
+    <color name="md_on_secondary_container">#ff0b1f14</color>
+
+    <color name="md_tertiary">#ff3c6472</color>
+    <color name="md_on_tertiary">#ffffffff</color>
+    <color name="md_tertiary_container">#ffc0e9fa</color>
+    <color name="md_on_tertiary_container">#ff001f28</color>
+
+    <color name="md_error">#ffba1a1a</color>
+    <color name="md_on_error">#ffffffff</color>
+    <color name="md_error_container">#ffffdad6</color>
+    <color name="md_on_error_container">#ff410002</color>
+
+    <color name="md_background">#fff6fbf5</color>
+    <color name="md_on_background">#ff171d19</color>
+    <color name="md_surface">#fff6fbf5</color>
+    <color name="md_on_surface">#ff171d19</color>
+    <color name="md_surface_variant">#ffdbe5dc</color>
+    <color name="md_on_surface_variant">#ff404943</color>
+
+    <color name="md_surface_container_lowest">#ffffffff</color>
+    <color name="md_surface_container_low">#fff0f6ef</color>
+    <color name="md_surface_container">#ffebf1ea</color>
+    <color name="md_surface_container_high">#ffe5ebe4</color>
+    <color name="md_surface_container_highest">#ffdfe5de</color>
+
+    <color name="md_outline">#ff707972</color>
+    <color name="md_outline_variant">#ffbfc9c1</color>
+
+    <color name="md_inverse_surface">#ff2c322d</color>
+    <color name="md_inverse_on_surface">#ffedf3eb</color>
+    <color name="md_inverse_primary">#ff8bd6ac</color>
+
+    <!--
+        Running totals. "Within budget" deliberately reads as ordinary body
+        text rather than a success green: a positive balance is the normal
+        case, and colouring every one of them dilutes the overspend warning.
+    -->
+    <color name="amount_within_budget">#ff171d19</color>
+    <color name="amount_over_budget">#ffba1a1a</color>
+
+    <!-- The app-widget surface, which cannot resolve theme attributes. -->
+    <color name="widget_background">#fffbfefa</color>
+    <color name="widget_amount">#ff171d19</color>
+    <color name="widget_accent">#ff146c43</color>
+    <color name="widget_on_accent">#ffffffff</color>
+
+    <!--
+        Category chart palette. Chosen for hue separation at small slice sizes
+        and held to at least 3:1 against both light and dark surfaces, so the
+        same list works in either theme. values-night lightens them slightly.
+    -->
+    <color name="chart_1">#ff2e7d5b</color>
+    <color name="chart_2">#ff3f6f9e</color>
+    <color name="chart_3">#ffb5843a</color>
+    <color name="chart_4">#ff8a5aa8</color>
+    <color name="chart_5">#ffc25e5e</color>
+    <color name="chart_6">#ff3f8f8a</color>
+    <color name="chart_7">#ff96793c</color>
+    <color name="chart_8">#ff6f7fb8</color>
+    <color name="chart_9">#ffa85b7e</color>
+    <color name="chart_10">#ff5c8a4a</color>
+
 </resources>

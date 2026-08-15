@@ -6,36 +6,37 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class WeekActivity extends BaseActivity implements ActionBar.OnNavigationListener {
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
+public class WeekActivity extends BaseActivity
+        implements Navigation.OnDestinationSelected, ExpenseRow.Actions {
 
     private Budget _budget;
     private BroadcastReceiver _syncReceiver;
     private int _daysBackFromToday = 0;
+    private ExpenseAdapter _adapter;
 
     private static final int EDIT_BUDGET = 1;
     private static final int SWITCH_BUDGET = 2;
@@ -62,19 +63,32 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_week);
 
-        Navigation.setUp(this, this, Navigation.WEEK);
+        Navigation.setUp(this, Navigation.WEEK, this);
+
+        _adapter = new ExpenseAdapter(this, true);
+        RecyclerView list = findViewById(R.id.week_list);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.setAdapter(_adapter);
+
+        findViewById(R.id.week_back).setOnClickListener(v -> weekBack());
+        findViewById(R.id.week_forward).setOnClickListener(v -> weekForward());
+        findViewById(R.id.fab_add).setOnClickListener(v ->
+                startActivity(new Intent(this, AddExpenseActivity.class)));
 
         setUpSwipe();
-        ListView lv = WeekActivity.this.findViewById(R.id.week_list);
-        registerForContextMenu(lv);
 
         _syncReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                final View spinner = findViewById(R.id.main_load);
                 runOnUiThread(() -> {
+                    View spinner = findViewById(R.id.main_load);
                     if (spinner != null) {
                         spinner.setVisibility(View.INVISIBLE);
+                    }
+                    // A sync can bring in expenses from another device, so the
+                    // week is re-read rather than only clearing the spinner.
+                    if (_budget != null) {
+                        loadData();
                     }
                 });
             }
@@ -112,16 +126,16 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     private void startSync() {
-        View spinner = findViewById(R.id.main_load);
+        LinearProgressIndicator spinner = findViewById(R.id.main_load);
         spinner.setVisibility(View.VISIBLE);
         Sync.start(this);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setUpSwipe() {
-        final View container = findViewById(R.id.week_container);
-        View v = findViewById(R.id.week_list);
-
-        container.setOnTouchListener(new OnSwipeTouchListener(this) {
+        // The list keeps its own touch handling (rows are clickable), so the
+        // detector only observes there; the background consumes the gesture.
+        findViewById(R.id.week_container).setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeRight() {
                 weekBack();
             }
@@ -130,13 +144,13 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
                 weekForward();
             }
 
-            @SuppressLint("ClickableViewAccessibility")
             public boolean onTouch(View v, MotionEvent event) {
                 gestureDetector.onTouchEvent(event);
                 return true;
             }
         });
-        v.setOnTouchListener(new OnSwipeTouchListener(this) {
+
+        findViewById(R.id.week_list).setOnTouchListener(new OnSwipeTouchListener(this) {
             public void onSwipeRight() {
                 weekBack();
             }
@@ -145,7 +159,6 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
                 weekForward();
             }
 
-            @SuppressLint("ClickableViewAccessibility")
             public boolean onTouch(View v, MotionEvent event) {
                 gestureDetector.onTouchEvent(event);
                 return false;
@@ -153,15 +166,14 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
         });
     }
 
-    private String getPeriod() {
+    /** The Sunday-to-Saturday (or whichever start day) week being shown. */
+    private Calendar weekStart() {
         Calendar start = Calendar.getInstance();
         start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
         while ((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay) {
             start.add(Calendar.DAY_OF_YEAR, -1);
         }
-        Calendar end = (Calendar) start.clone();
-        end.add(Calendar.DAY_OF_YEAR, 6);
-        return Dates.getShortDateString(this, start.getTime()) + " - " + Dates.getShortDateString(this, end.getTime());
+        return start;
     }
 
     private void loadData() {
@@ -189,37 +201,106 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
             return;
         }
 
+        // Through the activity, not the toolbar: once the toolbar is the
+        // support ActionBar it re-applies the window title over anything set
+        // on it directly, so toolbar.setTitle() silently loses.
+        setTitle(_budget.Name != null && !_budget.Name.isEmpty()
+                ? _budget.Name : getString(R.string.app_name));
+
         List<Expense> expenses = DBHelper.GetExpensesForWeek(_budget.UniqueId, _daysBackFromToday, _budget.StartDay);
 
         double total = 0;
-        for (int i = 0; i < expenses.size(); i++) {
-            total += expenses.get(i).Amount;
+        for (Expense e : expenses) {
+            total += e.Amount;
         }
-        double remaining = _budget.Amount - total;
+        final double rounded = Math.round((_budget.Amount - total) * 100) / 100.0;
 
-        Button r = WeekActivity.this.findViewById(R.id.remaining);
-        final double rounded = Math.round(remaining * 100) / 100.0;
-        if (rounded >= 0) {
-            r.setText(getString(R.string.week_activity_amount_remaining, Helpers.currencyString(rounded)));
-            r.setTextColor(ContextCompat.getColor(this, R.color.amount_within_budget));
-        } else {
-            r.setText(getString(R.string.week_activity_amount_over, Helpers.currencyString(Math.abs(rounded))));
-            r.setTextColor(ContextCompat.getColor(this, R.color.amount_over_budget));
-        }
-        r.setOnClickListener(v -> confirmCarryBalance(rounded));
-        ListView lv = WeekActivity.this.findViewById(R.id.week_list);
-        if (lv.getAdapter() == null) {
-            WeekRowAdapter adapter = new WeekRowAdapter(WeekActivity.this, R.layout.week_row, expenses);
-            lv.setAdapter(adapter);
-        } else {
-            ((WeekRowAdapter) lv.getAdapter()).clear();
-            ((WeekRowAdapter) lv.getAdapter()).addAll(expenses);
-        }
+        bindBalance(total, rounded);
+        bindPeriod();
 
-        TextView dates = findViewById(R.id.current_week);
-        dates.setText(getPeriod());
+        _adapter.setCategories(CategoryIndex.of(this,
+                DBHelper.GetActiveCategories(_budget.UniqueId, null)));
+        _adapter.setExpenses(expenses);
+
+        View empty = findViewById(R.id.week_empty);
+        if (expenses.isEmpty()) {
+            EmptyState.show(empty, R.drawable.ic_receipt, R.string.week_empty_title,
+                    R.string.week_empty_body);
+        } else {
+            empty.setVisibility(View.GONE);
+        }
 
         notifyWidgets();
+    }
+
+    private void bindBalance(double spent, final double rounded) {
+        TextView label = findViewById(R.id.remaining_label);
+        TextView amount = findViewById(R.id.remaining_amount);
+        TextView spentOf = findViewById(R.id.spent_of);
+        LinearProgressIndicator progress = findViewById(R.id.budget_progress);
+        MaterialCardView card = findViewById(R.id.balance_card);
+
+        boolean over = rounded < 0;
+
+        label.setText(over ? R.string.week_over_label : R.string.week_remaining_label);
+        amount.setText(Helpers.currencyString(Math.abs(rounded)));
+        spentOf.setText(getString(R.string.week_spent_of,
+                Helpers.currencyString(spent), Helpers.currencyString(_budget.Amount)));
+
+        // Overspending recolours the whole card rather than only the number:
+        // it is the one state on this screen worth interrupting for.
+        int container = MaterialColors.getColor(card, over
+                ? com.google.android.material.R.attr.colorErrorContainer
+                : com.google.android.material.R.attr.colorPrimaryContainer);
+        int onContainer = MaterialColors.getColor(card, over
+                ? com.google.android.material.R.attr.colorOnErrorContainer
+                : com.google.android.material.R.attr.colorOnPrimaryContainer);
+
+        card.setCardBackgroundColor(container);
+        label.setTextColor(onContainer);
+        amount.setTextColor(onContainer);
+        spentOf.setTextColor(onContainer);
+
+        MaterialButton carry = findViewById(R.id.carry_balance);
+        carry.setTextColor(onContainer);
+        carry.setIconTint(android.content.res.ColorStateList.valueOf(onContainer));
+        carry.setOnClickListener(v -> confirmCarryBalance(rounded));
+
+        int pct = _budget.Amount > 0
+                ? (int) Math.round(Math.min(spent / _budget.Amount, 1.0) * 100)
+                : 0;
+        progress.setProgressCompat(Math.max(pct, 0), true);
+        progress.setIndicatorColor(over
+                ? MaterialColors.getColor(card, androidx.appcompat.R.attr.colorError)
+                : MaterialColors.getColor(card, androidx.appcompat.R.attr.colorPrimary));
+    }
+
+    private void bindPeriod() {
+        Calendar start = weekStart();
+        Calendar end = (Calendar) start.clone();
+        end.add(Calendar.DAY_OF_YEAR, 6);
+
+        TextView dates = findViewById(R.id.current_week);
+        dates.setText(getString(R.string.month_week_range,
+                Dates.getShortDateString(this, start.getTime()),
+                Dates.getShortDateString(this, end.getTime())));
+
+        TextView subtitle = findViewById(R.id.week_subtitle);
+        Calendar today = Calendar.getInstance();
+        int daysLeft = Dates.daysBetween(today, end);
+        boolean isCurrentWeek = Dates.daysBetween(start, today) >= 0 && daysLeft >= 0;
+
+        if (!isCurrentWeek) {
+            subtitle.setVisibility(View.GONE);
+            return;
+        }
+
+        String remaining = daysLeft == 0
+                ? getString(R.string.week_last_day)
+                : getResources().getQuantityString(R.plurals.week_days_left, daysLeft, daysLeft);
+        subtitle.setText(getString(R.string.week_subtitle,
+                getString(R.string.week_this_week), remaining));
+        subtitle.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -254,19 +335,13 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
             return;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(WeekActivity.this);
-
-        builder
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.carry_balance)
-                .setMessage(R.string.carry_balance_message)
+                .setMessage(getString(R.string.carry_balance_message, Helpers.currencyString(rounded)))
                 .setCancelable(true)
                 .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel())
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    Calendar start = Calendar.getInstance();
-                    start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
-                    while ((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay) {
-                        start.add(Calendar.DAY_OF_YEAR, -1);
-                    }
+                    Calendar start = weekStart();
                     start.add(Calendar.DAY_OF_YEAR, 7);
                     Expense e = new Expense();
                     e.Amount = -rounded;
@@ -278,11 +353,8 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
                     DBHelper.AddExpense(e, DBHelper.CREATED_STATE_KEY);
                     loadData();
                     dialog.dismiss();
-                });
-
-        Dialog d = builder.create();
-
-        d.show();
+                })
+                .show();
     }
 
     private void notifyWidgets() {
@@ -293,17 +365,9 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
         sendBroadcast(intent);
     }
 
-    public void weekBackOnClick(View v) {
-        weekBack();
-    }
-
     private void weekBack() {
         _daysBackFromToday += 7;
         loadData();
-    }
-
-    public void weekForwardOnClick(View v) {
-        weekForward();
     }
 
     private void weekForward() {
@@ -311,56 +375,33 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
         loadData();
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        ListView lv = (ListView) v;
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        lv.setTag(lv.getAdapter().getItem(info.position));
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.week_context, menu);
-    }
+    // ---- ExpenseRow.Actions ------------------------------------------------
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        ListView lv = findViewById(R.id.week_list);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Expense e = (Expense) lv.getItemAtPosition(info.position);
-
+    public void onEdit(Expense e) {
         try {
-            int id = item.getItemId();
-            if (id == R.id.context_edit) {
-                Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
-                i.putExtra("expense", e.toJson().toString());
-                WeekActivity.this.startActivity(i);
-            } else if (id == R.id.context_delete) {
-                deleteExpense(e);
-            } else if (id == R.id.context_copy) {
-                copyExpense(e);
-            }
+            Intent i = new Intent(this, AddExpenseActivity.class);
+            i.putExtra("expense", e.toJson().toString());
+            startActivity(i);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        return true;
     }
 
-    private void deleteExpense(Expense e) {
-        if (e.State.equals(DBHelper.CREATED_STATE_KEY))
+    @Override
+    public void onDelete(Expense e) {
+        if (DBHelper.CREATED_STATE_KEY.equals(e.State)) {
             DBHelper.DeleteExpense(e);
-        else
+        } else {
             DBHelper.EditExpense(e, DBHelper.DELETED_STATE_KEY);
+        }
         loadData();
         Sync.start(this);
     }
 
-    private void copyExpense(Expense e) {
-        Calendar start = Calendar.getInstance();
-        start.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
-        while ((start.get(Calendar.DAY_OF_WEEK) - 1) != _budget.StartDay) {
-            start.add(Calendar.DAY_OF_YEAR, -1);
-        }
+    @Override
+    public void onCopyToNextWeek(Expense e) {
+        Calendar start = weekStart();
         start.add(Calendar.DAY_OF_YEAR, 7);
         Expense ex = new Expense();
         ex.Amount = e.Amount;
@@ -374,17 +415,11 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
         Sync.start(this);
     }
 
+    // ---- Menu and navigation ----------------------------------------------
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.week, menu);
-        MenuItem add = menu.findItem(R.id.action_add);
-        add.setOnMenuItemClickListener(arg0 -> {
-            Intent i = new Intent(WeekActivity.this, AddExpenseActivity.class);
-            startActivity(i);
-            return true;
-        });
         if (_budget != null) {
             MenuItem s = menu.findItem(R.id.action_current_budget);
             s.setTitle(getString(R.string.current_budget_named, _budget.Name));
@@ -400,6 +435,12 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
                 Intent i = new Intent(this, SwitchBudgetActivity.class);
                 startActivityForResult(i, SWITCH_BUDGET);
             }
+            return true;
+        }
+        if (id == R.id.action_how_it_works) {
+            Intent i = new Intent(this, TutorialActivity.class);
+            i.putExtra(TutorialActivity.EXTRA_STANDALONE, true);
+            startActivity(i);
             return true;
         }
         if (id == R.id.action_settings) {
@@ -419,9 +460,9 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     @Override
-    public boolean onNavigationItemSelected(int position, long id) {
-        if (position == Navigation.WEEK || _budget == null) {
-            return true;
+    public void onDestinationSelected(int position) {
+        if (_budget == null) {
+            return;
         }
         if (position == Navigation.MONTH) {
             gotoMonth();
@@ -432,7 +473,6 @@ public class WeekActivity extends BaseActivity implements ActionBar.OnNavigation
         } else if (position == Navigation.CATEGORY) {
             gotoCategory();
         }
-        return true;
     }
 
     private void goTo(Class<?> target, int requestCode) {
