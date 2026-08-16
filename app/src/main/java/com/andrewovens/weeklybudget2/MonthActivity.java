@@ -34,6 +34,7 @@ public class MonthActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_month);
 
+        Transitions.disableCloseAnimation(this);
         Navigation.setUp(this, Navigation.MONTH, this);
 
         try {

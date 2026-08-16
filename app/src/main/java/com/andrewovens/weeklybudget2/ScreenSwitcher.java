@@ -28,7 +28,7 @@ final class ScreenSwitcher {
         i.putExtra(WeekActivity.GOTO_ACTIVITY, WeekActivity.GOTO_WEEK + position);
         activity.setResult(Activity.RESULT_OK, i);
         activity.finish();
-        Transitions.suppressClose(activity);
+        Transitions.afterFinish(activity);
     }
 
     /**

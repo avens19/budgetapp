@@ -76,6 +76,7 @@ abstract class CategoryChartActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
 
+        Transitions.disableCloseAnimation(this);
         Navigation.setUp(this, navPosition(), this);
 
         try {

@@ -501,8 +501,7 @@ public class WeekActivity extends BaseActivity
             Intent i = new Intent(this, target);
             i.putExtra("budget", _budget.toJson(false).toString());
             i.putExtra("days", _daysBackFromToday);
-            startActivityForResult(i, requestCode);
-            Transitions.suppressOpen(this);
+            startActivityForResult(Transitions.noAnimation(i), requestCode);
         } catch (Exception e) {
             e.printStackTrace();
         }

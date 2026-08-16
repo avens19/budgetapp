@@ -31,6 +31,7 @@ public class CategoryActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
+        Transitions.disableCloseAnimation(this);
         Navigation.setUp(this, Navigation.CATEGORY, this);
 
         try {
