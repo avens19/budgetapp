@@ -18,6 +18,7 @@ each track without creating an edit.
 
 import argparse
 import json
+import os
 import sys
 
 try:
@@ -80,6 +81,35 @@ def explain(response, who, package):
     sys.exit(1)
 
 
+IMAGE_TYPE = "phoneScreenshots"
+
+
+def upload_screenshots(s, args, edit_id, who):
+    """Replace the whole phone set. Play keeps images in upload order and has
+    no way to reorder them afterwards, so the existing ones are cleared first
+    and the new files sent in filename order."""
+    import glob
+    files = sorted(glob.glob(os.path.join(args.screenshots, "*.png")))
+    if not files:
+        sys.exit("no PNGs in {}".format(args.screenshots))
+
+    listing = "{}/{}/edits/{}/listings/{}/{}".format(
+        BASE, args.package, edit_id, args.language, IMAGE_TYPE)
+    r = s.delete(listing)
+    if r.status_code >= 400:
+        explain(r, who, args.package)
+    print("cleared existing {}".format(IMAGE_TYPE))
+
+    for path in files:
+        with open(path, "rb") as f:
+            r = s.post("{}/{}/edits/{}/listings/{}/{}?uploadType=media".format(
+                           UPLOAD, args.package, edit_id, args.language, IMAGE_TYPE),
+                       headers={"Content-Type": "image/png"}, data=f)
+        if r.status_code >= 400:
+            explain(r, who, args.package)
+        print("  uploaded {}".format(os.path.basename(path)))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--key", required=True, help="service account JSON")
@@ -93,10 +123,14 @@ def main():
     ap.add_argument("--rollout", type=float, metavar="FRACTION",
                     help="release to this fraction of users, e.g. 0.1. "
                          "Omit to stage the release as a draft.")
+    ap.add_argument("--screenshots", metavar="DIR",
+                    help="replace the phone screenshots with the PNGs in DIR, "
+                         "in filename order")
+    ap.add_argument("--language", default="en-US")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
-    if not args.aab and not args.promote:
-        ap.error("one of --aab or --promote is required")
+    if not (args.aab or args.promote or args.screenshots):
+        ap.error("one of --aab, --promote or --screenshots is required")
 
     s, who = session_for(args.key)
     print("authenticated as {}".format(who))
@@ -116,6 +150,18 @@ def main():
                     t["track"], rel.get("status"), rel.get("versionCodes")))
         s.delete("{}/{}/edits/{}".format(BASE, args.package, edit["id"]))
         print("dry run only — edit discarded, nothing changed")
+        return
+
+    # Screenshots on their own: no track change, just the listing images.
+    if args.screenshots and not (args.aab or args.promote):
+        r = s.post("{}/{}/edits".format(BASE, args.package))
+        if r.status_code >= 400:
+            explain(r, who, args.package)
+        edit_id = check(r, "edits.insert")["id"]
+        upload_screenshots(s, args, edit_id, who)
+        check(s.post("{}/{}/edits/{}:commit".format(BASE, args.package, edit_id)),
+              "edits.commit")
+        print("\nDone. Listing screenshots replaced.")
         return
 
     notes = None
@@ -159,6 +205,9 @@ def main():
                 json={"track": args.track, "releases": [release]}),
           "tracks.update")
     print("track '{}' set to {}".format(args.track, release["status"]))
+
+    if args.screenshots:
+        upload_screenshots(s, args, edit_id, who)
 
     check(s.post("{}/{}/edits/{}:commit".format(BASE, args.package, edit_id)),
           "edits.commit")
