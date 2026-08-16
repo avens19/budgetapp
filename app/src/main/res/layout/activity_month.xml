@@ -51,6 +51,11 @@
 
                     <TextView
                         android:id="@+id/current_month"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_s"
+                        android:paddingBottom="@dimen/space_s"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

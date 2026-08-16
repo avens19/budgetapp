@@ -54,6 +54,13 @@ public class MonthActivity extends BaseActivity
 
         findViewById(R.id.month_back).setOnClickListener(v -> shiftMonths(-1));
         findViewById(R.id.month_forward).setOnClickListener(v -> shiftMonths(1));
+        findViewById(R.id.current_month).setOnClickListener(v ->
+                PeriodPicker.show(this, R.string.pick_month, _daysBackFromToday, true,
+                        days -> {
+                            _daysBackFromToday = days;
+                            loadData();
+                            invalidateOptionsMenu();
+                        }));
 
         setUpSwipe();
 
@@ -126,6 +133,8 @@ public class MonthActivity extends BaseActivity
             return;
         }
 
+        BudgetTitle.asTitle(this, _budget);
+
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DAY_OF_YEAR, _daysBackFromToday * -1);
 
@@ -147,12 +156,24 @@ public class MonthActivity extends BaseActivity
         budgetLine.setText(getString(R.string.month_weekly_budget,
                 Helpers.currencyString(_budget.Amount)));
 
+        // A month with nothing in it still has week rows — one per week, each
+        // reading zero — so showing the empty state on top of them stacked two
+        // messages over each other. The list goes away with them.
+        boolean anySpending = amount != 0;
+        for (DateTotal week : list) {
+            if (week.Total != 0) {
+                anySpending = true;
+                break;
+            }
+        }
+
         View empty = findViewById(R.id.month_empty);
-        if (amount == 0) {
+        findViewById(R.id.month_list).setVisibility(anySpending ? View.VISIBLE : View.GONE);
+        if (anySpending) {
+            empty.setVisibility(View.GONE);
+        } else {
             EmptyState.show(empty, R.drawable.ic_nav_month, R.string.month_empty_title,
                     R.string.month_empty_body);
-        } else {
-            empty.setVisibility(View.GONE);
         }
     }
 
@@ -166,6 +187,7 @@ public class MonthActivity extends BaseActivity
             _daysBackFromToday = 0;
 
         loadData();
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -192,7 +214,22 @@ public class MonthActivity extends BaseActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem today = menu.findItem(R.id.action_today);
+        if (today != null) {
+            today.setVisible(_daysBackFromToday != 0);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_today) {
+            _daysBackFromToday = 0;
+            loadData();
+            invalidateOptionsMenu();
+            return true;
+        }
         return ScreenSwitcher.onOptionsItemSelected(this, item, _budget)
                 || super.onOptionsItemSelected(item);
     }

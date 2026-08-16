@@ -15,6 +15,9 @@
 
     <string name="action_add">Add expense</string>
     <string name="action_edit_categories">Manage categories</string>
+    <string name="action_today">Today</string>
+    <string name="pick_week">Jump to a week</string>
+    <string name="pick_month">Jump to a month</string>
     <string name="previous_period">Previous period</string>
     <string name="next_period">Next period</string>
 

@@ -84,6 +84,8 @@ public class CategoryActivity extends BaseActivity
             return;
         }
 
+        BudgetTitle.asSubtitle(this, R.string.title_category, _budget);
+
         List<Category> list = DBHelper.GetActiveCategories(_budget.UniqueId, null);
         _adapter.setCategories(list, CategoryIndex.of(this, list));
 

@@ -14,6 +14,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -68,7 +72,7 @@ public class AddExpenseActivity extends BaseActivity {
                 _date = Calendar.getInstance();
                 _date.setTime(_expense.Date);
 
-                setTitle(R.string.edit_expense_title);
+                BudgetTitle.asSubtitle(this, R.string.edit_expense_title, budgetOrNull());
                 save.setText(R.string.edit_button);
 
                 ((EditText) findViewById(R.id.add_description)).setText(_expense.Description);
@@ -80,12 +84,37 @@ public class AddExpenseActivity extends BaseActivity {
                 return;
             }
         } else {
-            setTitle(R.string.title_activity_add_expense);
+            BudgetTitle.asSubtitle(this, R.string.title_activity_add_expense, budgetOrNull());
             _date = Calendar.getInstance();
             initCategories(null);
         }
 
         bindDate();
+        focusAmount();
+    }
+
+    /**
+     * The amount is the one field every expense needs, so the form opens on it
+     * with the keyboard showing. On an edit the existing value is selected, so
+     * typing replaces it instead of appending to it.
+     */
+    private void focusAmount() {
+        final EditText amount = findViewById(R.id.add_amount);
+        amount.requestFocus();
+        if (_isEdit) {
+            amount.selectAll();
+        }
+        // Posted, because the window has no insets controller until it is
+        // attached, and asking for the IME before that is a no-op.
+        amount.post(() -> {
+            WindowInsetsControllerCompat controller =
+                    WindowCompat.getInsetsController(getWindow(), amount);
+            controller.show(WindowInsetsCompat.Type.ime());
+        });
+    }
+
+    private Budget budgetOrNull() {
+        return Settings.getBudget(this);
     }
 
     private void bindDate() {

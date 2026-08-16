@@ -67,9 +67,14 @@ def explain(response, who, package):
         sys.exit("\nFix: enable the Google Play Android Developer API on the Cloud\n"
                  "project that owns this key, then wait a minute for it to "
                  "propagate.")
-    if response.status_code in (401, 403):
+    if reason in ("IAM_PERMISSION_DENIED", "ACCESS_TOKEN_SCOPE_INSUFFICIENT") or (
+            response.status_code == 401) or "permission" in message.lower():
         sys.exit("\nFix: in Play Console -> Users and permissions -> Invite new user,\n"
                  "add {}\nand grant it release access to {}.".format(who, package))
+    if "already been used" in message:
+        sys.exit("\nThat version code is already uploaded — to move the existing\n"
+                 "release between statuses or tracks, pass --promote <versionCode>\n"
+                 "instead of --aab.")
     if response.status_code == 404:
         sys.exit("\nNo app '{}' is visible to this account.".format(package))
     sys.exit(1)
@@ -78,7 +83,10 @@ def explain(response, who, package):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--key", required=True, help="service account JSON")
-    ap.add_argument("--aab", required=True)
+    ap.add_argument("--aab", help="bundle to upload; omit when using --promote")
+    ap.add_argument("--promote", type=int, metavar="VERSIONCODE",
+                    help="reuse a version code already uploaded to Play rather "
+                         "than uploading again")
     ap.add_argument("--notes", help="release notes file (<=500 chars)")
     ap.add_argument("--track", default="production")
     ap.add_argument("--package", default=PACKAGE)
@@ -87,6 +95,8 @@ def main():
                          "Omit to stage the release as a draft.")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
+    if not args.aab and not args.promote:
+        ap.error("one of --aab or --promote is required")
 
     s, who = session_for(args.key)
     print("authenticated as {}".format(who))
@@ -120,16 +130,19 @@ def main():
     edit_id = check(r, "edits.insert")["id"]
     print("edit {}".format(edit_id))
 
-    with open(args.aab, "rb") as f:
-        r = s.post("{}/{}/edits/{}/bundles?uploadType=media".format(
-                       UPLOAD, args.package, edit_id),
-                   headers={"Content-Type": "application/octet-stream"},
-                   data=f)
-    if r.status_code >= 400:
-        explain(r, who, args.package)
-    bundle = check(r, "bundles.upload")
-    version_code = bundle["versionCode"]
-    print("uploaded versionCode {}".format(version_code))
+    if args.promote:
+        version_code = args.promote
+        print("promoting existing versionCode {}".format(version_code))
+    else:
+        with open(args.aab, "rb") as f:
+            r = s.post("{}/{}/edits/{}/bundles?uploadType=media".format(
+                           UPLOAD, args.package, edit_id),
+                       headers={"Content-Type": "application/octet-stream"},
+                       data=f)
+        if r.status_code >= 400:
+            explain(r, who, args.package)
+        version_code = check(r, "bundles.upload")["versionCode"]
+        print("uploaded versionCode {}".format(version_code))
 
     release = {"versionCodes": [str(version_code)]}
     if args.rollout is None:

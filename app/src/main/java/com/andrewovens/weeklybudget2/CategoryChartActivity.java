@@ -94,6 +94,14 @@ abstract class CategoryChartActivity extends BaseActivity
 
         findViewById(R.id.period_back).setOnClickListener(v -> move(-1));
         findViewById(R.id.period_forward).setOnClickListener(v -> move(1));
+        findViewById(R.id.period_label).setOnClickListener(v ->
+                PeriodPicker.show(this, pickerTitle(), _daysBackFromToday,
+                        navPosition() == Navigation.CATEGORY_MONTH,
+                        days -> {
+                            _daysBackFromToday = days;
+                            loadData();
+                            invalidateOptionsMenu();
+                        }));
 
         setUpSegments();
         setUpSwipe();
@@ -171,9 +179,15 @@ abstract class CategoryChartActivity extends BaseActivity
         }
     }
 
+    private int pickerTitle() {
+        return navPosition() == Navigation.CATEGORY_MONTH
+                ? R.string.pick_month : R.string.pick_week;
+    }
+
     private void move(int direction) {
         shiftPeriod(direction);
         loadData();
+        invalidateOptionsMenu();
     }
 
     void loadData() {
@@ -183,6 +197,8 @@ abstract class CategoryChartActivity extends BaseActivity
             this.finish();
             return;
         }
+
+        BudgetTitle.asTitle(this, _budget);
 
         ((TextView) findViewById(R.id.period_label)).setText(periodLabel());
 
@@ -381,7 +397,22 @@ abstract class CategoryChartActivity extends BaseActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem today = menu.findItem(R.id.action_today);
+        if (today != null) {
+            today.setVisible(_daysBackFromToday != 0);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_today) {
+            _daysBackFromToday = 0;
+            loadData();
+            invalidateOptionsMenu();
+            return true;
+        }
         return ScreenSwitcher.onOptionsItemSelected(this, item, _budget)
                 || super.onOptionsItemSelected(item);
     }

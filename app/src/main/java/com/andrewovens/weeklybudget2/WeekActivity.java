@@ -72,6 +72,12 @@ public class WeekActivity extends BaseActivity
 
         findViewById(R.id.week_back).setOnClickListener(v -> weekBack());
         findViewById(R.id.week_forward).setOnClickListener(v -> weekForward());
+        findViewById(R.id.current_week).setOnClickListener(v ->
+                PeriodPicker.show(this, R.string.pick_week, _daysBackFromToday, false,
+                        days -> {
+                            _daysBackFromToday = days;
+                            loadData();
+                        }));
         findViewById(R.id.fab_add).setOnClickListener(v ->
                 startActivity(new Intent(this, AddExpenseActivity.class)));
 
@@ -201,11 +207,7 @@ public class WeekActivity extends BaseActivity
             return;
         }
 
-        // Through the activity, not the toolbar: once the toolbar is the
-        // support ActionBar it re-applies the window title over anything set
-        // on it directly, so toolbar.setTitle() silently loses.
-        setTitle(_budget.Name != null && !_budget.Name.isEmpty()
-                ? _budget.Name : getString(R.string.app_name));
+        BudgetTitle.asTitle(this, _budget);
 
         List<Expense> expenses = DBHelper.GetExpensesForWeek(_budget.UniqueId, _daysBackFromToday, _budget.StartDay);
 
@@ -223,6 +225,7 @@ public class WeekActivity extends BaseActivity
         _adapter.setExpenses(expenses);
 
         View empty = findViewById(R.id.week_empty);
+        findViewById(R.id.week_list).setVisibility(expenses.isEmpty() ? View.GONE : View.VISIBLE);
         if (expenses.isEmpty()) {
             EmptyState.show(empty, R.drawable.ic_receipt, R.string.week_empty_title,
                     R.string.week_empty_body);
@@ -368,11 +371,13 @@ public class WeekActivity extends BaseActivity
     private void weekBack() {
         _daysBackFromToday += 7;
         loadData();
+        invalidateOptionsMenu();
     }
 
     private void weekForward() {
         _daysBackFromToday -= 7;
         loadData();
+        invalidateOptionsMenu();
     }
 
     // ---- ExpenseRow.Actions ------------------------------------------------
@@ -428,8 +433,24 @@ public class WeekActivity extends BaseActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Only worth offering when it would actually move you.
+        MenuItem today = menu.findItem(R.id.action_today);
+        if (today != null) {
+            today.setVisible(_daysBackFromToday != 0);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if (id == R.id.action_today) {
+            _daysBackFromToday = 0;
+            loadData();
+            invalidateOptionsMenu();
+            return true;
+        }
         if (id == R.id.action_current_budget) {
             if (_budget != null) {
                 Intent i = new Intent(this, SwitchBudgetActivity.class);
@@ -481,6 +502,7 @@ public class WeekActivity extends BaseActivity
             i.putExtra("budget", _budget.toJson(false).toString());
             i.putExtra("days", _daysBackFromToday);
             startActivityForResult(i, requestCode);
+            Transitions.suppressOpen(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
