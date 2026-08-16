@@ -24,7 +24,10 @@
     <!-- Week screen -->
     <string name="week_remaining_label">Left to spend</string>
     <string name="week_over_label">Over budget</string>
-    <string name="week_spent_of">%1$s spent of %2$s</string>
+    <!-- Sits under a "Left to spend" heading and a progress bar, so "spent"
+         is already implied; spelling it out wrapped the line on a 480dpi
+         display and pushed the card out of shape. -->
+    <string name="week_spent_of">%1$s of %2$s</string>
     <string name="week_this_week">This week</string>
     <string name="week_subtitle">%1$s · %2$s</string>
     <string name="week_last_day">Last day</string>
