@@ -94,11 +94,6 @@ final class Sync {
         categories.addAll(DBHelper.GetUnsyncedCategories(budget.UniqueId, DBHelper.EDITED_STATE_KEY));
         categories.addAll(DBHelper.GetUnsyncedCategories(budget.UniqueId, DBHelper.DELETED_STATE_KEY));
 
-        List<Expense> expenses = new ArrayList<>();
-        expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.CREATED_STATE_KEY));
-        expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.EDITED_STATE_KEY));
-        expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.DELETED_STATE_KEY));
-
         for (Category c : categories) {
             switch (c.State) {
                 case DBHelper.CREATED_STATE_KEY: {
@@ -117,6 +112,22 @@ final class Sync {
                 }
             }
         }
+
+        // Read after the categories are pushed, not before.
+        //
+        // A new category is created locally with an id from Settings.getNextId,
+        // and an expense tagged with it references that local id.
+        // ReplaceCategory above swaps the category for the server's copy and
+        // repoints the expense rows — but a list loaded before that still holds
+        // the old id, so the expense was sent referencing a category the server
+        // had never seen. Postgres rejects it on the foreign key, the sync
+        // throws, and every later change stays queued behind it and retries
+        // forever. The old server accepted the orphan silently, which is why
+        // this went unnoticed for so long.
+        List<Expense> expenses = new ArrayList<>();
+        expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.CREATED_STATE_KEY));
+        expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.EDITED_STATE_KEY));
+        expenses.addAll(DBHelper.GetUnsyncedExpenses(budget.UniqueId, DBHelper.DELETED_STATE_KEY));
 
         for (Expense e : expenses) {
             switch (e.State) {
