@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard"
+  ],
+  "timezone": "America/Edmonton",
+  "prConcurrentLimit": 3,
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": [
+    {
+      "description": "AndroidX and Material move constantly and rarely break; one PR a month for all of them is less noise than one each.",
+      "matchPackagePatterns": [
+        "^androidx\\.",
+        "^com\\.google\\.android\\.material"
+      ],
+      "groupName": "androidx"
+    },
+    {
+      "description": "The Gradle plugin and the wrapper decide which compileSdk is even available, so these are the ones worth looking at rather than merging blind.",
+      "matchPackageNames": [
+        "com.android.application",
+        "com.android.tools.build:gradle"
+      ],
+      "groupName": "android gradle plugin",
+      "dependencyDashboardApproval": true
+    },
+    {
+      "description": "A major bump of anything here means reading release notes first.",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "dependencyDashboardApproval": true
+    }
+  ]
+}

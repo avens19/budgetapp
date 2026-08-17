@@ -1,0 +1,62 @@
+# Warn before Play stops accepting updates.
+#
+# This is the failure that actually happened: the app went stale for long enough
+# that Play would not take an update and new phones could no longer install it.
+# No dependency bot catches it. Renovate watches library versions; targetSdk is a
+# number in build.gradle, and the thing that moves is Google's policy, not a
+# package.
+#
+# Play requires new releases to target an API level within roughly a year of the
+# latest, enforced from about August each year. The deadlines are published years
+# ahead, so a small table is enough — and if this ever runs past the end of the
+# table it says so rather than quietly passing.
+name: Play target API deadline
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'      # the 1st of each month
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compare targetSdk against Play's requirement
+        run: |
+          set -euo pipefail
+
+          target=$(grep -oE 'targetSdk[[:space:]]+[0-9]+' app/build.gradle | grep -oE '[0-9]+')
+          echo "targetSdk in build.gradle: $target"
+
+          # year:required-api — Play's published schedule.
+          table="2025:35 2026:36 2027:37 2028:38"
+          year=$(date -u +%Y)
+          required=""
+          for entry in $table; do
+            [ "${entry%%:*}" = "$year" ] && required="${entry##*:}"
+          done
+
+          if [ -z "$required" ]; then
+            echo "::warning::No requirement recorded for $year. Check Play's target API level policy and extend the table in this workflow."
+            exit 0
+          fi
+
+          echo "Play requires >= $required for updates submitted in $year"
+
+          if [ "$target" -lt "$required" ]; then
+            echo "::error::targetSdk $target is below Play's $required for $year. Updates will be rejected and new devices cannot install the app until this is raised."
+            exit 1
+          fi
+
+          # A year of warning is the point: catching this in August is too late.
+          next=$((year + 1))
+          for entry in $table; do
+            [ "${entry%%:*}" = "$next" ] && upcoming="${entry##*:}"
+          done
+          if [ -n "${upcoming:-}" ] && [ "$target" -lt "$upcoming" ]; then
+            echo "::warning::targetSdk $target satisfies $year but not $next, which needs $upcoming. Raise it during $year rather than against the deadline."
+          fi
+
+          echo "targetSdk $target is fine for $year."
