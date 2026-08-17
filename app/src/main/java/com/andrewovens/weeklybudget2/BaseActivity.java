@@ -42,6 +42,20 @@ abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
+
+        // Every screen, not just the first one.
+        //
+        // myDB is a static field opened by WeekActivity, the widget and Sync.
+        // After the process is killed Android restores whichever screen the user
+        // was last on — and if that is Month or Categories, they query a null
+        // database on resume and the app dies before drawing anything. Play has
+        // two such crashes on record, in GetTotalsForMonth and
+        // getCategoryAmounts, both from performResumeActivity.
+        //
+        // OpenDB is synchronized and returns immediately when the database is
+        // already open, so doing it here costs nothing and closes the hole for
+        // every screen at once.
+        DBHelper.OpenDB(this);
     }
 
     @Override
