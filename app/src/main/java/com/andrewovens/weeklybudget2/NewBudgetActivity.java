@@ -29,6 +29,8 @@ public class NewBudgetActivity extends BaseActivity {
         save.setOnClickListener(v -> goButtonOnClick(save));
 
         findViewById(R.id.budget_id_card).setOnClickListener(v -> copyUniqueId());
+        findViewById(R.id.button_other_devices)
+                .setOnClickListener(v -> Helpers.openUrl(this, getString(R.string.url_apps)));
 
         String budget = getIntent().getStringExtra("budget");
         TextView uniqueId = findViewById(R.id.text_new_unique);

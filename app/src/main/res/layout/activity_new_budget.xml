@@ -146,6 +146,20 @@
                         app:tint="?attr/colorOnSurfaceVariant" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <!--
+                Directly under the ID, because this is the screen you are on when
+                you are trying to get someone else set up, and their phone is not
+                necessarily this one.
+            -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_other_devices"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:text="@string/action_other_devices"
+                app:icon="@drawable/ic_open_in_new" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

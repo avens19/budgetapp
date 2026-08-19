@@ -106,6 +106,17 @@
     <string name="copied_unique_id">Budget ID copied</string>
     <string name="copy_budget_id">Copy budget ID</string>
 
+    <!--
+        Points at a page on the web app rather than straight at the App Store,
+        which is what the iOS build has to do: App Store guideline 2.3.10
+        disallows naming other mobile platforms inside an app, so that build
+        cannot carry a Play Store link. One page for both keeps the store URLs
+        in a single place and lets each app stay quiet about the other.
+    -->
+    <string name="action_other_devices">Apps for other devices</string>
+    <string name="url_apps" translatable="false">https://budget.andrewovens.com/Apps</string>
+    <string name="error_no_browser">No app here can open a web page.</string>
+
     <!-- How this works: the post-install tutorial -->
     <string name="tutorial_title">How this works</string>
     <string name="tutorial_skip">Skip</string>
@@ -123,8 +134,8 @@
     <string name="tutorial_3_title">Share it with your partner</string>
     <string name="tutorial_3_body">One budget can live on as many devices as you like, and they all stay in step.\n\nOpen Edit budget, tap the budget ID to copy it, and enter it on the other device with Join with an ID. You will both see the same running total.</string>
 
-    <string name="tutorial_4_title">On iPhone? Use the web app</string>
-    <string name="tutorial_4_body">There is no iPhone app, but budget.andrewovens.com opens in any browser and works on the same budget as this one.\n\nAdd it to the home screen and it behaves much like an app.</string>
+    <string name="tutorial_4_title">On iPhone? There is an app</string>
+    <string name="tutorial_4_body">There is an iPhone app too — listed as Weekly Spend, because this name was taken — and budget.andrewovens.com opens in any browser. All three work on the same budget.\n\nEdit budget has the links, under Apps for other devices.</string>
 
     <string name="action_how_it_works">How this works</string>
 

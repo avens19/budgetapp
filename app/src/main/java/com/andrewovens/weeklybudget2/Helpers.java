@@ -1,6 +1,9 @@
 package com.andrewovens.weeklybudget2;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
@@ -12,6 +15,22 @@ import java.util.Locale;
 public class Helpers {
     static void showNetworkErrorToastOnUi(final Activity a, final int resourceId) {
         a.runOnUiThread(() -> Toast.makeText(a, resourceId, Toast.LENGTH_SHORT).show());
+    }
+
+    /**
+     * Hands a URL to whatever the device uses for web pages.
+     *
+     * <p>A device with no browser at all is unusual but not impossible — a
+     * stripped ROM, or a work profile that blocks it — and an uncaught
+     * {@link ActivityNotFoundException} would take the whole screen down for
+     * what is only a link.
+     */
+    static void openUrl(Activity a, String url) {
+        try {
+            a.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(a, R.string.error_no_browser, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
