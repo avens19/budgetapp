@@ -28,6 +28,7 @@
          is already implied; spelling it out wrapped the line on a 480dpi
          display and pushed the card out of shape. -->
     <string name="week_spent_of">%1$s of %2$s</string>
+    <string name="week_total_label">Spent this week</string>
     <string name="week_this_week">This week</string>
     <string name="week_subtitle">%1$s · %2$s</string>
     <string name="week_last_day">Last day</string>
@@ -150,6 +151,15 @@
     <string name="tutorial_4_body">There is an iPhone app too — listed as Weekly Spend, because this name was taken — and budget.andrewovens.com opens in any browser. All three work on the same budget.\n\nEdit budget has the links, under Apps for other devices.</string>
 
     <string name="action_how_it_works">How this works</string>
+
+    <!--
+        Compact layout. Asked for by users of the pre-2026 design, whose objection
+        was that the roomy one shows very few expenses at once and splits the week
+        into days they do not always file things under correctly.
+    -->
+    <string name="action_dense_layout">Compact layout</string>
+    <string name="week_dense_left">%1$s left</string>
+    <string name="week_dense_over">%1$s over</string>
 
     <!-- Carry balance -->
     <string name="carry_balance">Carry balance</string>

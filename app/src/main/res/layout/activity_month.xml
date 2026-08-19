@@ -13,10 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <!-- See PeriodSwipeLayout: an intercepting parent, not a touch listener. -->
+    <com.andrewovens.weeklybudget2.PeriodSwipeLayout
+        android:id="@+id/month_swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/header_bar"
@@ -144,6 +150,7 @@
                 android:visibility="gone" />
         </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </com.andrewovens.weeklybudget2.PeriodSwipeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

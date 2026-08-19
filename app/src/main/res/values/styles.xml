@@ -13,6 +13,22 @@
         <item name="android:letterSpacing">-0.02</item>
     </style>
 
+    <!--
+        The hero number in compact mode. Still the biggest text on the screen and
+        still the only coloured one, but title rather than display: at compact
+        sizes the number's job is to be found instantly, not to fill the card.
+    -->
+    <style name="TextAppearance.Budget.Money.HeroDense" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <!-- Carry balance in compact mode: a label beside the number, not a button block. -->
+    <style name="TextAppearance.Budget.CarryDense" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="TextAppearance.Budget.Money.Row" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:fontFeatureSettings">tnum</item>

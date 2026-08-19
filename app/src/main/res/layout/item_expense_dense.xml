@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The compact row: one line, a rule underneath, and no card.
+
+    This exists because the roomy default shows very few expenses at once, which
+    is the thing long-time users miss most about the older layout. Everything here
+    is in service of fitting more on screen: a single line, a 48dp target rather
+    than 64, the date carried on the row (dense mode hides the day headings, so
+    without it there would be no way to tell when something was spent), and the
+    category reduced to its colour dot.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!--
+        The ripple and the click live on this, not on the root: the root also holds
+        the divider, which should neither light up nor be part of the touch target.
+        ExpenseRow.bind looks for this id and falls back to the root, which is what
+        the roomy layout still wants.
+    -->
+    <LinearLayout
+        android:id="@+id/expense_touch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:baselineAligned="false"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_xs"
+        android:paddingEnd="0dp">
+
+        <ImageView
+            android:id="@+id/expense_dot"
+            android:layout_width="@dimen/category_dot"
+            android:layout_height="@dimen/category_dot"
+            android:contentDescription="@null"
+            android:src="@drawable/category_dot" />
+
+        <TextView
+            android:id="@+id/expense_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_s"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurface"
+            tools:text="Thai takeout" />
+
+        <!--
+            The day, short and dim. Under a day heading this would be repetition;
+            with the headings gone it is the only thing that says when.
+        -->
+        <TextView
+            android:id="@+id/expense_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_s"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:text="Wed" />
+
+        <TextView
+            android:id="@+id/expense_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_s"
+            android:gravity="end"
+            android:minWidth="68dp"
+            android:textAppearance="@style/TextAppearance.Budget.Money.Row"
+            android:textColor="?attr/colorOnSurface"
+            tools:text="$42.62" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/expense_menu"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_more_vert"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="16dp"
+            app:iconTint="?attr/colorOnSurfaceVariant" />
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

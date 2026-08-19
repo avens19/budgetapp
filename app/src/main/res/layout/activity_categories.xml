@@ -18,11 +18,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <!-- See PeriodSwipeLayout: an intercepting parent, not a touch listener. -->
+    <com.andrewovens.weeklybudget2.PeriodSwipeLayout
+        android:id="@+id/category_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/category_scroll"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/space_xl"
         android:scrollbars="none">
@@ -153,6 +159,7 @@
                 android:visibility="gone" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    </com.andrewovens.weeklybudget2.PeriodSwipeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

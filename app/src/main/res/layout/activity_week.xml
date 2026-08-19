@@ -20,10 +20,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <!--
+        The swipe container is a parent rather than a touch listener on purpose:
+        RecyclerView tells its parent to stop intercepting the moment it starts
+        scrolling, which is the only reliable way to know a gesture is a vertical
+        scroll and not a sideways page. See PeriodSwipeLayout.
+    -->
+    <com.andrewovens.weeklybudget2.PeriodSwipeLayout
+        android:id="@+id/week_swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/header_bar"
@@ -214,6 +225,7 @@
             android:text="@string/action_add"
             app:icon="@drawable/ic_add" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </com.andrewovens.weeklybudget2.PeriodSwipeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

@@ -17,6 +17,9 @@
          without covering the last row. -->
     <dimen name="list_bottom_inset">96dp</dimen>
 
+    <!-- Carry balance's icon in compact mode, where the row is a single line. -->
+    <dimen name="carry_icon_dense">15dp</dimen>
+
     <dimen name="card_elevation">0dp</dimen>
     <dimen name="category_dot">10dp</dimen>
     <dimen name="chart_size">260dp</dimen>

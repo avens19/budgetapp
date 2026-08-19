@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
@@ -14,8 +13,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +58,9 @@ public class WeekActivity extends BaseActivity
     public static final int GOTO_CATEGORY_MONTH = 203;
     public static final int GOTO_CATEGORY = 204;
 
+    /** Read once in onCreate; toggling it recreates the screen. */
+    private boolean _dense;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +68,17 @@ public class WeekActivity extends BaseActivity
 
         Navigation.setUp(this, Navigation.WEEK, this);
 
+        _dense = Settings.isDenseLayout(this);
+
+        collapseBalanceCard();
+
         _adapter = new ExpenseAdapter(this, true);
+        _adapter.setDense(_dense);
         RecyclerView list = findViewById(R.id.week_list);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(_adapter);
+
+        applyDensity();
 
         findViewById(R.id.week_back).setOnClickListener(v -> weekBack());
         findViewById(R.id.week_forward).setOnClickListener(v -> weekForward());
@@ -137,37 +147,17 @@ public class WeekActivity extends BaseActivity
         Sync.start(this);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void setUpSwipe() {
-        // The list keeps its own touch handling (rows are clickable), so the
-        // detector only observes there; the background consumes the gesture.
-        findViewById(R.id.week_container).setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
-                weekBack();
-            }
-
-            public void onSwipeLeft() {
+        PeriodSwipeLayout swipe = findViewById(R.id.week_swipe);
+        swipe.setListener(new PeriodSwipeLayout.Listener() {
+            @Override
+            public void onNext() {
                 weekForward();
             }
 
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return true;
-            }
-        });
-
-        findViewById(R.id.week_list).setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
+            @Override
+            public void onPrevious() {
                 weekBack();
-            }
-
-            public void onSwipeLeft() {
-                weekForward();
-            }
-
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return false;
             }
         });
     }
@@ -222,6 +212,8 @@ public class WeekActivity extends BaseActivity
 
         _adapter.setCategories(CategoryIndex.of(this,
                 DBHelper.GetActiveCategories(_budget.UniqueId, null)));
+        _adapter.setTotal(getString(R.string.week_spent_of,
+                Helpers.currencyString(total), Helpers.currencyString(_budget.Amount)));
         _adapter.setExpenses(expenses);
 
         View empty = findViewById(R.id.week_empty);
@@ -236,6 +228,91 @@ public class WeekActivity extends BaseActivity
         notifyWidgets();
     }
 
+    /**
+     * Takes the spent total out of the balance card and puts the number and the
+     * Carry action on one line.
+     *
+     * <p>The total belongs under the table, beneath the things it adds up; the card
+     * is for the one figure that answers "can I buy this", and it says that better
+     * with less around it. Removing the total left Carry alone on a row that still
+     * cost its full 48dp, which read as a hole in the card — so the number moves
+     * onto that row, and a row disappears rather than emptying.
+     *
+     * <p>Both layouts, because both had the same hole.
+     */
+    private void collapseBalanceCard() {
+        TextView spentOf = findViewById(R.id.spent_of);
+        TextView amount = findViewById(R.id.remaining_amount);
+        ViewGroup inner = (ViewGroup) ((ViewGroup) findViewById(R.id.balance_card)).getChildAt(0);
+        ViewGroup summaryRow = (ViewGroup) spentOf.getParent();
+
+        spentOf.setVisibility(View.GONE);
+
+        // One line, so a long amount is truncated rather than wrapping the row and
+        // undoing the saving. Realistic weekly figures are nowhere near the width.
+        amount.setMaxLines(1);
+
+        inner.removeView(amount);
+        // Weighted, so the number takes the slack and pushes Carry to the edge.
+        summaryRow.addView(amount, 0, new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+
+        // The bar reads as a rule under the numbers it describes, which is also how
+        // the older layout was arranged.
+        inner.removeView(summaryRow);
+        inner.addView(summaryRow, 1);
+
+        ViewGroup.MarginLayoutParams rowParams =
+                (ViewGroup.MarginLayoutParams) summaryRow.getLayoutParams();
+        rowParams.topMargin = 0;
+        summaryRow.setLayoutParams(rowParams);
+    }
+
+    /**
+     * Shrinks the chrome for compact mode.
+     *
+     * <p>Done in code against the one layout rather than as a second XML file: the
+     * two versions differ only in sizes and in one hidden label, and a duplicate
+     * layout would drift the moment anything on this screen changed.
+     */
+    private void applyDensity() {
+        if (!_dense) {
+            return;
+        }
+
+        findViewById(R.id.remaining_label).setVisibility(View.GONE);
+
+        TextView amount = findViewById(R.id.remaining_amount);
+        amount.setTextAppearance(R.style.TextAppearance_Budget_Money_HeroDense);
+
+        ViewGroup inner = (ViewGroup) ((ViewGroup) findViewById(R.id.balance_card)).getChildAt(0);
+
+        // A MaterialButton is 48dp tall before it contains anything, and with the
+        // card down to two lines that was setting the height on its own.
+        MaterialButton carry = findViewById(R.id.carry_balance);
+        carry.setMinHeight(0);
+        carry.setMinimumHeight(0);
+        carry.setInsetTop(0);
+        carry.setInsetBottom(0);
+        carry.setIconSize(getResources().getDimensionPixelSize(R.dimen.carry_icon_dense));
+        carry.setTextAppearance(R.style.TextAppearance_Budget_CarryDense);
+
+        int h = getResources().getDimensionPixelSize(R.dimen.space_m);
+        int v = getResources().getDimensionPixelSize(R.dimen.space_s);
+        inner.setPadding(h, v, h, v);
+
+        View progress = findViewById(R.id.budget_progress);
+        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) progress.getLayoutParams();
+        lp.topMargin = getResources().getDimensionPixelSize(R.dimen.space_s);
+        progress.setLayoutParams(lp);
+
+        // Dense rows are separated by rules and want the full width; the gutter
+        // that keeps cards clear of the edge is wasted on them.
+        View list = findViewById(R.id.week_list);
+        int gutter = getResources().getDimensionPixelSize(R.dimen.space_s);
+        list.setPadding(gutter, list.getPaddingTop(), gutter, list.getPaddingBottom());
+    }
+
     private void bindBalance(double spent, final double rounded) {
         TextView label = findViewById(R.id.remaining_label);
         TextView amount = findViewById(R.id.remaining_amount);
@@ -246,7 +323,13 @@ public class WeekActivity extends BaseActivity
         boolean over = rounded < 0;
 
         label.setText(over ? R.string.week_over_label : R.string.week_remaining_label);
-        amount.setText(Helpers.currencyString(Math.abs(rounded)));
+        // Compact mode hides the label, so the word moves onto the number itself
+        // rather than being lost: "$50.35 over" reads the same as the two lines
+        // it replaces, in a third of the height.
+        amount.setText(_dense
+                ? getString(over ? R.string.week_dense_over : R.string.week_dense_left,
+                            Helpers.currencyString(Math.abs(rounded)))
+                : Helpers.currencyString(Math.abs(rounded)));
         spentOf.setText(getString(R.string.week_spent_of,
                 Helpers.currencyString(spent), Helpers.currencyString(_budget.Amount)));
 
@@ -439,6 +522,10 @@ public class WeekActivity extends BaseActivity
         if (today != null) {
             today.setVisible(_daysBackFromToday != 0);
         }
+        MenuItem dense = menu.findItem(R.id.action_dense_layout);
+        if (dense != null) {
+            dense.setChecked(_dense);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -456,6 +543,14 @@ public class WeekActivity extends BaseActivity
                 Intent i = new Intent(this, SwitchBudgetActivity.class);
                 startActivityForResult(i, SWITCH_BUDGET);
             }
+            return true;
+        }
+        if (id == R.id.action_dense_layout) {
+            // Recreated rather than re-bound: the row layout and the grouping both
+            // change, and a RecyclerView holding pooled views of the old shape
+            // would hand them back for the new one.
+            Settings.setDenseLayout(this, !_dense);
+            recreate();
             return true;
         }
         if (id == R.id.action_how_it_works) {

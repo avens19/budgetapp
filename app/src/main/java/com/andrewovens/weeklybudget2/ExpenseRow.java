@@ -53,7 +53,13 @@ final class ExpenseRow {
     }
 
     static View inflate(LayoutInflater inflater, ViewGroup parent) {
-        return inflater.inflate(R.layout.item_expense, parent, false);
+        // The compact layout is a display preference, so it is read here rather
+        // than threaded through every caller: all four places that show expense
+        // rows want to honour it, and none of them want to think about it.
+        int layout = Settings.isDenseLayout(parent.getContext())
+                ? R.layout.item_expense_dense
+                : R.layout.item_expense;
+        return inflater.inflate(layout, parent, false);
     }
 
     static void bind(@NonNull View row, @NonNull final Expense expense,
@@ -65,9 +71,20 @@ final class ExpenseRow {
         description.setText(expense.Description);
 
         TextView category = row.findViewById(R.id.expense_category);
-        category.setText(subtitle == Subtitle.DATE
-                ? Dates.getFullDateString(context, expense.Date)
-                : categories.nameFor(expense.CategoryId));
+        if (Settings.isDenseLayout(context)) {
+            // Dense mode drops the day headings, so the row has to say when — in as
+            // little space as will do the job. Inside a single week a weekday is
+            // unambiguous; a category drill-down can span a month, where "Mon" could
+            // be any of four, so that gets the date. The category itself is still
+            // there as the colour of the dot.
+            category.setText(subtitle == Subtitle.DATE
+                    ? Dates.getShortDateString(context, expense.Date)
+                    : Dates.getWeekDay(expense.Date));
+        } else {
+            category.setText(subtitle == Subtitle.DATE
+                    ? Dates.getFullDateString(context, expense.Date)
+                    : categories.nameFor(expense.CategoryId));
+        }
 
         TextView amount = row.findViewById(R.id.expense_amount);
         amount.setText(Helpers.currencyString(expense.Amount));
@@ -76,7 +93,10 @@ final class ExpenseRow {
         ImageViewCompat.setImageTintList(dot,
                 ColorStateList.valueOf(categories.colorFor(expense.CategoryId)));
 
-        row.setOnClickListener(v -> actions.onEdit(expense));
+        // The dense layout wraps its content so a divider can sit outside the
+        // touch target; the roomy one is its own target.
+        View touch = row.findViewById(R.id.expense_touch);
+        (touch != null ? touch : row).setOnClickListener(v -> actions.onEdit(expense));
 
         MaterialButton menu = row.findViewById(R.id.expense_menu);
         menu.setContentDescription(context.getString(R.string.expense_options, expense.Description));

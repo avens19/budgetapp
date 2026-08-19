@@ -1,6 +1,5 @@
 package com.andrewovens.weeklybudget2;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -155,29 +153,19 @@ abstract class CategoryChartActivity extends BaseActivity
         });
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void setUpSwipe() {
-        // Only the background consumes the gesture; the chart and the rows
-        // still need their own taps.
-        int[] swipeableIds = {R.id.category_container, R.id.category_chart, R.id.category_scroll};
+        PeriodSwipeLayout swipe = findViewById(R.id.category_swipe);
+        swipe.setListener(new PeriodSwipeLayout.Listener() {
+            @Override
+            public void onNext() {
+                move(1);
+            }
 
-        for (int id : swipeableIds) {
-            final boolean isContainer = id == R.id.category_container;
-            findViewById(id).setOnTouchListener(new OnSwipeTouchListener(this) {
-                public void onSwipeRight() {
-                    move(-1);
-                }
-
-                public void onSwipeLeft() {
-                    move(1);
-                }
-
-                public boolean onTouch(View v, MotionEvent event) {
-                    gestureDetector.onTouchEvent(event);
-                    return isContainer;
-                }
-            });
-        }
+            @Override
+            public void onPrevious() {
+                move(-1);
+            }
+        });
     }
 
     private int pickerTitle() {

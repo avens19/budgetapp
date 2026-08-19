@@ -16,6 +16,13 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_dense_layout"
+        android:checkable="true"
+        android:orderInCategory="103"
+        android:title="@string/action_dense_layout"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_how_it_works"
         android:icon="@drawable/ic_help"
         android:orderInCategory="102"

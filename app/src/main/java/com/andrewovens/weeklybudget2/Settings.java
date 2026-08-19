@@ -14,6 +14,7 @@ public class Settings {
     private static final String CURRENT_ID = "CURRENTID";
     private static final String CURRENT_CATEGORY_ID = "CURRENTCATEGORYID";
     private static final String SEEN_TUTORIAL = "SEENTUTORIAL";
+    private static final String DENSE_LAYOUT = "DENSELAYOUT";
 
     public static Budget getBudget(Context cxt) {
         SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
@@ -67,6 +68,27 @@ public class Settings {
         System.arraycopy(existing, 0, grown, 0, existing.length);
         grown[existing.length] = budget;
         setBudgets(cxt, grown);
+    }
+
+    /**
+     * Whether to draw the week compactly: no day headings, a one-line balance
+     * summary instead of the hero card, and rows separated by rules rather than
+     * spaced-out cards.
+     *
+     * <p>Asked for by long-time users of the pre-2026 layout, and the reasoning
+     * in their words is worth keeping: the roomy design shows far fewer expenses
+     * at once, and splitting by day works against people who use the week as a
+     * single running list and do not always put an expense on the right day.
+     *
+     * <p>A display preference for this device, not part of the budget, so it does
+     * not sync — two people sharing a budget can each have the layout they want.
+     */
+    static boolean isDenseLayout(Context cxt) {
+        return cxt.getSharedPreferences(SETTINGS_NAME, 0).getBoolean(DENSE_LAYOUT, false);
+    }
+
+    static void setDenseLayout(Context cxt, boolean dense) {
+        cxt.getSharedPreferences(SETTINGS_NAME, 0).edit().putBoolean(DENSE_LAYOUT, dense).apply();
     }
 
     static Budget[] getBudgets(Context cxt) {

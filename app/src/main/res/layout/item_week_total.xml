@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The week's total, as the last row of the table.
+
+    Compact mode has no day headings and no room in the balance strip for the
+    spent-against-budget figure, so it goes here instead — where a total belongs
+    on a table, under the things it adds up.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:minHeight="44dp"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/space_xs"
+    android:paddingEnd="@dimen/space_xs">
+
+    <TextView
+        android:id="@+id/week_total_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/week_total_label"
+        android:textAppearance="@style/TextAppearance.Budget.SectionHeader"
+        android:textColor="?attr/colorOnSurfaceVariant" />
+
+    <TextView
+        android:id="@+id/week_total_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Budget.SectionHeader"
+        android:textColor="?attr/colorOnSurface"
+        tools:text="$350.35 of $300.00" />
+
+</LinearLayout>

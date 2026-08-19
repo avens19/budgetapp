@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -93,35 +91,17 @@ public class MonthActivity extends BaseActivity
         Sync.start(this);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void setUpSwipe() {
-        findViewById(R.id.month_container).setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
-                shiftMonths(-1);
-            }
-
-            public void onSwipeLeft() {
+        PeriodSwipeLayout swipe = findViewById(R.id.month_swipe);
+        swipe.setListener(new PeriodSwipeLayout.Listener() {
+            @Override
+            public void onNext() {
                 shiftMonths(1);
             }
 
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return true;
-            }
-        });
-
-        findViewById(R.id.month_list).setOnTouchListener(new OnSwipeTouchListener(this) {
-            public void onSwipeRight() {
+            @Override
+            public void onPrevious() {
                 shiftMonths(-1);
-            }
-
-            public void onSwipeLeft() {
-                shiftMonths(1);
-            }
-
-            public boolean onTouch(View v, MotionEvent event) {
-                gestureDetector.onTouchEvent(event);
-                return false;
             }
         });
     }
