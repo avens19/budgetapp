@@ -9,7 +9,13 @@
 
         The system bars are left to androidx EdgeToEdge, which picks a
         transparent bar plus the right icon contrast for the current API level
-        and night mode, so no windowLightStatusBar overrides here.
+        and night mode, so no windowLightStatusBar overrides here — and no
+        statusBarColor or navigationBarColor either. Those two were set here as
+        well, which was redundant on every API level the app supports:
+        EdgeToEdgeApi23, 26, 29 and 35 each set both colours themselves, and
+        `EdgeToEdge.enable` runs from BaseActivity.onCreate before the first
+        frame. Both attributes are also deprecated as of API 35, and Play's
+        vitals flags them, so the duplicate is all cost and no effect.
     -->
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_primary</item>
@@ -51,9 +57,6 @@
         <item name="colorSurfaceInverse">@color/md_inverse_surface</item>
         <item name="colorOnSurfaceInverse">@color/md_inverse_on_surface</item>
         <item name="colorPrimaryInverse">@color/md_inverse_primary</item>
-
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
 
         <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Budget.ExtraSmall</item>
         <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Budget.Small</item>
