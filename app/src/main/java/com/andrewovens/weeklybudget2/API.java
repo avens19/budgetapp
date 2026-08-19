@@ -116,6 +116,44 @@ class API {
      * in a query string. It used to be pasted in raw, which a strict proxy or
      * a future non-UTC offset would reject.
      */
+    /**
+     * Mints an invitation: a one-time link that stands in for the budget id.
+     *
+     * <p>Sharing the id itself means handing over the budget's only credential,
+     * permanently and irrevocably. That is survivable as something typed out of
+     * one phone into another, and not as a link — links get forwarded, quoted in
+     * group chats and expanded by preview bots. An invitation expires, works
+     * once, and can be cancelled.
+     */
+    static String CreateInvite(String budgetId) throws JSONException, IOException {
+        URL url = new URL(baseUrl + "budget/" + budgetId + "/invites");
+        String response = NetworkOperations.HttpPost(url, "{}");
+        return new JSONObject(response).getString("Url");
+    }
+
+    /**
+     * Exchanges an invitation for the budget it stands for, spending its one use.
+     *
+     * <p>Returns null when the invitation is no longer usable — spent, cancelled
+     * or expired. The server does not distinguish between those and neither does
+     * this: they lead to the same next step, and telling them apart would turn
+     * the endpoint into a report on which tokens exist. A genuine network
+     * failure still throws, because that is worth retrying and this is not.
+     */
+    @Nullable
+    static Budget RedeemInvite(String token) throws JSONException, IOException {
+        URL url = new URL(baseUrl + "invites/" + token + "/redeem");
+        NetworkOperations.Result result = NetworkOperations.HttpSend(url, "{}", "POST");
+
+        if (result.status == 404 || result.status == 410) {
+            return null;
+        }
+        if (!result.ok()) {
+            throw new IOException("Redeem failed with " + result.status);
+        }
+        return Budget.fromJson(new JSONObject(result.body));
+    }
+
     private static String encode(@Nullable String watermark) throws UnsupportedEncodingException {
         return watermark != null ? URLEncoder.encode(watermark, "UTF-8") : "";
     }

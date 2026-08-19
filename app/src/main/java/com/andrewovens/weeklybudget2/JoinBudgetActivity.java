@@ -40,19 +40,10 @@ public class JoinBudgetActivity extends BaseActivity {
             try {
                 Budget budget = API.GetBudget(budgetId);
 
-                Settings.setBudget(JoinBudgetActivity.this, budget);
-
-                Budget[] budgets = Settings.getBudgets(JoinBudgetActivity.this);
-                Budget[] newBudgets;
-                if (budgets != null) {
-                    newBudgets = new Budget[budgets.length + 1];
-                    System.arraycopy(budgets, 0, newBudgets, 0, budgets.length);
-                    newBudgets[budgets.length] = budget;
-                } else {
-                    newBudgets = new Budget[]{budget};
-                }
-
-                Settings.setBudgets(JoinBudgetActivity.this, newBudgets);
+                // Shared with the invite-link path, and it replaces rather than
+                // appends: joining a budget this device already had used to put
+                // it in the switcher twice.
+                Settings.rememberBudget(JoinBudgetActivity.this, budget);
 
                 runOnUiThread(() -> {
                     JoinBudgetActivity.this.setResult(RESULT_OK);

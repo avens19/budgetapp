@@ -85,6 +85,15 @@
                     tools:ignore="LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_invite"
+                style="@style/Widget.Budget.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/action_invite"
+                app:icon="@drawable/ic_person_add" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/budget_id_card"
                 style="@style/Widget.Budget.Card"

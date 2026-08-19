@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,6 +32,9 @@ public class NewBudgetActivity extends BaseActivity {
         findViewById(R.id.budget_id_card).setOnClickListener(v -> copyUniqueId());
         findViewById(R.id.button_other_devices)
                 .setOnClickListener(v -> Helpers.openUrl(this, getString(R.string.url_apps)));
+
+        MaterialButton invite = findViewById(R.id.button_invite);
+        invite.setOnClickListener(v -> createInvite(invite));
 
         String budget = getIntent().getStringExtra("budget");
         TextView uniqueId = findViewById(R.id.text_new_unique);
@@ -67,6 +71,45 @@ public class NewBudgetActivity extends BaseActivity {
         _startDay = day;
         MaterialAutoCompleteTextView weekday = findViewById(R.id.weekday_spinner);
         weekday.setText(getResources().getStringArray(R.array.array_weekdays)[day], false);
+    }
+
+    /**
+     * Mints a one-time link and hands it straight to the share sheet.
+     *
+     * <p>No confirmation step and nowhere to view it later: the link's whole
+     * purpose is to be sent to somebody, so the useful thing is the share sheet,
+     * and an invitation nobody sent expires on its own in a week.
+     */
+    private void createInvite(MaterialButton invite) {
+        // Only meaningful once the budget exists on the server; on the create
+        // screen there is nothing to invite anyone to yet.
+        if (!_isEdit) {
+            Toast.makeText(this, R.string.invite_save_first, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        invite.setEnabled(false);
+        new Thread(() -> {
+            try {
+                final String url = API.CreateInvite(_budget.UniqueId);
+                runOnUiThread(() -> {
+                    invite.setEnabled(true);
+                    share(url);
+                });
+            } catch (Exception e) {
+                Helpers.showNetworkErrorToastOnUi(this, R.string.error_invite_failed);
+                runOnUiThread(() -> invite.setEnabled(true));
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void share(String url) {
+        Intent send = new Intent(Intent.ACTION_SEND);
+        send.setType("text/plain");
+        send.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.invite_share_subject));
+        send.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_share_text, url));
+        startActivity(Intent.createChooser(send, getString(R.string.action_invite)));
     }
 
     private void copyUniqueId() {

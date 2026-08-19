@@ -88,6 +88,51 @@ class NetworkOperations {
         return HttpPost(url, content, "POST");
     }
 
+    /**
+     * A status code with its body.
+     *
+     * <p>{@link #readResponse} throws on any error status, which is right for
+     * every other caller and wrong for redeeming an invitation: "410, this one
+     * has been used" is a different thing to tell the user than "the network is
+     * down", and as an exception the two are indistinguishable.
+     */
+    static final class Result {
+        final int status;
+        final String body;
+
+        Result(int status, String body) {
+            this.status = status;
+            this.body = body;
+        }
+
+        boolean ok() {
+            return status >= 200 && status < 300;
+        }
+    }
+
+    @NonNull
+    static Result HttpSend(@NonNull URL url, @Nullable String content, String method) throws IOException {
+        HttpURLConnection urlConnection = open(url, method);
+        try {
+            if (content != null) {
+                byte[] body = content.getBytes(StandardCharsets.UTF_8);
+                urlConnection.setDoOutput(true);
+                urlConnection.setFixedLengthStreamingMode(body.length);
+                urlConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                try (OutputStream out = urlConnection.getOutputStream()) {
+                    out.write(body);
+                }
+            }
+            // readBody, not readResponse: the whole reason this method exists is
+            // that "410, that invitation is spent" has to come back as an answer
+            // the caller can act on rather than as an exception.
+            String body = readBody(urlConnection);
+            return new Result(urlConnection.getResponseCode(), body);
+        } finally {
+            urlConnection.disconnect();
+        }
+    }
+
     @NonNull
     static String HttpPost(@NonNull URL url, String content, String method) throws IOException {
         HttpURLConnection urlConnection = open(url, method);
@@ -118,12 +163,34 @@ class NetworkOperations {
     }
 
     /**
-     * Reads the body as UTF-8. On an error status the body comes from
-     * {@code getErrorStream}, so the caller sees the server's message rather
-     * than a bare {@code IOException} from {@code getInputStream}.
+     * Reads the body as UTF-8 and throws on an error status, with the server's
+     * own message in it rather than a bare {@code IOException} from
+     * {@code getInputStream}.
+     *
+     * <p>Throwing is what almost every caller wants: for them a 4xx is a bug or
+     * an outage and there is nothing sensible to do but give up. {@link #HttpSend}
+     * is the exception and uses {@link #readBody} directly.
      */
     @NonNull
     private static String readResponse(@NonNull HttpURLConnection urlConnection) throws IOException {
+        String body = readBody(urlConnection);
+        int status = urlConnection.getResponseCode();
+
+        if (status >= HttpURLConnection.HTTP_BAD_REQUEST) {
+            throw new IOException("HTTP " + status + " from " + urlConnection.getURL() + ": " + body);
+        }
+
+        return body;
+    }
+
+    /**
+     * The body, whatever the status, taken from whichever stream carries it.
+     *
+     * <p>An error status puts the body on {@code getErrorStream} instead, and
+     * either can be absent entirely.
+     */
+    @NonNull
+    private static String readBody(@NonNull HttpURLConnection urlConnection) throws IOException {
         int status = urlConnection.getResponseCode();
         InputStream stream = status >= HttpURLConnection.HTTP_BAD_REQUEST
                 ? urlConnection.getErrorStream()
@@ -139,11 +206,6 @@ class NetworkOperations {
                 }
             }
         }
-
-        if (status >= HttpURLConnection.HTTP_BAD_REQUEST) {
-            throw new IOException("HTTP " + status + " from " + urlConnection.getURL() + ": " + total);
-        }
-
         return total.toString();
     }
 }

@@ -37,6 +37,38 @@ public class Settings {
         editor.apply();
     }
 
+    /**
+     * Makes a budget the current one and adds it to the list, replacing an
+     * existing entry with the same id rather than appending a second.
+     *
+     * <p>Joining a budget the device already has is entirely normal — an invite
+     * link tapped on the wrong phone, or a second tap on the same one — and
+     * appending would put the same budget in the switcher twice with no way to
+     * tell the copies apart.
+     */
+    static void rememberBudget(Context cxt, Budget budget) throws JSONException {
+        setBudget(cxt, budget);
+
+        Budget[] existing = getBudgets(cxt);
+        if (existing == null) {
+            setBudgets(cxt, new Budget[]{budget});
+            return;
+        }
+
+        for (int i = 0; i < existing.length; i++) {
+            if (existing[i].UniqueId.equals(budget.UniqueId)) {
+                existing[i] = budget;
+                setBudgets(cxt, existing);
+                return;
+            }
+        }
+
+        Budget[] grown = new Budget[existing.length + 1];
+        System.arraycopy(existing, 0, grown, 0, existing.length);
+        grown[existing.length] = budget;
+        setBudgets(cxt, grown);
+    }
+
     static Budget[] getBudgets(Context cxt) {
         SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
         String budgetString = settings.getString(BUDGETS, null);

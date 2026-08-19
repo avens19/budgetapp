@@ -117,6 +117,18 @@
     <string name="url_apps" translatable="false">https://budget.andrewovens.com/Apps</string>
     <string name="error_no_browser">No app here can open a web page.</string>
 
+    <!-- Invitations -->
+    <string name="invite_joining">Joining budget…</string>
+    <string name="invite_unusable_title">Invitation not valid</string>
+    <string name="invite_unusable_body">That invitation has already been used, or it has expired. Invitations are good for one use — ask for a new one and it will work.</string>
+    <string name="invite_failed_title">Could not join</string>
+    <string name="invite_failed_body">Check your connection and open the link again.</string>
+    <string name="action_invite">Invite someone</string>
+    <string name="invite_share_subject">Join my weekly budget</string>
+    <string name="invite_share_text">Tap this to share my weekly budget: %1$s</string>
+    <string name="error_invite_failed">Could not create an invitation. Please try again.</string>
+    <string name="invite_save_first">Create the budget first, then invite someone to it.</string>
+
     <!-- How this works: the post-install tutorial -->
     <string name="tutorial_title">How this works</string>
     <string name="tutorial_skip">Skip</string>
@@ -132,7 +144,7 @@
     <string name="tutorial_2_body">There is deliberately nowhere to enter recurring income or expenses. Those amounts are already fixed, so leaving them out keeps the app focused on the one number that actually moves: what you spent this week.\n\nIf money comes in mid-week — a refund, a gift, cash back — add it as an expense with a minus sign.</string>
 
     <string name="tutorial_3_title">Share it with your partner</string>
-    <string name="tutorial_3_body">One budget can live on as many devices as you like, and they all stay in step.\n\nOpen Edit budget, tap the budget ID to copy it, and enter it on the other device with Join with an ID. You will both see the same running total.</string>
+    <string name="tutorial_3_body">One budget can live on as many devices as you like, and they all stay in step.\n\nOpen Edit budget, tap Invite someone, and send the link. Whoever opens it joins this budget, and you will both see the same running total.\n\nThe link works once and expires after a week, so a forwarded one is harmless.</string>
 
     <string name="tutorial_4_title">On iPhone? There is an app</string>
     <string name="tutorial_4_body">There is an iPhone app too — listed as Weekly Spend, because this name was taken — and budget.andrewovens.com opens in any browser. All three work on the same budget.\n\nEdit budget has the links, under Apps for other devices.</string>

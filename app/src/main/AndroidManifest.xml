@@ -26,6 +26,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--
+            Invite links. autoVerify makes Android check
+            /.well-known/assetlinks.json on the domain at install time and, when
+            it matches, open this app instead of a browser — since Android 12 an
+            unverified link never opens the app at all, so the fingerprint in that
+            file has to be the certificate the installed app was actually signed
+            with. With Play App Signing that is Play's, not the upload key's.
+
+            Only /join/ is claimed. Every other page on that host is a web page
+            and should stay one.
+        -->
+        <activity
+            android:name=".InviteActivity"
+            android:exported="true"
+            android:label="@string/invite_joining"
+            android:launchMode="singleTask">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="budget.andrewovens.com"
+                    android:pathPrefix="/join/"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".TutorialActivity"
             android:exported="false"
