@@ -15,10 +15,10 @@ android {
         applicationId "com.andrewovens.weeklybudget2"
         minSdk 23
         targetSdk 37
-        // Must stay above the highest version code already on Play. 6.0.3
-        // (code 36) went live on 17 Aug 2026, so this release is 37.
-        versionCode 37
-        versionName "6.0.4"
+        // Must stay above the highest version code already on Play. 6.0.4
+        // (code 37) went live on 19 Aug 2026, so this release is 38.
+        versionCode 38
+        versionName "6.0.5"
 
         vectorDrawables.useSupportLibrary = true
 
