@@ -153,6 +153,34 @@
     <string name="action_how_it_works">How this works</string>
 
     <!--
+        About. The app has no accounts and no support desk, so this screen is the
+        only place that says who is behind it and how to reach him.
+    -->
+    <string name="action_about">About</string>
+    <string name="title_about">About</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_body">I\'m Andrew — just a guy in Calgary who loves making software and thinks more of it should be free. This app has no ads, no accounts and no price, and it is not going to grow any. I build it because I use it every week myself.\n\nIf something is broken, or you want it to do something it doesn\'t, email me. I read all of it.</string>
+    <string name="about_help">Need help? Email me</string>
+    <string name="about_review">Leave a review</string>
+    <string name="about_coffee">Buy me a coffee</string>
+    <string name="about_coffee_note">Entirely optional. The app is free either way.</string>
+    <string name="about_privacy">Privacy</string>
+    <!-- Carries the version so a bug report says which build it came from. -->
+    <string name="about_email_subject">Weekly Budget %1$s for Android</string>
+    <string name="error_no_email">No app here can send email.</string>
+
+    <string name="email_support" translatable="false">avens19@gmail.com</string>
+    <string name="url_coffee" translatable="false">https://buymeacoffee.com/ovens</string>
+    <string name="url_privacy" translatable="false">https://budget.andrewovens.com/privacy</string>
+    <!--
+        Two spellings of the same listing. market:// opens the Play app straight
+        on the review sheet; the https one is the fallback for a device that has
+        no Play app to open it with.
+    -->
+    <string name="url_review_app" translatable="false">market://details?id=com.andrewovens.weeklybudget2</string>
+    <string name="url_review" translatable="false">https://play.google.com/store/apps/details?id=com.andrewovens.weeklybudget2</string>
+
+    <!--
         Compact layout. Asked for by users of the pre-2026 design, whose objection
         was that the roomy one shows very few expenses at once and splits the week
         into days they do not always file things under correctly.

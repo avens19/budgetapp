@@ -559,6 +559,10 @@ public class WeekActivity extends BaseActivity
             startActivity(i);
             return true;
         }
+        if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+            return true;
+        }
         if (id == R.id.action_settings) {
             if (_budget != null) {
                 try {

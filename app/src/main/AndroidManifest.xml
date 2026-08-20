@@ -59,6 +59,10 @@
             android:exported="false"
             android:label="@string/tutorial_title" />
         <activity
+            android:name=".AboutActivity"
+            android:exported="false"
+            android:label="@string/title_about" />
+        <activity
             android:name=".FirstActivity"
             android:exported="false"
             android:label="@string/title_activity_first" />
