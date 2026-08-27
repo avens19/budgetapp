@@ -68,6 +68,18 @@
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!--
+                Directly under the amount, because "how much a week?" is the
+                question this screen asks that people cannot answer.
+            -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_weekly_number"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/planner_open"
+                app:icon="@drawable/ic_tune" />
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Budget.TextInputLayout.Dropdown"
                 android:layout_width="match_parent"

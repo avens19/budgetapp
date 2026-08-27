@@ -15,6 +15,8 @@ public class Settings {
     private static final String CURRENT_CATEGORY_ID = "CURRENTCATEGORYID";
     private static final String SEEN_TUTORIAL = "SEENTUTORIAL";
     private static final String SEEN_APPS_ANNOUNCEMENT = "SEENAPPSANNOUNCEMENT";
+    private static final String WEEKLY_PLAN = "WEEKLYPLAN";
+    private static final String SUGGESTED_AMOUNT = "SUGGESTEDAMOUNT";
     private static final String DENSE_LAYOUT = "DENSELAYOUT";
 
     public static Budget getBudget(Context cxt) {
@@ -159,6 +161,45 @@ public class Settings {
     static void setSeenAppsAnnouncement(Context cxt) {
         SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
         settings.edit().putBoolean(SEEN_APPS_ANNOUNCEMENT, true).apply();
+    }
+
+    /**
+     * The figures last entered in the weekly-number helper, as
+     * {@link WeeklyNumber#toJson}, or null if it has never been used.
+     *
+     * <p>Local to the device and never synced: it is the working for one
+     * number, not part of the budget, and the other devices on a shared budget
+     * do not want a copy of somebody's pay.
+     */
+    static String getWeeklyPlan(Context cxt) {
+        return cxt.getSharedPreferences(SETTINGS_NAME, 0).getString(WEEKLY_PLAN, null);
+    }
+
+    static void setWeeklyPlan(Context cxt, String plan) {
+        SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+        settings.edit().putString(WEEKLY_PLAN, plan).apply();
+    }
+
+    /**
+     * An amount the helper worked out during the tutorial, waiting for the
+     * budget that does not exist yet.
+     *
+     * <p>Kept as text rather than a float so the value that reaches the new
+     * budget screen is exactly the one that was on screen when it was
+     * accepted.
+     */
+    static String takeSuggestedAmount(Context cxt) {
+        SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+        String amount = settings.getString(SUGGESTED_AMOUNT, null);
+        if (amount != null) {
+            settings.edit().remove(SUGGESTED_AMOUNT).apply();
+        }
+        return amount;
+    }
+
+    static void setSuggestedAmount(Context cxt, String amount) {
+        SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+        settings.edit().putString(SUGGESTED_AMOUNT, amount).apply();
     }
 
     static long getNextId(Context cxt) {

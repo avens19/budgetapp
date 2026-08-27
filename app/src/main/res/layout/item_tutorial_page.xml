@@ -55,6 +55,22 @@
             android:textColor="?attr/colorOnSurfaceVariant"
             tools:text="Start outside the app…" />
 
+        <!--
+            Optional per-page action. Only the first page carries one today
+            (the weekly-number helper), so it stays gone unless the adapter
+            gives it something to say.
+        -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tutorial_action"
+            style="@style/Widget.Budget.Button.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xl"
+            android:visibility="gone"
+            app:icon="@drawable/ic_tune"
+            tools:text="Work it out with me"
+            tools:visibility="visible" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

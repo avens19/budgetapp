@@ -59,6 +59,11 @@
             android:exported="false"
             android:label="@string/tutorial_title" />
         <activity
+            android:name=".WeeklyNumberActivity"
+            android:exported="false"
+            android:label="@string/planner_title"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".AboutActivity"
             android:exported="false"
             android:label="@string/title_about" />

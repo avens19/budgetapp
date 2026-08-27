@@ -150,6 +150,8 @@
     <string name="tutorial_1_title">Budget your spending money</string>
     <string name="tutorial_1_body">Start outside the app. Take what you earn, subtract the bills that never change — rent, insurance, subscriptions, loan payments — and whatever is left is your spending money.\n\nSplit that across the weeks in the month, and you have your weekly target.</string>
 
+    <string name="tutorial_1_action">Work it out with me</string>
+
     <string name="tutorial_2_title">Bills don\'t belong in here</string>
     <string name="tutorial_2_body">There is deliberately nowhere to enter recurring income or expenses. Those amounts are already fixed, so leaving them out keeps the app focused on the one number that actually moves: what you spent this week.\n\nIf money comes in mid-week — a refund, a gift, cash back — add it as an expense with a minus sign.</string>
 
@@ -160,6 +162,55 @@
     <string name="tutorial_4_body">There is an iPhone app too — listed as Weekly Spend, because this name was taken — and budget.andrewovens.com opens in any browser. All three work on the same budget.\n\nEdit budget has the links, under Apps for other devices.</string>
 
     <string name="action_how_it_works">How this works</string>
+
+    <!--
+        The optional weekly-number helper. The prompts are named rather than
+        left as blank "income" and "expenses" boxes because the sum's failure
+        mode is forgetting something: nobody omits the rent, everybody omits
+        the car insurance until they are asked about it.
+    -->
+    <string name="planner_title">Work out a weekly number</string>
+    <string name="planner_intro">Answer whichever of these you know. Anything left blank counts as nothing, and none of it reaches your budget until you tap the button at the bottom.</string>
+    <string name="planner_open">Not sure? Work it out</string>
+    <string name="planner_use">Use this amount</string>
+    <string name="planner_result_label">Left to spend each week</string>
+    <string name="planner_note_empty">Fill in what you can. The number updates as you type.</string>
+    <string name="planner_note_short">That leaves nothing to spend each week. Check the figures — or leave the steady spending out and track it here week to week instead.</string>
+    <string name="planner_note_monthly">%1$s a month in · %2$s a month out</string>
+    <!-- Spoken label for a row's frequency dropdown; %1$s is the row, e.g. "Rent or mortgage". -->
+    <string name="planner_how_often">How often: %1$s</string>
+
+    <string name="planner_group_income">Money coming in</string>
+    <string name="planner_group_income_help">What actually lands in the account, after tax and deductions.</string>
+    <string name="planner_group_fixed">Bills that don\'t change</string>
+    <string name="planner_group_fixed_help">The amounts that go out whether you think about them or not. Savings belongs here too: money you have decided not to spend is not spending money.</string>
+    <string name="planner_group_steady">Steady spending (optional)</string>
+    <string name="planner_group_steady_help">Things that vary a little but never surprise you. Subtract them here and they stay out of the app; leave them blank and enter them week to week instead. One or the other, not both.</string>
+
+    <string name="planner_pay">Take-home pay</string>
+    <string name="planner_other_income">Other income</string>
+    <string name="planner_housing">Rent or mortgage</string>
+    <string name="planner_utilities">Power, heat, water</string>
+    <string name="planner_phone">Phone and internet</string>
+    <string name="planner_insurance">Insurance</string>
+    <string name="planner_transport">Car payment or transit pass</string>
+    <string name="planner_debt">Loan and credit payments</string>
+    <string name="planner_subscriptions">Subscriptions</string>
+    <string name="planner_childcare">Childcare or school fees</string>
+    <string name="planner_savings">Savings</string>
+    <string name="planner_other_fixed">Anything else fixed</string>
+    <string name="planner_groceries">Groceries</string>
+    <string name="planner_fuel">Fuel or fares</string>
+    <string name="planner_household">Household and toiletries</string>
+    <string name="planner_pets">Pets</string>
+    <string name="planner_other_steady">Anything else steady</string>
+
+    <string name="period_weekly">Weekly</string>
+    <string name="period_fortnightly">Every 2 weeks</string>
+    <string name="period_semi_monthly">Twice a month</string>
+    <string name="period_monthly">Monthly</string>
+    <string name="period_yearly">Yearly</string>
+
 
     <!--
         About. The app has no accounts and no support desk, so this screen is the

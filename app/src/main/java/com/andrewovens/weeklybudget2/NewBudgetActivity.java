@@ -17,6 +17,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class NewBudgetActivity extends BaseActivity {
 
+    private static final int WEEKLY_NUMBER = 1;
+
     private Budget _budget;
     private boolean _isEdit = false;
     private int _startDay;
@@ -44,6 +46,7 @@ public class NewBudgetActivity extends BaseActivity {
             setTitle(R.string.title_activity_new_budget);
             uniqueId.setText(_budget.UniqueId);
             setStartDay(0);
+            applySuggestedAmount();
         } else {
             try {
                 _isEdit = true;
@@ -64,6 +67,34 @@ public class NewBudgetActivity extends BaseActivity {
 
         MaterialAutoCompleteTextView weekday = findViewById(R.id.weekday_spinner);
         weekday.setOnItemClickListener((parent, view, position, id) -> _startDay = position);
+
+        findViewById(R.id.button_weekly_number).setOnClickListener(v ->
+                startActivityForResult(new Intent(this, WeeklyNumberActivity.class), WEEKLY_NUMBER));
+    }
+
+    /**
+     * Picks up a figure worked out during the tutorial, when there was no
+     * budget yet to put it in.
+     *
+     * <p>Only on the create screen and only into an empty field: an edit
+     * already has an amount, and it is the one the user is looking at.
+     */
+    private void applySuggestedAmount() {
+        String suggested = Settings.takeSuggestedAmount(this);
+        EditText amount = findViewById(R.id.text_new_amount);
+        if (suggested != null && amount.getText().toString().trim().isEmpty()) {
+            amount.setText(suggested);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == WEEKLY_NUMBER && resultCode == RESULT_OK && data != null) {
+            ((EditText) findViewById(R.id.text_new_amount))
+                    .setText(data.getStringExtra(WeeklyNumberActivity.EXTRA_AMOUNT));
+        }
     }
 
     /** Keeps the field text and {@link #_startDay} in step. */

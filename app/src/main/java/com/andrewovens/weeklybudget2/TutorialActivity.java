@@ -1,5 +1,6 @@
 package com.andrewovens.weeklybudget2;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,7 +36,9 @@ public class TutorialActivity extends BaseActivity {
     static final String EXTRA_STANDALONE = "STANDALONE";
 
     private static final Page[] PAGES = {
-            new Page(R.drawable.ic_wallet, R.string.tutorial_1_title, R.string.tutorial_1_body),
+            // The one page that describes a calculation offers to do it.
+            new Page(R.drawable.ic_wallet, R.string.tutorial_1_title, R.string.tutorial_1_body,
+                    R.string.tutorial_1_action),
             new Page(R.drawable.ic_receipt, R.string.tutorial_2_title, R.string.tutorial_2_body),
             new Page(R.drawable.ic_link, R.string.tutorial_3_title, R.string.tutorial_3_body),
             new Page(R.drawable.ic_globe, R.string.tutorial_4_title, R.string.tutorial_4_body),
@@ -52,10 +55,20 @@ public class TutorialActivity extends BaseActivity {
         @StringRes
         final int body;
 
+        /** Label for the page's optional action, or 0 for a page without one. */
+        @StringRes
+        final int action;
+
         Page(@DrawableRes int icon, @StringRes int title, @StringRes int body) {
+            this(icon, title, body, 0);
+        }
+
+        Page(@DrawableRes int icon, @StringRes int title, @StringRes int body,
+             @StringRes int action) {
             this.icon = icon;
             this.title = title;
             this.body = body;
+            this.action = action;
         }
     }
 
@@ -67,7 +80,8 @@ public class TutorialActivity extends BaseActivity {
         final boolean standalone = getIntent().getBooleanExtra(EXTRA_STANDALONE, false);
 
         _pager = findViewById(R.id.tutorial_pager);
-        _pager.setAdapter(new PageAdapter());
+        _pager.setAdapter(new PageAdapter(page ->
+                startActivity(new Intent(this, WeeklyNumberActivity.class))));
 
         _dots = findViewById(R.id.tutorial_dots);
         buildDots();
@@ -125,7 +139,18 @@ public class TutorialActivity extends BaseActivity {
         }
     }
 
+    /** What a page's optional action does, given the page that carries it. */
+    interface OnAction {
+        void run(int page);
+    }
+
     private static final class PageAdapter extends RecyclerView.Adapter<PageAdapter.Holder> {
+
+        private final OnAction _action;
+
+        PageAdapter(OnAction action) {
+            _action = action;
+        }
 
         @NonNull
         @Override
@@ -140,6 +165,14 @@ public class TutorialActivity extends BaseActivity {
             holder.icon.setImageResource(page.icon);
             holder.title.setText(page.title);
             holder.body.setText(page.body);
+
+            if (page.action == 0) {
+                holder.action.setVisibility(View.GONE);
+            } else {
+                holder.action.setVisibility(View.VISIBLE);
+                holder.action.setText(page.action);
+                holder.action.setOnClickListener(v -> _action.run(position));
+            }
         }
 
         @Override
@@ -151,12 +184,14 @@ public class TutorialActivity extends BaseActivity {
             final ImageView icon;
             final TextView title;
             final TextView body;
+            final MaterialButton action;
 
             Holder(@NonNull View itemView) {
                 super(itemView);
                 icon = itemView.findViewById(R.id.tutorial_icon);
                 title = itemView.findViewById(R.id.tutorial_title);
                 body = itemView.findViewById(R.id.tutorial_body);
+                action = itemView.findViewById(R.id.tutorial_action);
             }
         }
     }

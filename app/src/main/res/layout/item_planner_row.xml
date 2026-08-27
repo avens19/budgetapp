@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/planner_amount_layout"
+        style="@style/Widget.Budget.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_s"
+        android:layout_weight="1"
+        tools:hint="Rent or mortgage">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/planner_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Budget.TextInputLayout.Dropdown"
+        android:layout_width="136dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_s"
+        android:layout_marginTop="@dimen/space_s">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/planner_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:inputType="none"
+            tools:ignore="LabelFor"
+            tools:text="Monthly" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>
