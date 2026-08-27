@@ -115,6 +115,15 @@
         in a single place and lets each app stay quiet about the other.
     -->
     <string name="action_other_devices">Apps for other devices</string>
+
+    <!--
+        Shown once, to installs that predate the tutorial. Names Weekly Spend
+        because someone looking for it in the App Store will not find "Weekly
+        Budget", and that is the whole point of mentioning it.
+    -->
+    <string name="apps_announcement_title">Your budget travels now</string>
+    <string name="apps_announcement_body">The same budget opens on iPhone — listed as Weekly Spend, because this name was taken — and at budget.andrewovens.com in any browser. Everything stays in step, so you can add an expense wherever you are.</string>
+    <string name="apps_announcement_dismiss">Not now</string>
     <string name="url_apps" translatable="false">https://budget.andrewovens.com/Apps</string>
     <string name="error_no_browser">No app here can open a web page.</string>
 

@@ -14,6 +14,7 @@ public class Settings {
     private static final String CURRENT_ID = "CURRENTID";
     private static final String CURRENT_CATEGORY_ID = "CURRENTCATEGORYID";
     private static final String SEEN_TUTORIAL = "SEENTUTORIAL";
+    private static final String SEEN_APPS_ANNOUNCEMENT = "SEENAPPSANNOUNCEMENT";
     private static final String DENSE_LAYOUT = "DENSELAYOUT";
 
     public static Budget getBudget(Context cxt) {
@@ -138,6 +139,26 @@ public class Settings {
     static void setSeenTutorial(Context cxt) {
         SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
         settings.edit().putBoolean(SEEN_TUTORIAL, true).apply();
+    }
+
+    /**
+     * Whether the one-time note about the apps for other devices has been
+     * shown.
+     *
+     * <p>The tutorial's last page says the same thing, so anyone who arrived
+     * through first run has already read it and is treated as having seen the
+     * note. That leaves exactly the people it is for: installs that predate
+     * the tutorial, who otherwise have no way to learn the iPhone app exists.
+     */
+    static boolean hasSeenAppsAnnouncement(Context cxt) {
+        SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+        return settings.getBoolean(SEEN_APPS_ANNOUNCEMENT, false)
+                || settings.getBoolean(SEEN_TUTORIAL, false);
+    }
+
+    static void setSeenAppsAnnouncement(Context cxt) {
+        SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
+        settings.edit().putBoolean(SEEN_APPS_ANNOUNCEMENT, true).apply();
     }
 
     static long getNextId(Context cxt) {

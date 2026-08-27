@@ -226,6 +226,43 @@ public class WeekActivity extends BaseActivity
         }
 
         notifyWidgets();
+
+        maybeAnnounceOtherApps();
+    }
+
+    /**
+     * Tells long-standing installs, once, that the budget now travels to other
+     * devices.
+     *
+     * <p>The tutorial carries this for anyone who installed recently, but it
+     * only runs on first run, so the people most likely to want a second
+     * device are the ones who never see it.
+     *
+     * <p>Points at the apps page rather than a store listing, for the reason
+     * given above {@code url_apps}: one page holds both stores, and each app
+     * stays quiet about the other platform.
+     *
+     * <p>Marked as seen when it is shown rather than when it is answered, so a
+     * process death between the two does not bring it back.
+     */
+    private void maybeAnnounceOtherApps() {
+        if (Settings.hasSeenAppsAnnouncement(this)) {
+            return;
+        }
+
+        Settings.setSeenAppsAnnouncement(this);
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.apps_announcement_title)
+                .setMessage(R.string.apps_announcement_body)
+                .setCancelable(true)
+                .setNegativeButton(R.string.apps_announcement_dismiss, (dialog, which) -> dialog.dismiss())
+                .setPositiveButton(R.string.action_other_devices,
+                        (dialog, which) -> {
+                            Helpers.openUrl(this, getString(R.string.url_apps));
+                            dialog.dismiss();
+                        })
+                .show();
     }
 
     /**
