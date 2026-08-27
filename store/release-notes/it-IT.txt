@@ -1,0 +1,3 @@
+Venti nuove lingue: l'app ora segue la lingua del telefono.
+
+E un nuovo strumento calcola con te l'importo settimanale. Rispondi a quello che sai — stipendio, affitto, assicurazioni, spesa — e ai conti pensa lui. Lo trovi nella prima pagina di Come funziona e accanto all'importo in Modifica budget.

@@ -1,0 +1,3 @@
+Vingt nouvelles langues : l'appli suit maintenant la langue de votre téléphone.
+
+Et un nouvel assistant calcule votre montant hebdomadaire avec vous. Répondez à ce que vous savez — salaire, loyer, assurances, courses — il fait le calcul. Il est sur la première page de Comment ça marche, et à côté du montant dans Modifier le budget.

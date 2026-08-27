@@ -1,0 +1,3 @@
+Hai mươi ngôn ngữ mới: ứng dụng giờ đi theo ngôn ngữ của điện thoại.
+
+Và có thêm phần giúp bạn tính số tiền mỗi tuần. Trả lời những câu bạn biết — lương, tiền nhà, bảo hiểm, đi chợ — phần tính toán để nó lo. Nằm ở trang đầu của Cách hoạt động, và cạnh số tiền trong Sửa ngân sách.

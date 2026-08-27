@@ -1,0 +1,3 @@
+Vinte novos idiomas: a app segue agora o idioma do seu telemóvel.
+
+E um novo assistente calcula consigo o montante semanal. Responda ao que souber — ordenado, renda, seguros, compras — e ele faz as contas. Está na primeira página de Como funciona e ao lado do montante em Editar orçamento.

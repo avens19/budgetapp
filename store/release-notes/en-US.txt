@@ -1,0 +1,3 @@
+Twenty new languages: the app now follows your phone's language.
+
+And a new helper works out your weekly number with you. Answer the prompts you know — pay, rent, insurance, groceries — and it does the arithmetic. It is on the first page of How this works, and beside the amount on Edit budget.

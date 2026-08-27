@@ -1,0 +1,3 @@
+Dwadzieścia nowych języków: aplikacja idzie teraz za językiem telefonu.
+
+Doszedł też pomocnik, który policzy z tobą kwotę na tydzień. Odpowiedz na to, co wiesz — wypłata, czynsz, ubezpieczenia, zakupy — a rachunek zrobi on. Jest na pierwszej stronie Jak to działa i obok kwoty w Edytuj budżet.

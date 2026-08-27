@@ -1,0 +1,3 @@
+Vinte novos idiomas: o app agora segue o idioma do seu celular.
+
+E um novo assistente calcula com você o valor da semana. Responda o que souber — salário, aluguel, seguros, mercado — e ele faz a conta. Está na primeira página de Como funciona e ao lado do valor em Editar orçamento.

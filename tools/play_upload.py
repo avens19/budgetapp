@@ -14,6 +14,10 @@ presses publish. Pass --rollout to actually release.
 
 Add --dry-run first: it authenticates and prints what Play currently has on
 each track without creating an edit.
+
+The listing text lives in store/listing/<language>.json and is pushed with
+--listings; --notes takes either one file or a directory of <language>.txt, so
+a release can carry its notes in every language the app speaks.
 """
 
 import argparse
@@ -83,6 +87,73 @@ def explain(response, who, package):
 
 IMAGE_TYPE = "phoneScreenshots"
 
+# Play's own limits. It rejects an over-long field rather than truncating it,
+# and rejects the whole edit with it - so the bundle would already be uploaded
+# by the time one long sentence in German failed the release.
+LISTING_LIMITS = {"title": 30, "shortDescription": 80, "fullDescription": 4000}
+
+
+def upload_listings(s, args, edit_id, who):
+    """Push store/listing/<language>.json for every language it holds."""
+    import glob
+
+    paths = sorted(glob.glob(os.path.join(args.listings, "*.json")))
+    if not paths:
+        sys.exit("no listing files in {}".format(args.listings))
+
+    for path in paths:
+        language = os.path.basename(path)[:-len(".json")]
+        with open(path, encoding="utf-8") as f:
+            listing = json.load(f)
+
+        for field, limit in LISTING_LIMITS.items():
+            value = listing.get(field, "")
+            if not value:
+                sys.exit("{}: {} is empty".format(language, field))
+            if len(value) > limit:
+                sys.exit("{}: {} is {} chars; Play allows {}".format(
+                    language, field, len(value), limit))
+
+        r = s.put("{}/{}/edits/{}/listings/{}".format(
+                      BASE, args.package, edit_id, language),
+                  json={"language": language,
+                        "title": listing["title"],
+                        "shortDescription": listing["shortDescription"],
+                        "fullDescription": listing["fullDescription"]})
+        if r.status_code >= 400:
+            explain(r, who, args.package)
+        print("  listing {}".format(language))
+
+
+def read_notes(path):
+    """One file, or a directory of <language>.txt.
+
+    Returns what tracks.update wants: a list of {language, text}. Play shows a
+    reader the notes for their own language and falls back to en-US, so a
+    release with twenty translations of the app and one language of notes is
+    only half translated at the moment anyone looks.
+    """
+    if os.path.isdir(path):
+        import glob
+        notes = []
+        for note in sorted(glob.glob(os.path.join(path, "*.txt"))):
+            language = os.path.basename(note)[:-len(".txt")]
+            with open(note, encoding="utf-8") as f:
+                text = f.read().strip()
+            if len(text) > 500:
+                sys.exit("{} notes are {} chars; Play allows 500".format(
+                    language, len(text)))
+            notes.append({"language": language, "text": text})
+        if not notes:
+            sys.exit("no .txt files in {}".format(path))
+        return notes
+
+    with open(path, encoding="utf-8") as f:
+        text = f.read().strip()
+    if len(text) > 500:
+        sys.exit("release notes are {} chars; Play allows 500".format(len(text)))
+    return [{"language": "en-US", "text": text}]
+
 
 def upload_screenshots(s, args, edit_id, who):
     """Replace the whole phone set. Play keeps images in upload order and has
@@ -117,7 +188,12 @@ def main():
     ap.add_argument("--promote", type=int, metavar="VERSIONCODE",
                     help="reuse a version code already uploaded to Play rather "
                          "than uploading again")
-    ap.add_argument("--notes", help="release notes file (<=500 chars)")
+    ap.add_argument("--notes",
+                    help="release notes: a file, or a directory of "
+                         "<language>.txt for notes in every language")
+    ap.add_argument("--listings", metavar="DIR",
+                    help="push the store listing text from DIR/<language>.json "
+                         "(title, shortDescription, fullDescription)")
     ap.add_argument("--track", default="production")
     ap.add_argument("--package", default=PACKAGE)
     ap.add_argument("--rollout", type=float, metavar="FRACTION",
@@ -129,8 +205,8 @@ def main():
     ap.add_argument("--language", default="en-US")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
-    if not (args.aab or args.promote or args.screenshots):
-        ap.error("one of --aab, --promote or --screenshots is required")
+    if not (args.aab or args.promote or args.screenshots or args.listings):
+        ap.error("one of --aab, --promote, --screenshots or --listings is required")
 
     s, who = session_for(args.key)
     print("authenticated as {}".format(who))
@@ -152,6 +228,19 @@ def main():
         print("dry run only — edit discarded, nothing changed")
         return
 
+    # Listing text on its own: the copy changed, the app did not.
+    if args.listings and not (args.aab or args.promote or args.screenshots):
+        r = s.post("{}/{}/edits".format(BASE, args.package))
+        if r.status_code >= 400:
+            explain(r, who, args.package)
+        edit_id = check(r, "edits.insert")["id"]
+        upload_listings(s, args, edit_id, who)
+        check(s.post("{}/{}/edits/{}:commit".format(BASE, args.package, edit_id)),
+              "edits.commit")
+        print("\nDone. Listing text updated in {} languages.".format(
+            len(os.listdir(args.listings))))
+        return
+
     # Screenshots on their own: no track change, just the listing images.
     if args.screenshots and not (args.aab or args.promote):
         r = s.post("{}/{}/edits".format(BASE, args.package))
@@ -164,11 +253,7 @@ def main():
         print("\nDone. Listing screenshots replaced.")
         return
 
-    notes = None
-    if args.notes:
-        notes = open(args.notes, encoding="utf-8").read().strip()
-        if len(notes) > 500:
-            sys.exit("release notes are {} chars; Play allows 500".format(len(notes)))
+    notes = read_notes(args.notes) if args.notes else None
 
     r = s.post("{}/{}/edits".format(BASE, args.package))
     if r.status_code >= 400:
@@ -199,12 +284,15 @@ def main():
         release["status"] = "inProgress"
         release["userFraction"] = args.rollout
     if notes:
-        release["releaseNotes"] = [{"language": "en-US", "text": notes}]
+        release["releaseNotes"] = notes
 
     check(s.put("{}/{}/edits/{}/tracks/{}".format(BASE, args.package, edit_id, args.track),
                 json={"track": args.track, "releases": [release]}),
           "tracks.update")
     print("track '{}' set to {}".format(args.track, release["status"]))
+
+    if args.listings:
+        upload_listings(s, args, edit_id, who)
 
     if args.screenshots:
         upload_screenshots(s, args, edit_id, who)

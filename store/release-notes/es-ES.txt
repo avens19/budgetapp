@@ -1,0 +1,3 @@
+Veinte idiomas nuevos: la app ahora sigue el idioma de tu móvil.
+
+Y un nuevo asistente calcula contigo tu importe semanal. Responde a lo que sepas — sueldo, alquiler, seguros, compra — y él hace las cuentas. Está en la primera página de Cómo funciona y junto al importe en Editar presupuesto.
