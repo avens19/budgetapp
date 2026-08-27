@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Japanese. Polite plain form (です・ます) with short labels: the buttons here
+    are narrow and Japanese UI text is expected to be terse.
+-->
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_month">月</string>
+    <string name="title_categories">カテゴリ</string>
+    <string name="title_category">カテゴリの管理</string>
+    <string name="nav_week">週</string>
+    <string name="nav_month">月</string>
+    <string name="nav_categories">カテゴリ</string>
+    <string name="segment_week">今週</string>
+    <string name="segment_month">今月</string>
+    <string name="action_add">支出を追加</string>
+    <string name="action_edit_categories">カテゴリの管理</string>
+    <string name="action_today">今日</string>
+    <string name="pick_week">週を選ぶ</string>
+    <string name="pick_month">月を選ぶ</string>
+    <string name="previous_period">前の期間</string>
+    <string name="next_period">次の期間</string>
+    <string name="week_remaining_label">使える残り</string>
+    <string name="week_over_label">予算オーバー</string>
+    <string name="week_spent_of">%2$s のうち %1$s</string>
+    <string name="week_total_label">今週の支出</string>
+    <string name="week_this_week">今週</string>
+    <string name="week_subtitle">%1$s · %2$s</string>
+    <string name="week_last_day">最終日</string>
+    <string name="week_empty_title">まだ支出はありません</string>
+    <string name="week_empty_body">今週に追加した支出がここに表示されます。</string>
+    <string name="month_total_label">今月の支出</string>
+    <string name="month_weekly_budget">週の予算 %1$s</string>
+    <string name="month_week_range">%1$s – %2$s</string>
+    <string name="month_over_by">%1$s 超過</string>
+    <string name="month_under_by">残り %1$s</string>
+    <string name="month_empty_title">今月の支出はありません</string>
+    <string name="month_empty_body">「週」タブで支出を追加すると、ここに合計が出ます。</string>
+    <string name="category_share">%1$s%%</string>
+    <string name="category_tap_hint">カテゴリをタップすると、その支出を表示します</string>
+    <string name="category_empty_title">まだ表示するものがありません</string>
+    <string name="category_empty_body">支出にカテゴリを付けると、ここに内訳が出ます。</string>
+    <string name="category_manage_empty_title">カテゴリがまだありません</string>
+    <string name="category_manage_empty_body">支出の追加時にカテゴリを作ると、ここに表示されます。</string>
+    <string name="uncategorized">カテゴリなし</string>
+    <string name="category_context_rename">カテゴリ名を変更</string>
+    <string name="category_context_delete">カテゴリを削除</string>
+    <string name="category_delete_message">「%1$s」の支出は残りますが、カテゴリは外れます。</string>
+    <string name="category_more_options">%1$s のその他の操作</string>
+    <string name="title_activity_add_expense">支出を追加</string>
+    <string name="edit_expense_title">支出を編集</string>
+    <string name="add_date">日付</string>
+    <string name="add_description">内容</string>
+    <string name="add_amount">金額</string>
+    <string name="add_amount_hint">0</string>
+    <string name="add_add">支出を追加</string>
+    <string name="edit_button">変更を保存</string>
+    <string name="label_pick_category">カテゴリ</string>
+    <string name="label_new_category">新しいカテゴリ…</string>
+    <string name="label_new_category_hint">新しいカテゴリの名前</string>
+    <string name="label_category_name_hint">カテゴリの名前</string>
+    <string name="label_no_category">カテゴリなし</string>
+    <string name="pick_date">日付を選ぶ</string>
+    <string name="context_edit">支出を編集</string>
+    <string name="context_delete">支出を削除</string>
+    <string name="context_copy">翌週にコピー</string>
+    <string name="expense_options">%1$s の操作</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">新しい予算</string>
+    <string name="title_activity_join_budget">予算に参加</string>
+    <string name="title_activity_switch_budget">予算の一覧</string>
+    <string name="edit_budget_title">予算を編集</string>
+    <string name="first_headline">週の支出を、ふたりで把握</string>
+    <string name="first_body">1週間の金額を決めて、支出をその都度追加すれば、残りがひと目で分かります。同じ予算を複数の端末で共有できます。</string>
+    <string name="button_new_budget">予算を作る</string>
+    <string name="button_join_budget">IDで参加する</string>
+    <string name="button_create_budget">予算を作成</string>
+    <string name="button_edit_budget">予算を保存</string>
+    <string name="button_go">予算に参加</string>
+    <string name="label_budget_name">予算の名前</string>
+    <string name="label_budget_name_helper">例:「家計」「食費」など</string>
+    <string name="label_start_day">週の始まり</string>
+    <string name="label_new_amount">1週間の金額</string>
+    <string name="label_new_unique">予算ID</string>
+    <string name="label_new_unique_helper">このIDを共有すると、別の端末から参加できます。タップでコピー。</string>
+    <string name="label_join_unique_id">予算ID</string>
+    <string name="label_join_helper">すでに予算がある端末のIDを貼り付けてください。</string>
+    <string name="current_budget">使用中の予算</string>
+    <string name="current_budget_named">使用中: %1$s</string>
+    <string name="context_remove_budget">この端末から削除</string>
+    <string name="budget_weekly_amount">週 %1$s</string>
+    <string name="budget_selected">使用中の予算</string>
+    <string name="copied_unique_id">予算IDをコピーしました</string>
+    <string name="copy_budget_id">予算IDをコピー</string>
+    <string name="action_other_devices">他の端末向けアプリ</string>
+    <string name="apps_announcement_title">予算を持ち歩けるようになりました</string>
+    <string name="apps_announcement_body">同じ予算がiPhoneでも開けます。名前はWeekly Spend です（この名前は使われていたため）。ブラウザからは budget.andrewovens.com。すべて同期されるので、どこにいても支出を追加できます。</string>
+    <string name="apps_announcement_dismiss">後で</string>
+    <string name="error_no_browser">Webページを開けるアプリがありません。</string>
+    <string name="invite_joining">予算に参加しています…</string>
+    <string name="invite_unusable_title">招待が無効です</string>
+    <string name="invite_unusable_body">この招待はすでに使われたか、期限が切れています。招待は1回限りです。新しいものをもらえば使えます。</string>
+    <string name="invite_failed_title">参加できませんでした</string>
+    <string name="invite_failed_body">通信状況を確認して、リンクをもう一度開いてください。</string>
+    <string name="action_invite">招待する</string>
+    <string name="invite_share_subject">週の予算に参加してください</string>
+    <string name="invite_share_text">タップすると私の週の予算を共有します: %1$s</string>
+    <string name="error_invite_failed">招待を作成できませんでした。もう一度お試しください。</string>
+    <string name="invite_save_first">先に予算を作ってから招待してください。</string>
+    <string name="tutorial_title">使い方</string>
+    <string name="tutorial_skip">スキップ</string>
+    <string name="tutorial_next">次へ</string>
+    <string name="tutorial_done">はじめる</string>
+    <string name="tutorial_close">完了</string>
+    <string name="tutorial_page">%2$d ページ中 %1$d ページ目</string>
+    <string name="tutorial_1_title">自由に使えるお金を決める</string>
+    <string name="tutorial_1_body">まずはアプリの外で。収入から、毎月変わらない支払い（家賃、保険、サブスク、ローン）を引くと、残りが自由に使えるお金です。\n\nそれを月の週数で割れば、1週間の目安になります。</string>
+    <string name="tutorial_1_action">一緒に計算する</string>
+    <string name="tutorial_2_title">固定費はここに入れません</string>
+    <string name="tutorial_2_body">毎月決まった収入や支出を入れる場所は、あえて用意していません。金額がすでに決まっているものを外しておけば、本当に動く数字――今週いくら使ったか――だけに集中できます。\n\n週の途中でお金が入ったとき（返金、贈り物、キャッシュバックなど）は、マイナスの支出として追加してください。</string>
+    <string name="tutorial_3_title">パートナーと共有する</string>
+    <string name="tutorial_3_body">1つの予算は好きなだけ端末に置けて、すべて同じ状態に保たれます。\n\n「予算を編集」を開き、「招待する」をタップしてリンクを送ってください。開いた相手はこの予算に参加し、二人とも同じ合計を見ることになります。\n\nリンクは1回だけ有効で1週間で失効するので、転送されても問題ありません。</string>
+    <string name="tutorial_4_title">iPhoneをお使いですか</string>
+    <string name="tutorial_4_body">iPhone向けのアプリもあります。名前はWeekly Spend です（この名前は使われていたため）。budget.andrewovens.com はどのブラウザでも開けます。3つとも同じ予算で動きます。\n\nリンクは「予算を編集」の「他の端末向けアプリ」にあります。</string>
+    <string name="action_how_it_works">使い方</string>
+    <string name="planner_title">週の金額を計算する</string>
+    <string name="planner_intro">分かるものだけ答えてください。空欄はゼロとして扱われ、下のボタンを押すまで予算には反映されません。</string>
+    <string name="planner_open">迷ったら計算する</string>
+    <string name="planner_use">この金額を使う</string>
+    <string name="planner_result_label">毎週使える金額</string>
+    <string name="planner_note_empty">分かる範囲で入力してください。入力に合わせて数字が変わります。</string>
+    <string name="planner_note_short">これでは毎週使えるお金が残りません。金額を見直すか、決まった買い物はここから外して、毎週の支出として記録してください。</string>
+    <string name="planner_note_monthly">月 %1$s 収入 · 月 %2$s 支出</string>
+    <string name="planner_how_often">頻度: %1$s</string>
+    <string name="planner_group_income">入ってくるお金</string>
+    <string name="planner_group_income_help">税金や控除を引いて、実際に口座に入る金額です。</string>
+    <string name="planner_group_fixed">変わらない支払い</string>
+    <string name="planner_group_fixed_help">意識しなくても出ていく金額です。貯金もここに入ります。使わないと決めたお金は、使えるお金ではありません。</string>
+    <string name="planner_group_steady">ほぼ一定の支出（任意）</string>
+    <string name="planner_group_steady_help">多少は増減しても、驚くことはない支出です。ここで引けばアプリの外に置けますし、空欄にすれば毎週の支出として記録できます。どちらか一方にしてください。</string>
+    <string name="planner_pay">手取り収入</string>
+    <string name="planner_other_income">その他の収入</string>
+    <string name="planner_housing">家賃・住宅ローン</string>
+    <string name="planner_utilities">電気・ガス・水道</string>
+    <string name="planner_phone">携帯とインターネット</string>
+    <string name="planner_insurance">保険</string>
+    <string name="planner_transport">車のローン・定期券</string>
+    <string name="planner_debt">ローン・カードの返済</string>
+    <string name="planner_subscriptions">サブスク</string>
+    <string name="planner_childcare">保育料・学費</string>
+    <string name="planner_savings">貯金</string>
+    <string name="planner_other_fixed">その他の固定費</string>
+    <string name="planner_groceries">食料品</string>
+    <string name="planner_fuel">ガソリン・交通費</string>
+    <string name="planner_household">日用品</string>
+    <string name="planner_pets">ペット</string>
+    <string name="planner_other_steady">その他の一定支出</string>
+    <string name="period_weekly">毎週</string>
+    <string name="period_fortnightly">2週間ごと</string>
+    <string name="period_semi_monthly">月2回</string>
+    <string name="period_monthly">毎月</string>
+    <string name="period_yearly">毎年</string>
+    <string name="action_about">このアプリについて</string>
+    <string name="title_about">このアプリについて</string>
+    <string name="about_version">バージョン %1$s</string>
+    <string name="about_body">作者のAndrewです。カルガリー在住で、ソフトを作るのが好きで、もっと多くのソフトが無料であるべきだと思っています。このアプリに広告もアカウントも料金もありません。これからも増やしません。自分が毎週使っているから作っています。\n\n不具合があったり、こんなことができたらと思ったら、メールをください。すべて読んでいます。</string>
+    <string name="about_help">困ったときはメールで</string>
+    <string name="about_review">レビューを書く</string>
+    <string name="about_coffee">コーヒーをおごる</string>
+    <string name="about_coffee_note">まったく任意です。どちらでもアプリは無料です。</string>
+    <string name="about_privacy">プライバシー</string>
+    <string name="about_email_subject">Weekly Budget %1$s (Android)</string>
+    <string name="error_no_email">メールを送れるアプリがありません。</string>
+    <string name="action_dense_layout">コンパクト表示</string>
+    <string name="week_dense_left">残り %1$s</string>
+    <string name="week_dense_over">%1$s 超過</string>
+    <string name="carry_balance">残りを繰り越す</string>
+    <string name="carry_balance_message">残りの %1$s を翌週に繰り越しますか?</string>
+    <string name="carry_balance_expense_description">繰越分</string>
+    <string name="already_carried">今週の残りはすでに繰り越されています</string>
+    <string name="error_network">ネットワークに接続できません</string>
+    <string name="error_cant_edit">支出を編集できませんでした。もう一度お試しください</string>
+    <string name="error_description_required">内容を入力してください</string>
+    <string name="error_amount_required">金額を入力してください</string>
+    <string name="error_amount_invalid">正しい金額を入力してください</string>
+    <string name="error_category_name_required">カテゴリ名を入力してください</string>
+    <string name="error_name_required">名前を入力してください</string>
+    <string name="error_budget_id_required">予算IDを入力してください</string>
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_expense_widget_description">週の予算に支出を追加</string>
+    <string name="widget_left_label">残り</string>
+    <string name="widget_over_label">超過</string>
+    <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
+    <string name="delete">削除</string>
+    <string name="rename">名前を変更</string>
+
+    <plurals name="week_days_left">
+        <item quantity="other">残り %1$d 日</item>
+    </plurals>
+
+    <string-array name="array_weekdays">
+        <item>日曜日</item>
+        <item>月曜日</item>
+        <item>火曜日</item>
+        <item>水曜日</item>
+        <item>木曜日</item>
+        <item>金曜日</item>
+        <item>土曜日</item>
+    </string-array>
+
+</resources>

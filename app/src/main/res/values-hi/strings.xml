@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Hindi. Uses the "आप" register, which is the neutral one for an app talking
+    to an adult about money.
+-->
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_month">महीना</string>
+    <string name="title_categories">श्रेणियाँ</string>
+    <string name="title_category">श्रेणियाँ प्रबंधित करें</string>
+    <string name="nav_week">सप्ताह</string>
+    <string name="nav_month">महीना</string>
+    <string name="nav_categories">श्रेणियाँ</string>
+    <string name="segment_week">इस सप्ताह</string>
+    <string name="segment_month">इस महीने</string>
+    <string name="action_add">खर्च जोड़ें</string>
+    <string name="action_edit_categories">श्रेणियाँ प्रबंधित करें</string>
+    <string name="action_today">आज</string>
+    <string name="pick_week">किसी सप्ताह पर जाएँ</string>
+    <string name="pick_month">किसी महीने पर जाएँ</string>
+    <string name="previous_period">पिछली अवधि</string>
+    <string name="next_period">अगली अवधि</string>
+    <string name="week_remaining_label">खर्च के लिए बचा</string>
+    <string name="week_over_label">बजट से ऊपर</string>
+    <string name="week_spent_of">%2$s में से %1$s</string>
+    <string name="week_total_label">इस सप्ताह खर्च</string>
+    <string name="week_this_week">इस सप्ताह</string>
+    <string name="week_subtitle">%1$s · %2$s</string>
+    <string name="week_last_day">आखिरी दिन</string>
+    <string name="week_empty_title">अभी कुछ खर्च नहीं हुआ</string>
+    <string name="week_empty_body">इस सप्ताह जोड़े गए खर्च यहाँ दिखेंगे।</string>
+    <string name="month_total_label">इस महीने खर्च</string>
+    <string name="month_weekly_budget">साप्ताहिक बजट %1$s</string>
+    <string name="month_week_range">%1$s – %2$s</string>
+    <string name="month_over_by">%1$s ज़्यादा</string>
+    <string name="month_under_by">%1$s बचे</string>
+    <string name="month_empty_title">इस महीने कोई खर्च नहीं</string>
+    <string name="month_empty_body">सप्ताह टैब में खर्च जोड़ें, यहाँ उनका जोड़ दिखेगा।</string>
+    <string name="category_share">%1$s%%</string>
+    <string name="category_tap_hint">किसी श्रेणी के खर्च देखने के लिए उस पर टैप करें</string>
+    <string name="category_empty_title">अभी दिखाने को कुछ नहीं</string>
+    <string name="category_empty_body">जैसे ही खर्चों पर श्रेणी लगेगी, यहाँ बँटवारा दिखेगा।</string>
+    <string name="category_manage_empty_title">अभी कोई श्रेणी नहीं</string>
+    <string name="category_manage_empty_body">खर्च जोड़ते समय श्रेणी बनाएँ, वह यहाँ आ जाएगी।</string>
+    <string name="uncategorized">बिना श्रेणी</string>
+    <string name="category_context_rename">श्रेणी का नाम बदलें</string>
+    <string name="category_context_delete">श्रेणी हटाएँ</string>
+    <string name="category_delete_message">"%1$s" के खर्च बने रहेंगे, पर उनकी श्रेणी हट जाएगी।</string>
+    <string name="category_more_options">%1$s के लिए और विकल्प</string>
+    <string name="title_activity_add_expense">खर्च जोड़ें</string>
+    <string name="edit_expense_title">खर्च में बदलाव</string>
+    <string name="add_date">तारीख</string>
+    <string name="add_description">विवरण</string>
+    <string name="add_amount">रकम</string>
+    <string name="add_amount_hint">0</string>
+    <string name="add_add">खर्च जोड़ें</string>
+    <string name="edit_button">बदलाव सहेजें</string>
+    <string name="label_pick_category">श्रेणी</string>
+    <string name="label_new_category">नई श्रेणी…</string>
+    <string name="label_new_category_hint">नई श्रेणी का नाम</string>
+    <string name="label_category_name_hint">श्रेणी का नाम</string>
+    <string name="label_no_category">कोई श्रेणी नहीं</string>
+    <string name="pick_date">तारीख चुनें</string>
+    <string name="context_edit">खर्च में बदलाव</string>
+    <string name="context_delete">खर्च हटाएँ</string>
+    <string name="context_copy">अगले सप्ताह में कॉपी करें</string>
+    <string name="expense_options">%1$s के विकल्प</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">नया बजट</string>
+    <string name="title_activity_join_budget">बजट में शामिल हों</string>
+    <string name="title_activity_switch_budget">आपके बजट</string>
+    <string name="edit_budget_title">बजट में बदलाव</string>
+    <string name="first_headline">हफ्ते का खर्च साथ मिलकर देखें</string>
+    <string name="first_body">सप्ताह के लिए एक रकम तय करें, खर्च होते ही जोड़ते जाएँ, और एक नज़र में देखें कि कितना बचा है। एक ही बजट कई डिवाइस पर साझा करें।</string>
+    <string name="button_new_budget">बजट बनाएँ</string>
+    <string name="button_join_budget">ID से शामिल हों</string>
+    <string name="button_create_budget">बजट बनाएँ</string>
+    <string name="button_edit_budget">बजट सहेजें</string>
+    <string name="button_go">बजट में शामिल हों</string>
+    <string name="label_budget_name">बजट का नाम</string>
+    <string name="label_budget_name_helper">जैसे: घर, या राशन</string>
+    <string name="label_start_day">सप्ताह शुरू होता है</string>
+    <string name="label_new_amount">साप्ताहिक रकम</string>
+    <string name="label_new_unique">बजट ID</string>
+    <string name="label_new_unique_helper">दूसरा डिवाइस जोड़ने के लिए यह ID साझा करें। कॉपी करने के लिए टैप करें।</string>
+    <string name="label_join_unique_id">बजट ID</string>
+    <string name="label_join_helper">जिस डिवाइस पर बजट पहले से है, वहाँ से ID पेस्ट करें।</string>
+    <string name="current_budget">मौजूदा बजट</string>
+    <string name="current_budget_named">मौजूदा: %1$s</string>
+    <string name="context_remove_budget">इस डिवाइस से हटाएँ</string>
+    <string name="budget_weekly_amount">%1$s प्रति सप्ताह</string>
+    <string name="budget_selected">मौजूदा बजट</string>
+    <string name="copied_unique_id">बजट ID कॉपी हो गया</string>
+    <string name="copy_budget_id">बजट ID कॉपी करें</string>
+    <string name="action_other_devices">दूसरे डिवाइस के ऐप</string>
+    <string name="apps_announcement_title">अब आपका बजट साथ चलता है</string>
+    <string name="apps_announcement_body">यही बजट iPhone पर भी खुलता है — वहाँ इसका नाम Weekly Spend है, क्योंकि यह नाम पहले से लिया जा चुका था — और किसी भी ब्राउज़र में budget.andrewovens.com पर। सब कुछ एक जैसा रहता है, इसलिए खर्च कहीं से भी जोड़ा जा सकता है।</string>
+    <string name="apps_announcement_dismiss">अभी नहीं</string>
+    <string name="error_no_browser">यहाँ कोई ऐप वेब पेज नहीं खोल सकता।</string>
+    <string name="invite_joining">बजट में शामिल हो रहे हैं…</string>
+    <string name="invite_unusable_title">न्योता मान्य नहीं</string>
+    <string name="invite_unusable_body">यह न्योता पहले इस्तेमाल हो चुका है, या इसकी अवधि खत्म हो गई है। हर न्योता एक ही बार चलता है — नया माँग लें, वह काम करेगा।</string>
+    <string name="invite_failed_title">शामिल नहीं हो सके</string>
+    <string name="invite_failed_body">अपना कनेक्शन देखें और लिंक फिर से खोलें।</string>
+    <string name="action_invite">किसी को न्योता दें</string>
+    <string name="invite_share_subject">मेरे साप्ताहिक बजट में शामिल हों</string>
+    <string name="invite_share_text">मेरा साप्ताहिक बजट साझा करने के लिए यहाँ टैप करें: %1$s</string>
+    <string name="error_invite_failed">न्योता नहीं बन सका। फिर से कोशिश करें।</string>
+    <string name="invite_save_first">पहले बजट बनाएँ, फिर किसी को न्योता दें।</string>
+    <string name="tutorial_title">यह कैसे काम करता है</string>
+    <string name="tutorial_skip">छोड़ें</string>
+    <string name="tutorial_next">आगे</string>
+    <string name="tutorial_done">शुरू करें</string>
+    <string name="tutorial_close">हो गया</string>
+    <string name="tutorial_page">पेज %1$d / %2$d</string>
+    <string name="tutorial_1_title">अपने खर्च के पैसे का बजट बनाएँ</string>
+    <string name="tutorial_1_body">शुरुआत ऐप के बाहर करें। जो कमाते हैं उसमें से वे बिल घटाएँ जो कभी नहीं बदलते — किराया, बीमा, सब्सक्रिप्शन, लोन की किस्तें — और जो बचता है वही आपके खर्च के पैसे हैं।\n\nउसे महीने के हफ्तों में बाँट दें, आपका साप्ताहिक लक्ष्य तैयार है।</string>
+    <string name="tutorial_1_action">आइए मिलकर हिसाब लगाएँ</string>
+    <string name="tutorial_2_title">तय बिल यहाँ नहीं आते</string>
+    <string name="tutorial_2_body">हर महीने आने वाली आय या खर्च दर्ज करने की जगह जान-बूझकर नहीं रखी गई। वे रकमें पहले से तय हैं, और उन्हें बाहर रखने से ऐप उसी एक संख्या पर टिका रहता है जो सचमुच बदलती है: इस हफ्ते आपने कितना खर्च किया।\n\nअगर हफ्ते के बीच पैसा आए — रिफंड, तोहफा, कैशबैक — तो उसे माइनस के निशान के साथ खर्च की तरह जोड़ें।</string>
+    <string name="tutorial_3_title">अपने साथी के साथ साझा करें</string>
+    <string name="tutorial_3_body">एक बजट जितने चाहें उतने डिवाइस पर रह सकता है, और सब एक जैसे रहते हैं।\n\n"बजट में बदलाव" खोलें, "किसी को न्योता दें" पर टैप करें और लिंक भेजें। जो उसे खोलेगा वह इसी बजट में जुड़ जाएगा, और दोनों को एक ही जोड़ दिखेगा।\n\nलिंक एक ही बार चलता है और एक हफ्ते में खत्म हो जाता है, इसलिए आगे भेजने में कोई नुकसान नहीं।</string>
+    <string name="tutorial_4_title">iPhone है? ऐप मौजूद है</string>
+    <string name="tutorial_4_body">iPhone के लिए भी ऐप है — नाम Weekly Spend, क्योंकि यह नाम पहले से लिया जा चुका था — और budget.andrewovens.com किसी भी ब्राउज़र में खुलता है। तीनों एक ही बजट पर चलते हैं।\n\nलिंक "बजट में बदलाव" में, "दूसरे डिवाइस के ऐप" के नीचे हैं।</string>
+    <string name="action_how_it_works">यह कैसे काम करता है</string>
+    <string name="planner_title">साप्ताहिक रकम निकालें</string>
+    <string name="planner_intro">जो पता है उसका जवाब दें। खाली छोड़ी गई चीज़ें शून्य मानी जाती हैं, और नीचे बटन दबाने तक इनमें से कुछ भी आपके बजट में नहीं जाता।</string>
+    <string name="planner_open">पक्का नहीं? हिसाब लगाएँ</string>
+    <string name="planner_use">यही रकम लें</string>
+    <string name="planner_result_label">हर सप्ताह खर्च के लिए</string>
+    <string name="planner_note_empty">जितना भर सकें भरें। लिखते-लिखते संख्या बदलती रहेगी।</string>
+    <string name="planner_note_short">इस हिसाब से हर सप्ताह खर्च के लिए कुछ नहीं बचता। आँकड़े जाँचें — या नियमित खर्च को यहाँ से हटा दें और उन्हें हफ्ते-दर-हफ्ते यहीं दर्ज करें।</string>
+    <string name="planner_note_monthly">%1$s महीना आता · %2$s महीना जाता</string>
+    <string name="planner_how_often">कितनी बार: %1$s</string>
+    <string name="planner_group_income">आने वाला पैसा</string>
+    <string name="planner_group_income_help">टैक्स और कटौतियों के बाद खाते में सचमुच जो आता है।</string>
+    <string name="planner_group_fixed">वे बिल जो नहीं बदलते</string>
+    <string name="planner_group_fixed_help">वे रकमें जो आपके सोचे बिना भी निकल जाती हैं। बचत भी यहीं आती है: जो पैसा आपने न खर्च करने का तय किया, वह खर्च का पैसा नहीं है।</string>
+    <string name="planner_group_steady">नियमित खर्च (वैकल्पिक)</string>
+    <string name="planner_group_steady_help">जो थोड़ा घटता-बढ़ता है पर कभी चौंकाता नहीं। इन्हें यहाँ घटा दें तो ये ऐप से बाहर रहेंगे; खाली छोड़ दें तो हफ्ते-दर-हफ्ते यहीं दर्ज करें। दोनों में से एक, दोनों नहीं।</string>
+    <string name="planner_pay">हाथ में आने वाली तनख्वाह</string>
+    <string name="planner_other_income">दूसरी आमदनी</string>
+    <string name="planner_housing">किराया या होम लोन</string>
+    <string name="planner_utilities">बिजली, गैस, पानी</string>
+    <string name="planner_phone">फ़ोन और इंटरनेट</string>
+    <string name="planner_insurance">बीमा</string>
+    <string name="planner_transport">गाड़ी या ट्रैवल पास</string>
+    <string name="planner_debt">लोन और कार्ड की किस्तें</string>
+    <string name="planner_subscriptions">सब्सक्रिप्शन</string>
+    <string name="planner_childcare">क्रेच या स्कूल फीस</string>
+    <string name="planner_savings">बचत</string>
+    <string name="planner_other_fixed">कोई और तय खर्च</string>
+    <string name="planner_groceries">राशन</string>
+    <string name="planner_fuel">पेट्रोल या किराया</string>
+    <string name="planner_household">घर और साफ-सफाई</string>
+    <string name="planner_pets">पालतू जानवर</string>
+    <string name="planner_other_steady">कोई और नियमित खर्च</string>
+    <string name="period_weekly">हर सप्ताह</string>
+    <string name="period_fortnightly">हर 2 सप्ताह</string>
+    <string name="period_semi_monthly">महीने में दो बार</string>
+    <string name="period_monthly">हर महीने</string>
+    <string name="period_yearly">हर साल</string>
+    <string name="action_about">ऐप के बारे में</string>
+    <string name="title_about">ऐप के बारे में</string>
+    <string name="about_version">वर्शन %1$s</string>
+    <string name="about_body">मैं एंड्रयू हूँ — कैलगरी का एक आदमी, जिसे सॉफ़्टवेयर बनाना पसंद है और जो मानता है कि और भी सॉफ़्टवेयर मुफ़्त होना चाहिए। इस ऐप में न विज्ञापन हैं, न अकाउंट, न कीमत, और आगे भी नहीं होंगे। मैं इसे इसलिए बनाता हूँ क्योंकि मैं खुद हर हफ्ते इसका इस्तेमाल करता हूँ।\n\nकुछ टूटा हो, या आप चाहें कि यह कुछ और भी करे, तो मुझे ईमेल करें। मैं सब पढ़ता हूँ।</string>
+    <string name="about_help">मदद चाहिए? मुझे ईमेल करें</string>
+    <string name="about_review">समीक्षा लिखें</string>
+    <string name="about_coffee">मुझे एक कॉफ़ी पिलाएँ</string>
+    <string name="about_coffee_note">पूरी तरह वैकल्पिक। ऐप वैसे भी मुफ़्त है।</string>
+    <string name="about_privacy">निजता</string>
+    <string name="about_email_subject">Android के लिए Weekly Budget %1$s</string>
+    <string name="error_no_email">यहाँ कोई ऐप ईमेल नहीं भेज सकता।</string>
+    <string name="action_dense_layout">छोटा लेआउट</string>
+    <string name="week_dense_left">%1$s बचे</string>
+    <string name="week_dense_over">%1$s ज़्यादा</string>
+    <string name="carry_balance">बची रकम आगे ले जाएँ</string>
+    <string name="carry_balance_message">बची हुई %1$s अगले सप्ताह में ले जाएँ?</string>
+    <string name="carry_balance_expense_description">आगे ले गई रकम</string>
+    <string name="already_carried">इस सप्ताह की बची रकम पहले ही आगे ले जाई जा चुकी है</string>
+    <string name="error_network">नेटवर्क से नहीं जुड़ पा रहे</string>
+    <string name="error_cant_edit">खर्च में बदलाव नहीं हो सका, फिर कोशिश करें</string>
+    <string name="error_description_required">विवरण लिखें</string>
+    <string name="error_amount_required">रकम डालें</string>
+    <string name="error_amount_invalid">सही रकम डालें</string>
+    <string name="error_category_name_required">श्रेणी का नाम डालें</string>
+    <string name="error_name_required">नाम डालें</string>
+    <string name="error_budget_id_required">बजट ID डालें</string>
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_expense_widget_description">अपने साप्ताहिक बजट में खर्च जोड़ें</string>
+    <string name="widget_left_label">बचे</string>
+    <string name="widget_over_label">ज़्यादा</string>
+    <string name="ok">ठीक है</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="delete">हटाएँ</string>
+    <string name="rename">नाम बदलें</string>
+
+    <plurals name="week_days_left">
+        <item quantity="one">%1$d दिन बचा</item>
+        <item quantity="other">%1$d दिन बचे</item>
+    </plurals>
+
+    <string-array name="array_weekdays">
+        <item>रविवार</item>
+        <item>सोमवार</item>
+        <item>मंगलवार</item>
+        <item>बुधवार</item>
+        <item>गुरुवार</item>
+        <item>शुक्रवार</item>
+        <item>शनिवार</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Indonesian. The folder is values-in, not values-id: Android inherited
+    Java's legacy code for Indonesian, and a device set to Indonesian looks
+    for "in". Naming it "id" would ship a translation nobody ever sees.
+-->
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_month">Bulan</string>
+    <string name="title_categories">Kategori</string>
+    <string name="title_category">Kelola kategori</string>
+    <string name="nav_week">Minggu</string>
+    <string name="nav_month">Bulan</string>
+    <string name="nav_categories">Kategori</string>
+    <string name="segment_week">Minggu ini</string>
+    <string name="segment_month">Bulan ini</string>
+    <string name="action_add">Tambah pengeluaran</string>
+    <string name="action_edit_categories">Kelola kategori</string>
+    <string name="action_today">Hari ini</string>
+    <string name="pick_week">Buka minggu tertentu</string>
+    <string name="pick_month">Buka bulan tertentu</string>
+    <string name="previous_period">Periode sebelumnya</string>
+    <string name="next_period">Periode berikutnya</string>
+    <string name="week_remaining_label">Sisa untuk dibelanjakan</string>
+    <string name="week_over_label">Melebihi anggaran</string>
+    <string name="week_spent_of">%1$s dari %2$s</string>
+    <string name="week_total_label">Terpakai minggu ini</string>
+    <string name="week_this_week">Minggu ini</string>
+    <string name="week_subtitle">%1$s · %2$s</string>
+    <string name="week_last_day">Hari terakhir</string>
+    <string name="week_empty_title">Belum ada pengeluaran</string>
+    <string name="week_empty_body">Pengeluaran yang kamu tambahkan minggu ini akan muncul di sini.</string>
+    <string name="month_total_label">Terpakai bulan ini</string>
+    <string name="month_weekly_budget">Anggaran mingguan %1$s</string>
+    <string name="month_week_range">%1$s – %2$s</string>
+    <string name="month_over_by">Lebih %1$s</string>
+    <string name="month_under_by">Sisa %1$s</string>
+    <string name="month_empty_title">Tidak ada pengeluaran bulan ini</string>
+    <string name="month_empty_body">Tambahkan pengeluaran di tab Minggu, di sini akan dijumlahkan.</string>
+    <string name="category_share">%1$s%%</string>
+    <string name="category_tap_hint">Ketuk kategori untuk melihat pengeluarannya</string>
+    <string name="category_empty_title">Belum ada yang bisa ditampilkan</string>
+    <string name="category_empty_body">Begitu pengeluaran punya kategori, rinciannya muncul di sini.</string>
+    <string name="category_manage_empty_title">Belum ada kategori</string>
+    <string name="category_manage_empty_body">Buat kategori saat menambah pengeluaran, nanti muncul di sini.</string>
+    <string name="uncategorized">Tanpa kategori</string>
+    <string name="category_context_rename">Ganti nama kategori</string>
+    <string name="category_context_delete">Hapus kategori</string>
+    <string name="category_delete_message">Pengeluaran di "%1$s" tetap ada, tapi kehilangan kategorinya.</string>
+    <string name="category_more_options">Opsi lain untuk %1$s</string>
+    <string name="title_activity_add_expense">Tambah pengeluaran</string>
+    <string name="edit_expense_title">Ubah pengeluaran</string>
+    <string name="add_date">Tanggal</string>
+    <string name="add_description">Keterangan</string>
+    <string name="add_amount">Jumlah</string>
+    <string name="add_amount_hint">0</string>
+    <string name="add_add">Tambah pengeluaran</string>
+    <string name="edit_button">Simpan perubahan</string>
+    <string name="label_pick_category">Kategori</string>
+    <string name="label_new_category">Kategori baru…</string>
+    <string name="label_new_category_hint">Nama kategori baru</string>
+    <string name="label_category_name_hint">Nama kategori</string>
+    <string name="label_no_category">Tanpa kategori</string>
+    <string name="pick_date">Pilih tanggal</string>
+    <string name="context_edit">Ubah pengeluaran</string>
+    <string name="context_delete">Hapus pengeluaran</string>
+    <string name="context_copy">Salin ke minggu depan</string>
+    <string name="expense_options">Opsi untuk %1$s</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">Anggaran baru</string>
+    <string name="title_activity_join_budget">Gabung ke anggaran</string>
+    <string name="title_activity_switch_budget">Anggaranmu</string>
+    <string name="edit_budget_title">Ubah anggaran</string>
+    <string name="first_headline">Pantau belanja mingguan bersama</string>
+    <string name="first_body">Tetapkan jumlah untuk seminggu, catat pengeluaran sambil jalan, dan lihat sisanya sekilas. Satu anggaran bisa dipakai di beberapa perangkat.</string>
+    <string name="button_new_budget">Buat anggaran</string>
+    <string name="button_join_budget">Gabung dengan ID</string>
+    <string name="button_create_budget">Buat anggaran</string>
+    <string name="button_edit_budget">Simpan anggaran</string>
+    <string name="button_go">Gabung ke anggaran</string>
+    <string name="label_budget_name">Nama anggaran</string>
+    <string name="label_budget_name_helper">Misalnya: Rumah tangga, atau Belanja</string>
+    <string name="label_start_day">Minggu dimulai hari</string>
+    <string name="label_new_amount">Jumlah per minggu</string>
+    <string name="label_new_unique">ID anggaran</string>
+    <string name="label_new_unique_helper">Bagikan ID ini agar perangkat lain bisa gabung. Ketuk untuk menyalin.</string>
+    <string name="label_join_unique_id">ID anggaran</string>
+    <string name="label_join_helper">Tempel ID dari perangkat yang sudah punya anggaran ini.</string>
+    <string name="current_budget">Anggaran aktif</string>
+    <string name="current_budget_named">Aktif: %1$s</string>
+    <string name="context_remove_budget">Hapus dari perangkat ini</string>
+    <string name="budget_weekly_amount">%1$s per minggu</string>
+    <string name="budget_selected">Anggaran aktif</string>
+    <string name="copied_unique_id">ID anggaran disalin</string>
+    <string name="copy_budget_id">Salin ID anggaran</string>
+    <string name="action_other_devices">Aplikasi untuk perangkat lain</string>
+    <string name="apps_announcement_title">Anggaranmu kini ikut ke mana-mana</string>
+    <string name="apps_announcement_body">Anggaran yang sama terbuka di iPhone — di sana namanya Weekly Spend, karena nama ini sudah dipakai — dan di budget.andrewovens.com lewat browser apa pun. Semuanya tetap sinkron, jadi kamu bisa mencatat pengeluaran di mana saja.</string>
+    <string name="apps_announcement_dismiss">Nanti saja</string>
+    <string name="error_no_browser">Tidak ada aplikasi di sini yang bisa membuka halaman web.</string>
+    <string name="invite_joining">Bergabung ke anggaran…</string>
+    <string name="invite_unusable_title">Undangan tidak berlaku</string>
+    <string name="invite_unusable_body">Undangan ini sudah dipakai atau sudah kedaluwarsa. Satu undangan hanya berlaku sekali — minta yang baru dan pasti bisa.</string>
+    <string name="invite_failed_title">Gagal bergabung</string>
+    <string name="invite_failed_body">Periksa koneksimu dan buka lagi tautannya.</string>
+    <string name="action_invite">Undang seseorang</string>
+    <string name="invite_share_subject">Gabung ke anggaran mingguanku</string>
+    <string name="invite_share_text">Ketuk ini untuk membuka anggaran mingguanku: %1$s</string>
+    <string name="error_invite_failed">Undangan gagal dibuat. Coba lagi.</string>
+    <string name="invite_save_first">Buat anggarannya dulu, baru undang seseorang.</string>
+    <string name="tutorial_title">Cara kerjanya</string>
+    <string name="tutorial_skip">Lewati</string>
+    <string name="tutorial_next">Lanjut</string>
+    <string name="tutorial_done">Mulai</string>
+    <string name="tutorial_close">Selesai</string>
+    <string name="tutorial_page">Halaman %1$d dari %2$d</string>
+    <string name="tutorial_1_title">Anggarkan uang belanjamu</string>
+    <string name="tutorial_1_body">Mulailah di luar aplikasi. Ambil penghasilanmu, kurangi tagihan yang tidak pernah berubah — sewa, asuransi, langganan, cicilan — dan sisanya adalah uang belanjamu.\n\nBagi jumlah itu ke minggu-minggu dalam sebulan, dan kamu punya target mingguan.</string>
+    <string name="tutorial_1_action">Hitung bareng aku</string>
+    <string name="tutorial_2_title">Tagihan tetap tidak masuk sini</string>
+    <string name="tutorial_2_body">Memang sengaja tidak ada tempat untuk mencatat pemasukan atau pengeluaran rutin. Jumlahnya sudah pasti, jadi dengan meninggalkannya di luar, aplikasi tetap fokus pada satu angka yang benar-benar bergerak: berapa yang kamu habiskan minggu ini.\n\nKalau ada uang masuk di tengah minggu — refund, hadiah, cashback — catat sebagai pengeluaran dengan tanda minus.</string>
+    <string name="tutorial_3_title">Bagikan ke pasanganmu</string>
+    <string name="tutorial_3_body">Satu anggaran bisa hidup di sebanyak apa pun perangkat, dan semuanya tetap sama.\n\nBuka Ubah anggaran, ketuk Undang seseorang, lalu kirim tautannya. Siapa pun yang membukanya ikut ke anggaran ini, dan kalian berdua melihat total yang sama.\n\nTautan hanya berlaku sekali dan kedaluwarsa setelah seminggu, jadi kalau diteruskan pun tidak masalah.</string>
+    <string name="tutorial_4_title">Pakai iPhone? Ada aplikasinya</string>
+    <string name="tutorial_4_body">Ada juga aplikasi untuk iPhone — namanya Weekly Spend, karena nama ini sudah dipakai — dan budget.andrewovens.com bisa dibuka di browser apa pun. Ketiganya bekerja pada anggaran yang sama.\n\nTautannya ada di Ubah anggaran, di bagian Aplikasi untuk perangkat lain.</string>
+    <string name="action_how_it_works">Cara kerjanya</string>
+    <string name="planner_title">Hitung jumlah mingguan</string>
+    <string name="planner_intro">Isi yang kamu tahu saja. Yang dibiarkan kosong dihitung nol, dan tidak ada satu pun yang masuk ke anggaranmu sampai kamu menekan tombol di bawah.</string>
+    <string name="planner_open">Belum yakin? Hitung dulu</string>
+    <string name="planner_use">Pakai jumlah ini</string>
+    <string name="planner_result_label">Sisa untuk tiap minggu</string>
+    <string name="planner_note_empty">Isi semampunya. Angkanya berubah sambil kamu mengetik.</string>
+    <string name="planner_note_short">Dengan begitu tidak ada sisa untuk dibelanjakan tiap minggu. Periksa lagi angkanya — atau jangan kurangi belanja rutin di sini, catat saja minggu demi minggu.</string>
+    <string name="planner_note_monthly">%1$s per bulan masuk · %2$s per bulan keluar</string>
+    <string name="planner_how_often">Seberapa sering: %1$s</string>
+    <string name="planner_group_income">Uang yang masuk</string>
+    <string name="planner_group_income_help">Yang benar-benar masuk ke rekening, setelah pajak dan potongan.</string>
+    <string name="planner_group_fixed">Tagihan yang tidak berubah</string>
+    <string name="planner_group_fixed_help">Jumlah yang keluar entah kamu memikirkannya atau tidak. Tabungan juga masuk sini: uang yang sudah kamu putuskan untuk tidak dibelanjakan bukan uang belanja.</string>
+    <string name="planner_group_steady">Belanja rutin (opsional)</string>
+    <string name="planner_group_steady_help">Hal-hal yang naik turun sedikit tapi tidak pernah mengejutkan. Kurangi di sini dan mereka tidak masuk aplikasi; biarkan kosong dan catat minggu demi minggu. Pilih salah satu, jangan dua-duanya.</string>
+    <string name="planner_pay">Gaji bersih</string>
+    <string name="planner_other_income">Pemasukan lain</string>
+    <string name="planner_housing">Sewa atau cicilan rumah</string>
+    <string name="planner_utilities">Listrik, gas, air</string>
+    <string name="planner_phone">Telepon dan internet</string>
+    <string name="planner_insurance">Asuransi</string>
+    <string name="planner_transport">Cicilan mobil atau tiket langganan</string>
+    <string name="planner_debt">Pinjaman dan kartu kredit</string>
+    <string name="planner_subscriptions">Langganan</string>
+    <string name="planner_childcare">Penitipan anak atau uang sekolah</string>
+    <string name="planner_savings">Tabungan</string>
+    <string name="planner_other_fixed">Pengeluaran tetap lainnya</string>
+    <string name="planner_groceries">Belanja dapur</string>
+    <string name="planner_fuel">Bensin atau ongkos</string>
+    <string name="planner_household">Rumah tangga dan perlengkapan mandi</string>
+    <string name="planner_pets">Hewan peliharaan</string>
+    <string name="planner_other_steady">Belanja rutin lainnya</string>
+    <string name="period_weekly">Mingguan</string>
+    <string name="period_fortnightly">Tiap 2 minggu</string>
+    <string name="period_semi_monthly">Dua kali sebulan</string>
+    <string name="period_monthly">Bulanan</string>
+    <string name="period_yearly">Tahunan</string>
+    <string name="action_about">Tentang</string>
+    <string name="title_about">Tentang</string>
+    <string name="about_version">Versi %1$s</string>
+    <string name="about_body">Saya Andrew — orang biasa dari Calgary yang senang membuat perangkat lunak dan berpendapat lebih banyak di antaranya seharusnya gratis. Aplikasi ini tanpa iklan, tanpa akun, dan tanpa harga, dan tidak akan berubah. Saya membuatnya karena saya sendiri memakainya tiap minggu.\n\nKalau ada yang rusak, atau kamu ingin aplikasi ini bisa sesuatu yang belum bisa, kirim email ke saya. Semuanya saya baca.</string>
+    <string name="about_help">Butuh bantuan? Kirim email</string>
+    <string name="about_review">Tulis ulasan</string>
+    <string name="about_coffee">Traktir saya kopi</string>
+    <string name="about_coffee_note">Sepenuhnya opsional. Aplikasi ini tetap gratis.</string>
+    <string name="about_privacy">Privasi</string>
+    <string name="about_email_subject">Weekly Budget %1$s untuk Android</string>
+    <string name="error_no_email">Tidak ada aplikasi di sini yang bisa mengirim email.</string>
+    <string name="action_dense_layout">Tampilan ringkas</string>
+    <string name="week_dense_left">Sisa %1$s</string>
+    <string name="week_dense_over">Lebih %1$s</string>
+    <string name="carry_balance">Bawa sisa ke depan</string>
+    <string name="carry_balance_message">Bawa sisa %1$s ke minggu depan?</string>
+    <string name="carry_balance_expense_description">Sisa yang dibawa</string>
+    <string name="already_carried">Sisa minggu ini sudah dibawa ke depan</string>
+    <string name="error_network">Tidak bisa terhubung ke jaringan</string>
+    <string name="error_cant_edit">Gagal mengubah pengeluaran, coba lagi</string>
+    <string name="error_description_required">Tulis keterangan</string>
+    <string name="error_amount_required">Isi jumlahnya</string>
+    <string name="error_amount_invalid">Isi jumlah yang valid</string>
+    <string name="error_category_name_required">Isi nama kategori</string>
+    <string name="error_name_required">Isi nama</string>
+    <string name="error_budget_id_required">Isi ID anggaran</string>
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_expense_widget_description">Tambah pengeluaran ke anggaran mingguanmu</string>
+    <string name="widget_left_label">sisa</string>
+    <string name="widget_over_label">lebih</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Batal</string>
+    <string name="delete">Hapus</string>
+    <string name="rename">Ganti nama</string>
+
+    <plurals name="week_days_left">
+        <item quantity="other">Sisa %1$d hari</item>
+    </plurals>
+
+    <string-array name="array_weekdays">
+        <item>Minggu</item>
+        <item>Senin</item>
+        <item>Selasa</item>
+        <item>Rabu</item>
+        <item>Kamis</item>
+        <item>Jumat</item>
+        <item>Sabtu</item>
+    </string-array>
+
+</resources>

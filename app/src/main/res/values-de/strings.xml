@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    German. Addresses the user as "du", which is what consumer apps here do,
+    and keeps the button labels short: German runs roughly a third longer than
+    English and these sit in fixed-width buttons.
+-->
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_month">Monat</string>
+    <string name="title_categories">Kategorien</string>
+    <string name="title_category">Kategorien verwalten</string>
+    <string name="nav_week">Woche</string>
+    <string name="nav_month">Monat</string>
+    <string name="nav_categories">Kategorien</string>
+    <string name="segment_week">Diese Woche</string>
+    <string name="segment_month">Dieser Monat</string>
+    <string name="action_add">Ausgabe hinzufügen</string>
+    <string name="action_edit_categories">Kategorien verwalten</string>
+    <string name="action_today">Heute</string>
+    <string name="pick_week">Zu einer Woche springen</string>
+    <string name="pick_month">Zu einem Monat springen</string>
+    <string name="previous_period">Vorheriger Zeitraum</string>
+    <string name="next_period">Nächster Zeitraum</string>
+    <string name="week_remaining_label">Noch übrig</string>
+    <string name="week_over_label">Budget überschritten</string>
+    <string name="week_spent_of">%1$s von %2$s</string>
+    <string name="week_total_label">Diese Woche ausgegeben</string>
+    <string name="week_this_week">Diese Woche</string>
+    <string name="week_subtitle">%1$s · %2$s</string>
+    <string name="week_last_day">Letzter Tag</string>
+    <string name="week_empty_title">Noch nichts ausgegeben</string>
+    <string name="week_empty_body">Ausgaben, die du für diese Woche einträgst, erscheinen hier.</string>
+    <string name="month_total_label">Diesen Monat ausgegeben</string>
+    <string name="month_weekly_budget">Wochenbudget %1$s</string>
+    <string name="month_week_range">%1$s – %2$s</string>
+    <string name="month_over_by">%1$s darüber</string>
+    <string name="month_under_by">%1$s übrig</string>
+    <string name="month_empty_title">Keine Ausgaben diesen Monat</string>
+    <string name="month_empty_body">Trag Ausgaben im Tab Woche ein, hier werden sie zusammengefasst.</string>
+    <string name="category_share">%1$s%%</string>
+    <string name="category_tap_hint">Tippe auf eine Kategorie, um ihre Ausgaben zu sehen</string>
+    <string name="category_empty_title">Noch nichts zu zeigen</string>
+    <string name="category_empty_body">Sobald Ausgaben eine Kategorie haben, erscheint hier die Aufteilung.</string>
+    <string name="category_manage_empty_title">Noch keine Kategorien</string>
+    <string name="category_manage_empty_body">Leg beim Eintragen einer Ausgabe eine Kategorie an, dann steht sie hier.</string>
+    <string name="uncategorized">Ohne Kategorie</string>
+    <string name="category_context_rename">Kategorie umbenennen</string>
+    <string name="category_context_delete">Kategorie löschen</string>
+    <string name="category_delete_message">Ausgaben in „%1$s“ bleiben, verlieren aber ihre Kategorie.</string>
+    <string name="category_more_options">Weitere Optionen für %1$s</string>
+    <string name="title_activity_add_expense">Ausgabe hinzufügen</string>
+    <string name="edit_expense_title">Ausgabe bearbeiten</string>
+    <string name="add_date">Datum</string>
+    <string name="add_description">Beschreibung</string>
+    <string name="add_amount">Betrag</string>
+    <string name="add_amount_hint">0</string>
+    <string name="add_add">Ausgabe hinzufügen</string>
+    <string name="edit_button">Änderungen speichern</string>
+    <string name="label_pick_category">Kategorie</string>
+    <string name="label_new_category">Neue Kategorie…</string>
+    <string name="label_new_category_hint">Name der neuen Kategorie</string>
+    <string name="label_category_name_hint">Name der Kategorie</string>
+    <string name="label_no_category">Keine Kategorie</string>
+    <string name="pick_date">Datum wählen</string>
+    <string name="context_edit">Ausgabe bearbeiten</string>
+    <string name="context_delete">Ausgabe löschen</string>
+    <string name="context_copy">In die nächste Woche kopieren</string>
+    <string name="expense_options">Optionen für %1$s</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">Neues Budget</string>
+    <string name="title_activity_join_budget">Budget beitreten</string>
+    <string name="title_activity_switch_budget">Deine Budgets</string>
+    <string name="edit_budget_title">Budget bearbeiten</string>
+    <string name="first_headline">Wochenausgaben gemeinsam im Blick</string>
+    <string name="first_body">Leg einen Betrag für die Woche fest, trag Ausgaben unterwegs ein und sieh auf einen Blick, was übrig ist. Ein Budget lässt sich über mehrere Geräte teilen.</string>
+    <string name="button_new_budget">Budget anlegen</string>
+    <string name="button_join_budget">Mit ID beitreten</string>
+    <string name="button_create_budget">Budget anlegen</string>
+    <string name="button_edit_budget">Budget speichern</string>
+    <string name="button_go">Budget beitreten</string>
+    <string name="label_budget_name">Name des Budgets</string>
+    <string name="label_budget_name_helper">Zum Beispiel: Haushalt oder Einkaufen</string>
+    <string name="label_start_day">Woche beginnt am</string>
+    <string name="label_new_amount">Betrag pro Woche</string>
+    <string name="label_new_unique">Budget-ID</string>
+    <string name="label_new_unique_helper">Teile diese ID, damit ein anderes Gerät beitreten kann. Zum Kopieren tippen.</string>
+    <string name="label_join_unique_id">Budget-ID</string>
+    <string name="label_join_helper">Füg die ID von dem Gerät ein, auf dem das Budget schon liegt.</string>
+    <string name="current_budget">Aktuelles Budget</string>
+    <string name="current_budget_named">Aktuell: %1$s</string>
+    <string name="context_remove_budget">Von diesem Gerät entfernen</string>
+    <string name="budget_weekly_amount">%1$s pro Woche</string>
+    <string name="budget_selected">Aktuelles Budget</string>
+    <string name="copied_unique_id">Budget-ID kopiert</string>
+    <string name="copy_budget_id">Budget-ID kopieren</string>
+    <string name="action_other_devices">Apps für andere Geräte</string>
+    <string name="apps_announcement_title">Dein Budget ist jetzt überall dabei</string>
+    <string name="apps_announcement_body">Dasselbe Budget öffnet sich auf dem iPhone — dort heißt es Weekly Spend, weil dieser Name vergeben war — und unter budget.andrewovens.com in jedem Browser. Alles bleibt synchron, du kannst eine Ausgabe also überall eintragen.</string>
+    <string name="apps_announcement_dismiss">Jetzt nicht</string>
+    <string name="error_no_browser">Hier kann keine App eine Webseite öffnen.</string>
+    <string name="invite_joining">Budget wird beigetreten…</string>
+    <string name="invite_unusable_title">Einladung ungültig</string>
+    <string name="invite_unusable_body">Diese Einladung wurde schon benutzt oder ist abgelaufen. Eine Einladung gilt nur einmal — frag nach einer neuen, dann klappt es.</string>
+    <string name="invite_failed_title">Beitritt nicht möglich</string>
+    <string name="invite_failed_body">Prüf deine Verbindung und öffne den Link noch einmal.</string>
+    <string name="action_invite">Jemanden einladen</string>
+    <string name="invite_share_subject">Tritt meinem Wochenbudget bei</string>
+    <string name="invite_share_text">Tipp hier, um mein Wochenbudget zu teilen: %1$s</string>
+    <string name="error_invite_failed">Einladung konnte nicht erstellt werden. Bitte nochmal versuchen.</string>
+    <string name="invite_save_first">Leg zuerst das Budget an, dann kannst du jemanden einladen.</string>
+    <string name="tutorial_title">So funktioniert es</string>
+    <string name="tutorial_skip">Überspringen</string>
+    <string name="tutorial_next">Weiter</string>
+    <string name="tutorial_done">Los geht\'s</string>
+    <string name="tutorial_close">Fertig</string>
+    <string name="tutorial_page">Seite %1$d von %2$d</string>
+    <string name="tutorial_1_title">Budgetier dein frei verfügbares Geld</string>
+    <string name="tutorial_1_body">Fang außerhalb der App an. Nimm, was reinkommt, zieh die Rechnungen ab, die sich nie ändern — Miete, Versicherungen, Abos, Kreditraten — und was übrig bleibt, ist dein Geld zum Ausgeben.\n\nTeil das auf die Wochen im Monat auf, und du hast dein Wochenziel.</string>
+    <string name="tutorial_1_action">Rechnen wir es aus</string>
+    <string name="tutorial_2_title">Feste Rechnungen gehören nicht hierher</string>
+    <string name="tutorial_2_body">Es gibt bewusst keine Stelle für wiederkehrende Einnahmen oder Ausgaben. Diese Beträge stehen ohnehin fest, und ohne sie bleibt die App bei der einen Zahl, die sich wirklich bewegt: was du diese Woche ausgegeben hast.\n\nKommt mitten in der Woche Geld rein — eine Erstattung, ein Geschenk, ein Cashback — trag es als Ausgabe mit Minuszeichen ein.</string>
+    <string name="tutorial_3_title">Teil es mit deiner Partnerin oder deinem Partner</string>
+    <string name="tutorial_3_body">Ein Budget kann auf beliebig vielen Geräten liegen, und alle bleiben synchron.\n\nÖffne Budget bearbeiten, tippe auf Jemanden einladen und schick den Link. Wer ihn öffnet, tritt diesem Budget bei, und ihr seht beide dieselbe Summe.\n\nDer Link gilt einmal und läuft nach einer Woche ab — weitergeleitet richtet er also keinen Schaden an.</string>
+    <string name="tutorial_4_title">iPhone? Dafür gibt es eine App</string>
+    <string name="tutorial_4_body">Es gibt auch eine iPhone-App — sie heißt Weekly Spend, weil dieser Name vergeben war — und budget.andrewovens.com öffnet sich in jedem Browser. Alle drei arbeiten am selben Budget.\n\nDie Links stehen unter Budget bearbeiten, bei Apps für andere Geräte.</string>
+    <string name="action_how_it_works">So funktioniert es</string>
+    <string name="planner_title">Wochenbetrag ausrechnen</string>
+    <string name="planner_intro">Beantworte, was du weißt. Was leer bleibt, zählt als null, und nichts davon landet in deinem Budget, bis du unten auf den Knopf tippst.</string>
+    <string name="planner_open">Unsicher? Rechne es aus</string>
+    <string name="planner_use">Diesen Betrag übernehmen</string>
+    <string name="planner_result_label">Pro Woche übrig</string>
+    <string name="planner_note_empty">Füll aus, was du kannst. Die Zahl aktualisiert sich beim Tippen.</string>
+    <string name="planner_note_short">So bleibt pro Woche nichts zum Ausgeben. Prüf die Zahlen — oder lass die regelmäßigen Ausgaben weg und trag sie hier Woche für Woche ein.</string>
+    <string name="planner_note_monthly">%1$s im Monat rein · %2$s im Monat raus</string>
+    <string name="planner_how_often">Wie oft: %1$s</string>
+    <string name="planner_group_income">Was reinkommt</string>
+    <string name="planner_group_income_help">Was tatsächlich auf dem Konto landet, nach Steuern und Abzügen.</string>
+    <string name="planner_group_fixed">Rechnungen, die sich nicht ändern</string>
+    <string name="planner_group_fixed_help">Die Beträge, die abgehen, ob du an sie denkst oder nicht. Sparen gehört auch hierher: Geld, das du nicht ausgeben willst, ist kein Geld zum Ausgeben.</string>
+    <string name="planner_group_steady">Regelmäßige Ausgaben (optional)</string>
+    <string name="planner_group_steady_help">Dinge, die etwas schwanken, dich aber nie überraschen. Zieh sie hier ab, dann bleiben sie aus der App heraus; lass sie leer und trag sie Woche für Woche ein. Das eine oder das andere, nicht beides.</string>
+    <string name="planner_pay">Nettogehalt</string>
+    <string name="planner_other_income">Weitere Einnahmen</string>
+    <string name="planner_housing">Miete oder Kreditrate</string>
+    <string name="planner_utilities">Strom, Heizung, Wasser</string>
+    <string name="planner_phone">Telefon und Internet</string>
+    <string name="planner_insurance">Versicherungen</string>
+    <string name="planner_transport">Auto oder Ticket</string>
+    <string name="planner_debt">Kredite und Karten</string>
+    <string name="planner_subscriptions">Abos</string>
+    <string name="planner_childcare">Kita oder Schulgebühren</string>
+    <string name="planner_savings">Sparen</string>
+    <string name="planner_other_fixed">Sonstiges Festes</string>
+    <string name="planner_groceries">Lebensmittel</string>
+    <string name="planner_fuel">Sprit oder Fahrkarten</string>
+    <string name="planner_household">Haushalt und Drogerie</string>
+    <string name="planner_pets">Haustiere</string>
+    <string name="planner_other_steady">Sonstiges Regelmäßiges</string>
+    <string name="period_weekly">Wöchentlich</string>
+    <string name="period_fortnightly">Alle 2 Wochen</string>
+    <string name="period_semi_monthly">Zweimal im Monat</string>
+    <string name="period_monthly">Monatlich</string>
+    <string name="period_yearly">Jährlich</string>
+    <string name="action_about">Über die App</string>
+    <string name="title_about">Über die App</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_body">Ich bin Andrew — einfach ein Typ aus Calgary, der gern Software baut und findet, dass mehr davon kostenlos sein sollte. Diese App hat keine Werbung, keine Konten und keinen Preis, und daran wird sich nichts ändern. Ich baue sie, weil ich sie selbst jede Woche benutze.\n\nWenn etwas kaputt ist oder sie etwas können soll, was sie nicht kann, schreib mir. Ich lese alles.</string>
+    <string name="about_help">Brauchst du Hilfe? Schreib mir</string>
+    <string name="about_review">Bewertung schreiben</string>
+    <string name="about_coffee">Spendier mir einen Kaffee</string>
+    <string name="about_coffee_note">Völlig freiwillig. Die App ist so oder so kostenlos.</string>
+    <string name="about_privacy">Datenschutz</string>
+    <string name="about_email_subject">Weekly Budget %1$s für Android</string>
+    <string name="error_no_email">Hier kann keine App E-Mails senden.</string>
+    <string name="action_dense_layout">Kompakte Ansicht</string>
+    <string name="week_dense_left">%1$s übrig</string>
+    <string name="week_dense_over">%1$s drüber</string>
+    <string name="carry_balance">Rest übertragen</string>
+    <string name="carry_balance_message">Die verbleibenden %1$s in die nächste Woche übertragen?</string>
+    <string name="carry_balance_expense_description">Übertragener Rest</string>
+    <string name="already_carried">Der Rest dieser Woche wurde bereits übertragen</string>
+    <string name="error_network">Keine Verbindung zum Netzwerk</string>
+    <string name="error_cant_edit">Fehler beim Bearbeiten der Ausgabe, bitte nochmal versuchen</string>
+    <string name="error_description_required">Gib eine Beschreibung ein</string>
+    <string name="error_amount_required">Gib einen Betrag ein</string>
+    <string name="error_amount_invalid">Gib einen gültigen Betrag ein</string>
+    <string name="error_category_name_required">Gib einen Kategorienamen ein</string>
+    <string name="error_name_required">Gib einen Namen ein</string>
+    <string name="error_budget_id_required">Gib eine Budget-ID ein</string>
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_expense_widget_description">Eine Ausgabe zum Wochenbudget hinzufügen</string>
+    <string name="widget_left_label">übrig</string>
+    <string name="widget_over_label">drüber</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="delete">Löschen</string>
+    <string name="rename">Umbenennen</string>
+
+    <plurals name="week_days_left">
+        <item quantity="one">Noch %1$d Tag</item>
+        <item quantity="other">Noch %1$d Tage</item>
+    </plurals>
+
+    <string-array name="array_weekdays">
+        <item>Sonntag</item>
+        <item>Montag</item>
+        <item>Dienstag</item>
+        <item>Mittwoch</item>
+        <item>Donnerstag</item>
+        <item>Freitag</item>
+        <item>Samstag</item>
+    </string-array>
+
+</resources>

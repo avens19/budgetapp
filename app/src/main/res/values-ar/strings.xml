@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Arabic. Right to left: the layouts already use start/end padding and the
+    manifest already declares supportsRtl, so the mirroring is automatic.
+    The plural carries all six quantities Arabic distinguishes.
+-->
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_month">الشهر</string>
+    <string name="title_categories">الفئات</string>
+    <string name="title_category">إدارة الفئات</string>
+    <string name="nav_week">الأسبوع</string>
+    <string name="nav_month">الشهر</string>
+    <string name="nav_categories">الفئات</string>
+    <string name="segment_week">هذا الأسبوع</string>
+    <string name="segment_month">هذا الشهر</string>
+    <string name="action_add">إضافة مصروف</string>
+    <string name="action_edit_categories">إدارة الفئات</string>
+    <string name="action_today">اليوم</string>
+    <string name="pick_week">الانتقال إلى أسبوع</string>
+    <string name="pick_month">الانتقال إلى شهر</string>
+    <string name="previous_period">الفترة السابقة</string>
+    <string name="next_period">الفترة التالية</string>
+    <string name="week_remaining_label">المتبقي للإنفاق</string>
+    <string name="week_over_label">تجاوزت الميزانية</string>
+    <string name="week_spent_of">%1$s من %2$s</string>
+    <string name="week_total_label">المصروف هذا الأسبوع</string>
+    <string name="week_this_week">هذا الأسبوع</string>
+    <string name="week_subtitle">%1$s · %2$s</string>
+    <string name="week_last_day">اليوم الأخير</string>
+    <string name="week_empty_title">لا مصروفات بعد</string>
+    <string name="week_empty_body">المصروفات التي تضيفها لهذا الأسبوع ستظهر هنا.</string>
+    <string name="month_total_label">المصروف هذا الشهر</string>
+    <string name="month_weekly_budget">الميزانية الأسبوعية %1$s</string>
+    <string name="month_week_range">%1$s – %2$s</string>
+    <string name="month_over_by">تجاوز بمقدار %1$s</string>
+    <string name="month_under_by">يتبقى %1$s</string>
+    <string name="month_empty_title">لا مصروفات هذا الشهر</string>
+    <string name="month_empty_body">أضف المصروفات في تبويب الأسبوع وستُجمع هنا.</string>
+    <string name="category_share">%1$s%%</string>
+    <string name="category_tap_hint">اضغط على فئة لعرض مصروفاتها</string>
+    <string name="category_empty_title">لا شيء لعرضه بعد</string>
+    <string name="category_empty_body">بمجرد وضع فئات للمصروفات سيظهر التوزيع هنا.</string>
+    <string name="category_manage_empty_title">لا فئات بعد</string>
+    <string name="category_manage_empty_body">أنشئ فئة أثناء إضافة مصروف وستظهر هنا.</string>
+    <string name="uncategorized">بدون فئة</string>
+    <string name="category_context_rename">إعادة تسمية الفئة</string>
+    <string name="category_context_delete">حذف الفئة</string>
+    <string name="category_delete_message">تبقى مصروفات «%1$s» موجودة، لكنها تفقد فئتها.</string>
+    <string name="category_more_options">خيارات أخرى لـ %1$s</string>
+    <string name="title_activity_add_expense">إضافة مصروف</string>
+    <string name="edit_expense_title">تعديل المصروف</string>
+    <string name="add_date">التاريخ</string>
+    <string name="add_description">الوصف</string>
+    <string name="add_amount">المبلغ</string>
+    <string name="add_amount_hint">0</string>
+    <string name="add_add">إضافة المصروف</string>
+    <string name="edit_button">حفظ التغييرات</string>
+    <string name="label_pick_category">الفئة</string>
+    <string name="label_new_category">فئة جديدة…</string>
+    <string name="label_new_category_hint">اسم الفئة الجديدة</string>
+    <string name="label_category_name_hint">اسم الفئة</string>
+    <string name="label_no_category">بدون فئة</string>
+    <string name="pick_date">اختيار التاريخ</string>
+    <string name="context_edit">تعديل المصروف</string>
+    <string name="context_delete">حذف المصروف</string>
+    <string name="context_copy">نسخ إلى الأسبوع القادم</string>
+    <string name="expense_options">خيارات %1$s</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">ميزانية جديدة</string>
+    <string name="title_activity_join_budget">الانضمام إلى ميزانية</string>
+    <string name="title_activity_switch_budget">ميزانياتك</string>
+    <string name="edit_budget_title">تعديل الميزانية</string>
+    <string name="first_headline">تابعوا مصروف الأسبوع معًا</string>
+    <string name="first_body">حدد مبلغًا للأسبوع، وأضف المصروفات أولًا بأول، وشاهد المتبقي بنظرة واحدة. شارك ميزانية واحدة بين عدة أجهزة.</string>
+    <string name="button_new_budget">إنشاء ميزانية</string>
+    <string name="button_join_budget">الانضمام بمعرّف</string>
+    <string name="button_create_budget">إنشاء الميزانية</string>
+    <string name="button_edit_budget">حفظ الميزانية</string>
+    <string name="button_go">الانضمام إلى الميزانية</string>
+    <string name="label_budget_name">اسم الميزانية</string>
+    <string name="label_budget_name_helper">مثلًا: المنزل أو البقالة</string>
+    <string name="label_start_day">يبدأ الأسبوع يوم</string>
+    <string name="label_new_amount">المبلغ الأسبوعي</string>
+    <string name="label_new_unique">معرّف الميزانية</string>
+    <string name="label_new_unique_helper">شارك هذا المعرّف لينضم جهاز آخر. اضغط للنسخ.</string>
+    <string name="label_join_unique_id">معرّف الميزانية</string>
+    <string name="label_join_helper">الصق المعرّف من الجهاز الذي لديه الميزانية بالفعل.</string>
+    <string name="current_budget">الميزانية الحالية</string>
+    <string name="current_budget_named">الحالية: %1$s</string>
+    <string name="context_remove_budget">إزالة من هذا الجهاز</string>
+    <string name="budget_weekly_amount">%1$s أسبوعيًا</string>
+    <string name="budget_selected">الميزانية الحالية</string>
+    <string name="copied_unique_id">تم نسخ معرّف الميزانية</string>
+    <string name="copy_budget_id">نسخ معرّف الميزانية</string>
+    <string name="action_other_devices">تطبيقات للأجهزة الأخرى</string>
+    <string name="apps_announcement_title">ميزانيتك تنتقل معك الآن</string>
+    <string name="apps_announcement_body">الميزانية نفسها تُفتح على الآيفون — باسم Weekly Spend، لأن هذا الاسم كان محجوزًا — وعلى budget.andrewovens.com في أي متصفح. كل شيء يبقى متزامنًا، فتستطيع إضافة مصروف أينما كنت.</string>
+    <string name="apps_announcement_dismiss">ليس الآن</string>
+    <string name="error_no_browser">لا يوجد هنا تطبيق يستطيع فتح صفحة ويب.</string>
+    <string name="invite_joining">جارٍ الانضمام إلى الميزانية…</string>
+    <string name="invite_unusable_title">الدعوة غير صالحة</string>
+    <string name="invite_unusable_body">هذه الدعوة استُخدمت من قبل أو انتهت صلاحيتها. كل دعوة تصلح مرة واحدة — اطلب واحدة جديدة وستعمل.</string>
+    <string name="invite_failed_title">تعذّر الانضمام</string>
+    <string name="invite_failed_body">تحقق من اتصالك وافتح الرابط مرة أخرى.</string>
+    <string name="action_invite">دعوة شخص</string>
+    <string name="invite_share_subject">انضم إلى ميزانيتي الأسبوعية</string>
+    <string name="invite_share_text">اضغط هنا لمشاركة ميزانيتي الأسبوعية: %1$s</string>
+    <string name="error_invite_failed">تعذّر إنشاء الدعوة. حاول مرة أخرى.</string>
+    <string name="invite_save_first">أنشئ الميزانية أولًا ثم ادعُ شخصًا إليها.</string>
+    <string name="tutorial_title">كيف يعمل هذا</string>
+    <string name="tutorial_skip">تخطٍ</string>
+    <string name="tutorial_next">التالي</string>
+    <string name="tutorial_done">لنبدأ</string>
+    <string name="tutorial_close">تم</string>
+    <string name="tutorial_page">صفحة %1$d من %2$d</string>
+    <string name="tutorial_1_title">ضع ميزانية لمصروفك</string>
+    <string name="tutorial_1_body">ابدأ خارج التطبيق. خذ دخلك، واطرح الفواتير التي لا تتغير — الإيجار والتأمين والاشتراكات وأقساط القروض — وما يتبقى هو مصروفك.\n\nوزّعه على أسابيع الشهر، فيكون لديك هدفك الأسبوعي.</string>
+    <string name="tutorial_1_action">لنحسبها معًا</string>
+    <string name="tutorial_2_title">الفواتير الثابتة ليس مكانها هنا</string>
+    <string name="tutorial_2_body">لا يوجد هنا عمدًا مكان لإدخال دخل أو مصروف متكرر. تلك المبالغ محددة أصلًا، وتركها خارجًا يُبقي التطبيق على الرقم الوحيد الذي يتحرك فعلًا: كم أنفقت هذا الأسبوع.\n\nإذا دخل مال في منتصف الأسبوع — استرداد أو هدية أو استرجاع نقدي — أضفه كمصروف بإشارة سالبة.</string>
+    <string name="tutorial_3_title">شاركها مع شريكك</string>
+    <string name="tutorial_3_body">يمكن للميزانية الواحدة أن تعيش على أي عدد من الأجهزة، وتبقى كلها متطابقة.\n\nافتح «تعديل الميزانية»، واضغط «دعوة شخص»، وأرسل الرابط. من يفتحه ينضم إلى هذه الميزانية، وسترون المجموع نفسه.\n\nالرابط يعمل مرة واحدة وتنتهي صلاحيته بعد أسبوع، فإعادة إرساله غير ضارة.</string>
+    <string name="tutorial_4_title">لديك آيفون؟ يوجد تطبيق</string>
+    <string name="tutorial_4_body">يوجد تطبيق للآيفون أيضًا — باسم Weekly Spend، لأن هذا الاسم كان محجوزًا — وموقع budget.andrewovens.com يفتح في أي متصفح. الثلاثة تعمل على الميزانية نفسها.\n\nالروابط في «تعديل الميزانية»، ضمن «تطبيقات للأجهزة الأخرى».</string>
+    <string name="action_how_it_works">كيف يعمل هذا</string>
+    <string name="planner_title">احسب مبلغ الأسبوع</string>
+    <string name="planner_intro">أجب عمّا تعرفه. ما تتركه فارغًا يُحسب صفرًا، ولا شيء من هذا يصل إلى ميزانيتك حتى تضغط الزر في الأسفل.</string>
+    <string name="planner_open">غير متأكد؟ احسبها</string>
+    <string name="planner_use">استخدام هذا المبلغ</string>
+    <string name="planner_result_label">المتبقي للإنفاق كل أسبوع</string>
+    <string name="planner_note_empty">املأ ما تستطيع. الرقم يتغير أثناء الكتابة.</string>
+    <string name="planner_note_short">بهذا لا يتبقى شيء للإنفاق كل أسبوع. راجع الأرقام — أو اترك المصروف المنتظم خارج الحساب وسجّله هنا أسبوعًا بأسبوع.</string>
+    <string name="planner_note_monthly">%1$s شهريًا داخل · %2$s شهريًا خارج</string>
+    <string name="planner_how_often">كل كم: %1$s</string>
+    <string name="planner_group_income">المال الداخل</string>
+    <string name="planner_group_income_help">ما يصل فعلًا إلى الحساب، بعد الضرائب والاستقطاعات.</string>
+    <string name="planner_group_fixed">فواتير لا تتغير</string>
+    <string name="planner_group_fixed_help">المبالغ التي تخرج سواء فكرت فيها أم لا. الادخار هنا أيضًا: المال الذي قررت ألا تنفقه ليس مالًا للإنفاق.</string>
+    <string name="planner_group_steady">مصروف منتظم (اختياري)</string>
+    <string name="planner_group_steady_help">أشياء تتغير قليلًا لكنها لا تفاجئك أبدًا. اطرحها هنا فتبقى خارج التطبيق، أو اتركها فارغة وسجّلها أسبوعًا بأسبوع. أحد الأمرين، لا كلاهما.</string>
+    <string name="planner_pay">الراتب الصافي</string>
+    <string name="planner_other_income">دخل آخر</string>
+    <string name="planner_housing">الإيجار أو قسط السكن</string>
+    <string name="planner_utilities">الكهرباء والتدفئة والماء</string>
+    <string name="planner_phone">الهاتف والإنترنت</string>
+    <string name="planner_insurance">التأمين</string>
+    <string name="planner_transport">السيارة أو اشتراك المواصلات</string>
+    <string name="planner_debt">القروض والبطاقات</string>
+    <string name="planner_subscriptions">الاشتراكات</string>
+    <string name="planner_childcare">الحضانة أو رسوم المدرسة</string>
+    <string name="planner_savings">الادخار</string>
+    <string name="planner_other_fixed">أي مصروف ثابت آخر</string>
+    <string name="planner_groceries">البقالة</string>
+    <string name="planner_fuel">الوقود أو التذاكر</string>
+    <string name="planner_household">المنزل والعناية الشخصية</string>
+    <string name="planner_pets">الحيوانات الأليفة</string>
+    <string name="planner_other_steady">أي مصروف منتظم آخر</string>
+    <string name="period_weekly">أسبوعيًا</string>
+    <string name="period_fortnightly">كل أسبوعين</string>
+    <string name="period_semi_monthly">مرتين شهريًا</string>
+    <string name="period_monthly">شهريًا</string>
+    <string name="period_yearly">سنويًا</string>
+    <string name="action_about">حول التطبيق</string>
+    <string name="title_about">حول التطبيق</string>
+    <string name="about_version">الإصدار %1$s</string>
+    <string name="about_body">أنا أندرو — رجل من كالغاري يحب صناعة البرمجيات ويرى أن المزيد منها يجب أن يكون مجانيًا. هذا التطبيق بلا إعلانات ولا حسابات ولا سعر، ولن يتغير ذلك. أصنعه لأنني أستخدمه بنفسي كل أسبوع.\n\nإذا تعطل شيء، أو أردته أن يفعل ما لا يفعله، راسلني. أقرأ كل الرسائل.</string>
+    <string name="about_help">تحتاج مساعدة؟ راسلني</string>
+    <string name="about_review">اكتب تقييمًا</string>
+    <string name="about_coffee">ادعُني إلى قهوة</string>
+    <string name="about_coffee_note">اختياري تمامًا. التطبيق مجاني في الحالتين.</string>
+    <string name="about_privacy">الخصوصية</string>
+    <string name="about_email_subject">Weekly Budget %1$s لأندرويد</string>
+    <string name="error_no_email">لا يوجد هنا تطبيق يستطيع إرسال بريد.</string>
+    <string name="action_dense_layout">عرض مضغوط</string>
+    <string name="week_dense_left">يتبقى %1$s</string>
+    <string name="week_dense_over">تجاوز %1$s</string>
+    <string name="carry_balance">ترحيل الرصيد</string>
+    <string name="carry_balance_message">ترحيل المتبقي %1$s إلى الأسبوع القادم؟</string>
+    <string name="carry_balance_expense_description">رصيد مرحّل</string>
+    <string name="already_carried">رصيد هذا الأسبوع مُرحّل بالفعل</string>
+    <string name="error_network">تعذّر الاتصال بالشبكة</string>
+    <string name="error_cant_edit">خطأ أثناء تعديل المصروف، حاول مرة أخرى</string>
+    <string name="error_description_required">اكتب وصفًا</string>
+    <string name="error_amount_required">أدخل مبلغًا</string>
+    <string name="error_amount_invalid">أدخل مبلغًا صحيحًا</string>
+    <string name="error_category_name_required">أدخل اسم فئة</string>
+    <string name="error_name_required">أدخل اسمًا</string>
+    <string name="error_budget_id_required">أدخل معرّف ميزانية</string>
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_expense_widget_description">إضافة مصروف إلى ميزانيتك الأسبوعية</string>
+    <string name="widget_left_label">متبقٍ</string>
+    <string name="widget_over_label">تجاوز</string>
+    <string name="ok">حسنًا</string>
+    <string name="cancel">إلغاء</string>
+    <string name="delete">حذف</string>
+    <string name="rename">إعادة تسمية</string>
+
+    <plurals name="week_days_left">
+        <item quantity="zero">لا أيام متبقية</item>
+        <item quantity="one">يتبقى يوم واحد</item>
+        <item quantity="two">يتبقى يومان</item>
+        <item quantity="few">تتبقى %1$d أيام</item>
+        <item quantity="many">يتبقى %1$d يومًا</item>
+        <item quantity="other">يتبقى %1$d يوم</item>
+    </plurals>
+
+    <string-array name="array_weekdays">
+        <item>الأحد</item>
+        <item>الاثنين</item>
+        <item>الثلاثاء</item>
+        <item>الأربعاء</item>
+        <item>الخميس</item>
+        <item>الجمعة</item>
+        <item>السبت</item>
+    </string-array>
+
+</resources>

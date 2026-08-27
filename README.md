@@ -44,6 +44,28 @@ contract: `@id/toolbar` takes the status bar, `@id/bottom_nav` takes the
 navigation bar (and the IME on screens without one), the root takes the
 horizontal insets.
 
+## Languages
+
+English is the source of truth in `res/values/strings.xml`; twenty locales sit
+beside it, chosen for Android install base: es, es-US, pt-BR, pt-PT, fr, de,
+it, nl, ru, uk, pl, tr, ar, hi, in, ja, ko, zh-CN, zh-TW, vi.
+
+- Indonesian is `values-in`, not `values-id`. Android inherited Java's legacy
+  code, and a device set to Indonesian looks for `in`.
+- Arabic is right to left, which the layouts already handle: padding is
+  start/end throughout and the manifest declares `supportsRtl`.
+- The four dialect pairs (es/es-US, pt-BR/pt-PT, zh-CN/zh-TW) are separate
+  translations rather than copies. They differ in the words this app uses most.
+- Lint runs with `warningsAsErrors`, so a string added to the default locale and
+  not to the other twenty fails the build. That is deliberate: the alternative
+  is a screen that is half translated.
+
+Two lint checks bite when translating. `MissingQuantity` wants every plural
+category CLDR defines for the language, including the `many` that Romance
+languages use only for large numbers; and `Typos` flags repeated words, which
+catches correct constructions like German "das das" and Turkish "hafta hafta" —
+those get reworded rather than suppressed, so the check keeps working.
+
 ## Talking to the API
 
 `API` reads its base URL from `BuildConfig.API_BASE_URL`. Release builds point

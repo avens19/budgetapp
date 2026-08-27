@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Traditional Chinese (Taiwan). Not a character conversion of values-zh-rCN:
+    the everyday vocabulary differs (應用程式 vs 应用, 網路 vs 网络, 儲存 vs 保存).
+-->
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_month">月</string>
+    <string name="title_categories">分類</string>
+    <string name="title_category">管理分類</string>
+    <string name="nav_week">週</string>
+    <string name="nav_month">月</string>
+    <string name="nav_categories">分類</string>
+    <string name="segment_week">本週</string>
+    <string name="segment_month">本月</string>
+    <string name="action_add">新增支出</string>
+    <string name="action_edit_categories">管理分類</string>
+    <string name="action_today">今天</string>
+    <string name="pick_week">跳到某一週</string>
+    <string name="pick_month">跳到某一月</string>
+    <string name="previous_period">上一期</string>
+    <string name="next_period">下一期</string>
+    <string name="week_remaining_label">還能花</string>
+    <string name="week_over_label">已超出預算</string>
+    <string name="week_spent_of">%2$s 中的 %1$s</string>
+    <string name="week_total_label">本週支出</string>
+    <string name="week_this_week">本週</string>
+    <string name="week_subtitle">%1$s · %2$s</string>
+    <string name="week_last_day">最後一天</string>
+    <string name="week_empty_title">還沒有支出</string>
+    <string name="week_empty_body">你為本週新增的支出會顯示在這裡。</string>
+    <string name="month_total_label">本月支出</string>
+    <string name="month_weekly_budget">每週預算 %1$s</string>
+    <string name="month_week_range">%1$s – %2$s</string>
+    <string name="month_over_by">超出 %1$s</string>
+    <string name="month_under_by">還剩 %1$s</string>
+    <string name="month_empty_title">本月沒有支出</string>
+    <string name="month_empty_body">在「週」分頁新增支出，這裡會加總。</string>
+    <string name="category_share">%1$s%%</string>
+    <string name="category_tap_hint">點一下分類就能看到它的支出</string>
+    <string name="category_empty_title">目前沒有可顯示的內容</string>
+    <string name="category_empty_body">幫支出加上分類後，這裡會顯示比例。</string>
+    <string name="category_manage_empty_title">還沒有分類</string>
+    <string name="category_manage_empty_body">新增支出時建立分類，它就會出現在這裡。</string>
+    <string name="uncategorized">未分類</string>
+    <string name="category_context_rename">重新命名分類</string>
+    <string name="category_context_delete">刪除分類</string>
+    <string name="category_delete_message">「%1$s」裡的支出會保留，但會失去分類。</string>
+    <string name="category_more_options">%1$s 的更多操作</string>
+    <string name="title_activity_add_expense">新增支出</string>
+    <string name="edit_expense_title">編輯支出</string>
+    <string name="add_date">日期</string>
+    <string name="add_description">說明</string>
+    <string name="add_amount">金額</string>
+    <string name="add_amount_hint">0</string>
+    <string name="add_add">新增支出</string>
+    <string name="edit_button">儲存變更</string>
+    <string name="label_pick_category">分類</string>
+    <string name="label_new_category">新分類…</string>
+    <string name="label_new_category_hint">新分類的名稱</string>
+    <string name="label_category_name_hint">分類名稱</string>
+    <string name="label_no_category">不分類</string>
+    <string name="pick_date">選擇日期</string>
+    <string name="context_edit">編輯支出</string>
+    <string name="context_delete">刪除支出</string>
+    <string name="context_copy">複製到下週</string>
+    <string name="expense_options">%1$s 的操作</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">新預算</string>
+    <string name="title_activity_join_budget">加入預算</string>
+    <string name="title_activity_switch_budget">你的預算</string>
+    <string name="edit_budget_title">編輯預算</string>
+    <string name="first_headline">一起顧好這週的開銷</string>
+    <string name="first_body">先訂下一週的額度，隨手記下支出，一眼就看得到還剩多少。同一個預算可以在多台裝置上共用。</string>
+    <string name="button_new_budget">建立預算</string>
+    <string name="button_join_budget">用 ID 加入</string>
+    <string name="button_create_budget">建立預算</string>
+    <string name="button_edit_budget">儲存預算</string>
+    <string name="button_go">加入預算</string>
+    <string name="label_budget_name">預算名稱</string>
+    <string name="label_budget_name_helper">例如：家用，或買菜</string>
+    <string name="label_start_day">每週開始於</string>
+    <string name="label_new_amount">每週金額</string>
+    <string name="label_new_unique">預算 ID</string>
+    <string name="label_new_unique_helper">把這個 ID 分享出去，另一台裝置就能加入。點一下複製。</string>
+    <string name="label_join_unique_id">預算 ID</string>
+    <string name="label_join_helper">貼上已經有這個預算的裝置上的 ID。</string>
+    <string name="current_budget">目前的預算</string>
+    <string name="current_budget_named">目前：%1$s</string>
+    <string name="context_remove_budget">從這台裝置移除</string>
+    <string name="budget_weekly_amount">每週 %1$s</string>
+    <string name="budget_selected">目前的預算</string>
+    <string name="copied_unique_id">已複製預算 ID</string>
+    <string name="copy_budget_id">複製預算 ID</string>
+    <string name="action_other_devices">其他裝置的應用程式</string>
+    <string name="apps_announcement_title">預算現在可以帶著走</string>
+    <string name="apps_announcement_body">同一個預算也能在 iPhone 上打開——那邊叫 Weekly Spend，因為這個名字已經有人用了——用任何瀏覽器也能連到 budget.andrewovens.com。所有資料保持同步，你在哪裡都能記上一筆。</string>
+    <string name="apps_announcement_dismiss">之後再說</string>
+    <string name="error_no_browser">這裡沒有可以開啟網頁的應用程式。</string>
+    <string name="invite_joining">正在加入預算…</string>
+    <string name="invite_unusable_title">邀請無效</string>
+    <string name="invite_unusable_body">這個邀請已經用過，或是已經過期。每個邀請只能用一次——再要一個就可以了。</string>
+    <string name="invite_failed_title">無法加入</string>
+    <string name="invite_failed_body">檢查網路連線，然後重新打開連結。</string>
+    <string name="action_invite">邀請別人</string>
+    <string name="invite_share_subject">加入我的每週預算</string>
+    <string name="invite_share_text">點這裡加入我的每週預算：%1$s</string>
+    <string name="error_invite_failed">建立邀請失敗，請再試一次。</string>
+    <string name="invite_save_first">先建立預算，再邀請別人。</string>
+    <string name="tutorial_title">這是怎麼用的</string>
+    <string name="tutorial_skip">略過</string>
+    <string name="tutorial_next">下一步</string>
+    <string name="tutorial_done">開始使用</string>
+    <string name="tutorial_close">完成</string>
+    <string name="tutorial_page">第 %1$d 頁，共 %2$d 頁</string>
+    <string name="tutorial_1_title">替自己的零用錢做預算</string>
+    <string name="tutorial_1_body">先在應用程式外面算一下。拿收入減掉每月不變的帳單——房租、保險、訂閱、貸款——剩下的就是你可以花的錢。\n\n把它分攤到一個月的每一週，就是你的每週目標。</string>
+    <string name="tutorial_1_action">陪我一起算</string>
+    <string name="tutorial_2_title">固定帳單不放這裡</string>
+    <string name="tutorial_2_body">這裡刻意沒有記錄固定收入和固定支出的地方。那些數字本來就定好了，把它們排除在外，應用程式才能只盯著真正會變的那個數字：你這週花了多少。\n\n如果週間有錢進來——退款、紅包、回饋——就用負數記成一筆支出。</string>
+    <string name="tutorial_3_title">和家人一起用</string>
+    <string name="tutorial_3_body">一個預算可以放在任意多台裝置上，而且始終保持一致。\n\n打開「編輯預算」，點「邀請別人」，把連結傳出去。誰打開連結就會加入這個預算，你們看到的是同一個總計。\n\n連結只能用一次，一週後失效，所以被轉傳也沒關係。</string>
+    <string name="tutorial_4_title">用 iPhone？也有應用程式</string>
+    <string name="tutorial_4_body">iPhone 上也有一個應用程式——叫 Weekly Spend，因為這個名字已經有人用了——budget.andrewovens.com 用任何瀏覽器都能打開。三者用的是同一個預算。\n\n連結在「編輯預算」裡的「其他裝置的應用程式」下面。</string>
+    <string name="action_how_it_works">這是怎麼用的</string>
+    <string name="planner_title">算出每週金額</string>
+    <string name="planner_intro">知道多少就填多少。留空的以零計算，在你按下面那個按鈕之前，這些都不會進到你的預算。</string>
+    <string name="planner_open">不確定？幫你算</string>
+    <string name="planner_use">就用這個金額</string>
+    <string name="planner_result_label">每週可以花</string>
+    <string name="planner_note_empty">能填的先填。數字會隨著你輸入而變動。</string>
+    <string name="planner_note_short">這樣每週就沒有錢可以花了。檢查一下數字——或者把固定的日常開銷留在外面，改成每週在這裡記帳。</string>
+    <string name="planner_note_monthly">每月進 %1$s · 每月出 %2$s</string>
+    <string name="planner_how_often">頻率：%1$s</string>
+    <string name="planner_group_income">進來的錢</string>
+    <string name="planner_group_income_help">扣完稅和各項之後，真正入帳的金額。</string>
+    <string name="planner_group_fixed">不會變的帳單</string>
+    <string name="planner_group_fixed_help">不管你想不想它們，都會扣掉的金額。存錢也算在這裡：你決定不花的錢，就不是可以花的錢。</string>
+    <string name="planner_group_steady">固定的日常開銷（可略過）</string>
+    <string name="planner_group_steady_help">會小幅變動但從不讓你意外的開銷。在這裡扣掉，它們就不進應用程式；留空的話就每週在應用程式裡記。二選一，別兩邊都算。</string>
+    <string name="planner_pay">實領薪水</string>
+    <string name="planner_other_income">其他收入</string>
+    <string name="planner_housing">房租或房貸</string>
+    <string name="planner_utilities">水電瓦斯</string>
+    <string name="planner_phone">電信和網路</string>
+    <string name="planner_insurance">保險</string>
+    <string name="planner_transport">車貸或月票</string>
+    <string name="planner_debt">貸款和信用卡</string>
+    <string name="planner_subscriptions">訂閱</string>
+    <string name="planner_childcare">托育或學費</string>
+    <string name="planner_savings">儲蓄</string>
+    <string name="planner_other_fixed">其他固定支出</string>
+    <string name="planner_groceries">買菜</string>
+    <string name="planner_fuel">油錢或車票</string>
+    <string name="planner_household">日用品</string>
+    <string name="planner_pets">寵物</string>
+    <string name="planner_other_steady">其他固定開銷</string>
+    <string name="period_weekly">每週</string>
+    <string name="period_fortnightly">每 2 週</string>
+    <string name="period_semi_monthly">每月兩次</string>
+    <string name="period_monthly">每月</string>
+    <string name="period_yearly">每年</string>
+    <string name="action_about">關於</string>
+    <string name="title_about">關於</string>
+    <string name="about_version">版本 %1$s</string>
+    <string name="about_body">我是 Andrew——卡加利的一個普通人，喜歡寫軟體，也覺得應該有更多軟體是免費的。這個應用程式沒有廣告、沒有帳號、沒有價格，以後也不會有。我做它，是因為我自己每週都在用。\n\n如果哪裡壞了，或者你希望它能多做點什麼，寄封信給我。我每封都會看。</string>
+    <string name="about_help">需要協助？寄信給我</string>
+    <string name="about_review">寫個評論</string>
+    <string name="about_coffee">請我喝杯咖啡</string>
+    <string name="about_coffee_note">完全隨意。不管怎樣應用程式都是免費的。</string>
+    <string name="about_privacy">隱私</string>
+    <string name="about_email_subject">Android 版 Weekly Budget %1$s</string>
+    <string name="error_no_email">這裡沒有可以寄信的應用程式。</string>
+    <string name="action_dense_layout">精簡版面</string>
+    <string name="week_dense_left">剩 %1$s</string>
+    <string name="week_dense_over">超 %1$s</string>
+    <string name="carry_balance">結轉餘額</string>
+    <string name="carry_balance_message">把剩下的 %1$s 轉到下週嗎？</string>
+    <string name="carry_balance_expense_description">結轉餘額</string>
+    <string name="already_carried">這週的餘額已經結轉過了</string>
+    <string name="error_network">無法連上網路</string>
+    <string name="error_cant_edit">修改支出時出錯，請再試一次</string>
+    <string name="error_description_required">填寫說明</string>
+    <string name="error_amount_required">填寫金額</string>
+    <string name="error_amount_invalid">填寫有效的金額</string>
+    <string name="error_category_name_required">填寫分類名稱</string>
+    <string name="error_name_required">填寫名稱</string>
+    <string name="error_budget_id_required">填寫預算 ID</string>
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_expense_widget_description">在每週預算記一筆支出</string>
+    <string name="widget_left_label">剩</string>
+    <string name="widget_over_label">超</string>
+    <string name="ok">確定</string>
+    <string name="cancel">取消</string>
+    <string name="delete">刪除</string>
+    <string name="rename">重新命名</string>
+
+    <plurals name="week_days_left">
+        <item quantity="other">還剩 %1$d 天</item>
+    </plurals>
+
+    <string-array name="array_weekdays">
+        <item>星期日</item>
+        <item>星期一</item>
+        <item>星期二</item>
+        <item>星期三</item>
+        <item>星期四</item>
+        <item>星期五</item>
+        <item>星期六</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Russian. Informal "ты" throughout, and the plural carries the four
+    quantities Russian actually uses (one, few, many, other).
+-->
+<resources>
+
+    <string name="app_name">Weekly Budget</string>
+    <string name="title_month">Месяц</string>
+    <string name="title_categories">Категории</string>
+    <string name="title_category">Управление категориями</string>
+    <string name="nav_week">Неделя</string>
+    <string name="nav_month">Месяц</string>
+    <string name="nav_categories">Категории</string>
+    <string name="segment_week">Эта неделя</string>
+    <string name="segment_month">Этот месяц</string>
+    <string name="action_add">Добавить расход</string>
+    <string name="action_edit_categories">Управление категориями</string>
+    <string name="action_today">Сегодня</string>
+    <string name="pick_week">Перейти к неделе</string>
+    <string name="pick_month">Перейти к месяцу</string>
+    <string name="previous_period">Предыдущий период</string>
+    <string name="next_period">Следующий период</string>
+    <string name="week_remaining_label">Осталось</string>
+    <string name="week_over_label">Бюджет превышен</string>
+    <string name="week_spent_of">%1$s из %2$s</string>
+    <string name="week_total_label">Потрачено за неделю</string>
+    <string name="week_this_week">Эта неделя</string>
+    <string name="week_subtitle">%1$s · %2$s</string>
+    <string name="week_last_day">Последний день</string>
+    <string name="week_empty_title">Пока ничего не потрачено</string>
+    <string name="week_empty_body">Расходы, добавленные на эту неделю, появятся здесь.</string>
+    <string name="month_total_label">Потрачено за месяц</string>
+    <string name="month_weekly_budget">Бюджет на неделю %1$s</string>
+    <string name="month_week_range">%1$s – %2$s</string>
+    <string name="month_over_by">Перерасход %1$s</string>
+    <string name="month_under_by">Осталось %1$s</string>
+    <string name="month_empty_title">В этом месяце расходов нет</string>
+    <string name="month_empty_body">Добавляй расходы на вкладке «Неделя» — здесь они суммируются.</string>
+    <string name="category_share">%1$s%%</string>
+    <string name="category_tap_hint">Нажми на категорию, чтобы увидеть её расходы</string>
+    <string name="category_empty_title">Пока нечего показать</string>
+    <string name="category_empty_body">Как только у расходов появятся категории, здесь будет разбивка.</string>
+    <string name="category_manage_empty_title">Категорий пока нет</string>
+    <string name="category_manage_empty_body">Создай категорию при добавлении расхода, и она появится здесь.</string>
+    <string name="uncategorized">Без категории</string>
+    <string name="category_context_rename">Переименовать категорию</string>
+    <string name="category_context_delete">Удалить категорию</string>
+    <string name="category_delete_message">Расходы в «%1$s» останутся, но потеряют категорию.</string>
+    <string name="category_more_options">Другие действия для %1$s</string>
+    <string name="title_activity_add_expense">Добавить расход</string>
+    <string name="edit_expense_title">Изменить расход</string>
+    <string name="add_date">Дата</string>
+    <string name="add_description">Описание</string>
+    <string name="add_amount">Сумма</string>
+    <string name="add_amount_hint">0</string>
+    <string name="add_add">Добавить расход</string>
+    <string name="edit_button">Сохранить изменения</string>
+    <string name="label_pick_category">Категория</string>
+    <string name="label_new_category">Новая категория…</string>
+    <string name="label_new_category_hint">Название новой категории</string>
+    <string name="label_category_name_hint">Название категории</string>
+    <string name="label_no_category">Без категории</string>
+    <string name="pick_date">Выбрать дату</string>
+    <string name="context_edit">Изменить расход</string>
+    <string name="context_delete">Удалить расход</string>
+    <string name="context_copy">Скопировать на следующую неделю</string>
+    <string name="expense_options">Действия для %1$s</string>
+    <string name="title_activity_first">Weekly Budget</string>
+    <string name="title_activity_new_budget">Новый бюджет</string>
+    <string name="title_activity_join_budget">Присоединиться к бюджету</string>
+    <string name="title_activity_switch_budget">Твои бюджеты</string>
+    <string name="edit_budget_title">Изменить бюджет</string>
+    <string name="first_headline">Следите за недельными тратами вместе</string>
+    <string name="first_body">Задай сумму на неделю, добавляй расходы по ходу дела и сразу видь, сколько осталось. Один бюджет можно вести с нескольких устройств.</string>
+    <string name="button_new_budget">Создать бюджет</string>
+    <string name="button_join_budget">Присоединиться по ID</string>
+    <string name="button_create_budget">Создать бюджет</string>
+    <string name="button_edit_budget">Сохранить бюджет</string>
+    <string name="button_go">Присоединиться</string>
+    <string name="label_budget_name">Название бюджета</string>
+    <string name="label_budget_name_helper">Например: Дом или Продукты</string>
+    <string name="label_start_day">Неделя начинается с</string>
+    <string name="label_new_amount">Сумма на неделю</string>
+    <string name="label_new_unique">ID бюджета</string>
+    <string name="label_new_unique_helper">Поделись этим ID, чтобы подключить другое устройство. Нажми, чтобы скопировать.</string>
+    <string name="label_join_unique_id">ID бюджета</string>
+    <string name="label_join_helper">Вставь ID с устройства, на котором бюджет уже есть.</string>
+    <string name="current_budget">Текущий бюджет</string>
+    <string name="current_budget_named">Текущий: %1$s</string>
+    <string name="context_remove_budget">Убрать с этого устройства</string>
+    <string name="budget_weekly_amount">%1$s в неделю</string>
+    <string name="budget_selected">Текущий бюджет</string>
+    <string name="copied_unique_id">ID бюджета скопирован</string>
+    <string name="copy_budget_id">Скопировать ID бюджета</string>
+    <string name="action_other_devices">Приложения для других устройств</string>
+    <string name="apps_announcement_title">Теперь бюджет всегда с тобой</string>
+    <string name="apps_announcement_body">Тот же бюджет открывается на iPhone — там он называется Weekly Spend, потому что это имя было занято, — и на budget.andrewovens.com в любом браузере. Всё синхронизируется, так что расход можно добавить где угодно.</string>
+    <string name="apps_announcement_dismiss">Не сейчас</string>
+    <string name="error_no_browser">Здесь нет приложения, которое может открыть веб-страницу.</string>
+    <string name="invite_joining">Подключение к бюджету…</string>
+    <string name="invite_unusable_title">Приглашение недействительно</string>
+    <string name="invite_unusable_body">Это приглашение уже использовано или истекло. Приглашение работает один раз — попроси новое, и всё получится.</string>
+    <string name="invite_failed_title">Не удалось присоединиться</string>
+    <string name="invite_failed_body">Проверь соединение и открой ссылку ещё раз.</string>
+    <string name="action_invite">Пригласить</string>
+    <string name="invite_share_subject">Присоединяйся к моему недельному бюджету</string>
+    <string name="invite_share_text">Нажми, чтобы открыть мой недельный бюджет: %1$s</string>
+    <string name="error_invite_failed">Не удалось создать приглашение. Попробуй ещё раз.</string>
+    <string name="invite_save_first">Сначала создай бюджет, потом приглашай.</string>
+    <string name="tutorial_title">Как это работает</string>
+    <string name="tutorial_skip">Пропустить</string>
+    <string name="tutorial_next">Далее</string>
+    <string name="tutorial_done">Начать</string>
+    <string name="tutorial_close">Готово</string>
+    <string name="tutorial_page">Страница %1$d из %2$d</string>
+    <string name="tutorial_1_title">Планируй деньги на текущие траты</string>
+    <string name="tutorial_1_body">Начни за пределами приложения. Возьми свой доход, вычти платежи, которые не меняются, — аренду, страховки, подписки, кредиты — и то, что останется, и есть деньги на траты.\n\nРаздели их на недели месяца, и получишь недельную цель.</string>
+    <string name="tutorial_1_action">Посчитаем вместе</string>
+    <string name="tutorial_2_title">Обязательным платежам здесь не место</string>
+    <string name="tutorial_2_body">Здесь намеренно негде вводить регулярные доходы и расходы. Эти суммы и так известны, а без них приложение остаётся о единственном числе, которое действительно меняется: сколько ты потратил на этой неделе.\n\nЕсли деньги приходят посреди недели — возврат, подарок, кешбэк — добавь их как расход со знаком минус.</string>
+    <string name="tutorial_3_title">Поделись с близким человеком</string>
+    <string name="tutorial_3_body">Один бюджет может жить на любом числе устройств, и все они остаются в согласии.\n\nОткрой «Изменить бюджет», нажми «Пригласить» и отправь ссылку. Кто её откроет, присоединится к этому бюджету, и вы оба увидите один и тот же итог.\n\nСсылка срабатывает один раз и истекает через неделю, так что переслать её не страшно.</string>
+    <string name="tutorial_4_title">У тебя iPhone? Приложение есть</string>
+    <string name="tutorial_4_body">Для iPhone тоже есть приложение — оно называется Weekly Spend, потому что это имя было занято, — а budget.andrewovens.com открывается в любом браузере. Все три работают с одним бюджетом.\n\nСсылки лежат в «Изменить бюджет», в разделе «Приложения для других устройств».</string>
+    <string name="action_how_it_works">Как это работает</string>
+    <string name="planner_title">Рассчитать сумму на неделю</string>
+    <string name="planner_intro">Ответь на то, что знаешь. Пустые поля считаются нулём, и ничего из этого не попадёт в бюджет, пока ты не нажмёшь кнопку внизу.</string>
+    <string name="planner_open">Не знаешь сколько? Посчитай</string>
+    <string name="planner_use">Взять эту сумму</string>
+    <string name="planner_result_label">Остаётся на неделю</string>
+    <string name="planner_note_empty">Заполни, что можешь. Число меняется по мере ввода.</string>
+    <string name="planner_note_short">Так на неделю не остаётся ничего. Проверь цифры — или не вычитай регулярные траты здесь, а записывай их неделя за неделей.</string>
+    <string name="planner_note_monthly">%1$s в месяц приходит · %2$s в месяц уходит</string>
+    <string name="planner_how_often">Как часто: %1$s</string>
+    <string name="planner_group_income">Что приходит</string>
+    <string name="planner_group_income_help">То, что реально попадает на счёт, после налогов и удержаний.</string>
+    <string name="planner_group_fixed">Платежи, которые не меняются</string>
+    <string name="planner_group_fixed_help">Суммы, которые уходят, думаешь ты о них или нет. Накопления тоже сюда: деньги, которые ты решил не тратить, — не деньги на траты.</string>
+    <string name="planner_group_steady">Регулярные траты (по желанию)</string>
+    <string name="planner_group_steady_help">То, что немного меняется, но никогда не удивляет. Вычти их здесь — и они останутся вне приложения; оставь пустыми — и записывай их неделя за неделей. Одно или другое, но не оба сразу.</string>
+    <string name="planner_pay">Зарплата на руки</string>
+    <string name="planner_other_income">Другие доходы</string>
+    <string name="planner_housing">Аренда или ипотека</string>
+    <string name="planner_utilities">Свет, отопление, вода</string>
+    <string name="planner_phone">Связь и интернет</string>
+    <string name="planner_insurance">Страховки</string>
+    <string name="planner_transport">Машина или проездной</string>
+    <string name="planner_debt">Кредиты и карты</string>
+    <string name="planner_subscriptions">Подписки</string>
+    <string name="planner_childcare">Садик или школа</string>
+    <string name="planner_savings">Накопления</string>
+    <string name="planner_other_fixed">Другие постоянные платежи</string>
+    <string name="planner_groceries">Продукты</string>
+    <string name="planner_fuel">Бензин или проезд</string>
+    <string name="planner_household">Дом и гигиена</string>
+    <string name="planner_pets">Питомцы</string>
+    <string name="planner_other_steady">Другие регулярные траты</string>
+    <string name="period_weekly">Раз в неделю</string>
+    <string name="period_fortnightly">Раз в 2 недели</string>
+    <string name="period_semi_monthly">Дважды в месяц</string>
+    <string name="period_monthly">Раз в месяц</string>
+    <string name="period_yearly">Раз в год</string>
+    <string name="action_about">О приложении</string>
+    <string name="title_about">О приложении</string>
+    <string name="about_version">Версия %1$s</string>
+    <string name="about_body">Я Эндрю — обычный парень из Калгари, который любит делать софт и считает, что больше софта должно быть бесплатным. Здесь нет рекламы, нет аккаунтов и нет цены, и не появится. Я делаю это приложение, потому что сам пользуюсь им каждую неделю.\n\nЕсли что-то сломалось или хочется, чтобы оно умело больше, напиши мне. Я читаю всё.</string>
+    <string name="about_help">Нужна помощь? Напиши мне</string>
+    <string name="about_review">Оставить отзыв</string>
+    <string name="about_coffee">Купить мне кофе</string>
+    <string name="about_coffee_note">Совершенно необязательно. Приложение бесплатное в любом случае.</string>
+    <string name="about_privacy">Конфиденциальность</string>
+    <string name="about_email_subject">Weekly Budget %1$s для Android</string>
+    <string name="error_no_email">Здесь нет приложения, которое может отправить письмо.</string>
+    <string name="action_dense_layout">Компактный вид</string>
+    <string name="week_dense_left">Осталось %1$s</string>
+    <string name="week_dense_over">Перерасход %1$s</string>
+    <string name="carry_balance">Перенести остаток</string>
+    <string name="carry_balance_message">Перенести оставшиеся %1$s на следующую неделю?</string>
+    <string name="carry_balance_expense_description">Перенесённый остаток</string>
+    <string name="already_carried">Остаток этой недели уже перенесён</string>
+    <string name="error_network">Нет соединения с сетью</string>
+    <string name="error_cant_edit">Не удалось изменить расход, попробуй ещё раз</string>
+    <string name="error_description_required">Введи описание</string>
+    <string name="error_amount_required">Введи сумму</string>
+    <string name="error_amount_invalid">Введи корректную сумму</string>
+    <string name="error_category_name_required">Введи название категории</string>
+    <string name="error_name_required">Введи название</string>
+    <string name="error_budget_id_required">Введи ID бюджета</string>
+    <string name="add_expense_widget_text">+</string>
+    <string name="add_expense_widget_description">Добавить расход в недельный бюджет</string>
+    <string name="widget_left_label">осталось</string>
+    <string name="widget_over_label">перерасход</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="rename">Переименовать</string>
+
+    <plurals name="week_days_left">
+        <item quantity="one">Остался %1$d день</item>
+        <item quantity="few">Осталось %1$d дня</item>
+        <item quantity="many">Осталось %1$d дней</item>
+        <item quantity="other">Осталось %1$d дня</item>
+    </plurals>
+
+    <string-array name="array_weekdays">
+        <item>Воскресенье</item>
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+    </string-array>
+
+</resources>
