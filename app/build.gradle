@@ -103,7 +103,7 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.14.0'
 
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     // android.jar's org.json is a stub that throws; the real implementation
