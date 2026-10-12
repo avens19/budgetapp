@@ -1,3 +1,3 @@
-Twintig nieuwe talen: de app volgt nu de taal van je telefoon.
+Nieuw: schuif je saldo automatisch door naar de volgende week.
 
-En een nieuwe hulp rekent je weekbedrag met je uit. Vul in wat je weet — loon, huur, verzekeringen, boodschappen — de rekensom doet hij. Te vinden op de eerste pagina van Zo werkt het, en naast het bedrag bij Budget bewerken.
+Zet „Saldo automatisch doorschuiven” aan bij Budget bewerken, en elke nieuwe week begint met wat er de week ervoor over was, of te veel is uitgegeven. Het staat uit tot je het aanzet.

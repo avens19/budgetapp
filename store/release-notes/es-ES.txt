@@ -1,3 +1,3 @@
-Veinte idiomas nuevos: la app ahora sigue el idioma de tu móvil.
+Novedad: pasa el saldo a la semana siguiente automáticamente.
 
-Y un nuevo asistente calcula contigo tu importe semanal. Responde a lo que sepas — sueldo, alquiler, seguros, compra — y él hace las cuentas. Está en la primera página de Cómo funciona y junto al importe en Editar presupuesto.
+Activa «Pasar el saldo automáticamente» en Editar presupuesto y cada semana nueva empezará con lo que sobró, o se gastó de más, la semana anterior. Viene desactivada hasta que la actives.
