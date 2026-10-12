@@ -81,6 +81,8 @@
     <string name="label_budget_name">बजट का नाम</string>
     <string name="label_budget_name_helper">जैसे: घर, या राशन</string>
     <string name="label_start_day">सप्ताह शुरू होता है</string>
+    <string name="label_carry_balance">बची रकम अपने-आप आगे ले जाएँ</string>
+    <string name="label_carry_balance_helper">हर नया सप्ताह पिछले सप्ताह की बची हुई या ज़्यादा खर्च की गई रकम के साथ शुरू होता है।</string>
     <string name="label_new_amount">साप्ताहिक रकम</string>
     <string name="label_new_unique">बजट ID</string>
     <string name="label_new_unique_helper">दूसरा डिवाइस जोड़ने के लिए यह ID साझा करें। कॉपी करने के लिए टैप करें।</string>

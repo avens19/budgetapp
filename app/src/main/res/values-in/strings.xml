@@ -82,6 +82,8 @@
     <string name="label_budget_name">Nama anggaran</string>
     <string name="label_budget_name_helper">Misalnya: Rumah tangga, atau Belanja</string>
     <string name="label_start_day">Minggu dimulai hari</string>
+    <string name="label_carry_balance">Bawa sisa ke depan secara otomatis</string>
+    <string name="label_carry_balance_helper">Setiap minggu baru dimulai dengan sisa, atau kelebihan pengeluaran, dari minggu sebelumnya.</string>
     <string name="label_new_amount">Jumlah per minggu</string>
     <string name="label_new_unique">ID anggaran</string>
     <string name="label_new_unique_helper">Bagikan ID ini agar perangkat lain bisa gabung. Ketuk untuk menyalin.</string>

@@ -78,6 +78,8 @@
     <string name="label_budget_name">Naam van het budget</string>
     <string name="label_budget_name_helper">Bijvoorbeeld: Huishouden, of Boodschappen</string>
     <string name="label_start_day">Week begint op</string>
+    <string name="label_carry_balance">Saldo automatisch doorschuiven</string>
+    <string name="label_carry_balance_helper">Elke nieuwe week begint met wat er de week ervoor over was, of te veel is uitgegeven.</string>
     <string name="label_new_amount">Bedrag per week</string>
     <string name="label_new_unique">Budget-ID</string>
     <string name="label_new_unique_helper">Deel dit ID zodat een ander apparaat kan meedoen. Tik om te kopiëren.</string>

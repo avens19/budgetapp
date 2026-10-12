@@ -94,6 +94,8 @@
     <string name="label_budget_name">Budget name</string>
     <string name="label_budget_name_helper">For example: Household, or Groceries</string>
     <string name="label_start_day">Week starts on</string>
+    <string name="label_carry_balance">Carry balance forward automatically</string>
+    <string name="label_carry_balance_helper">Each new week starts with what was left over, or overspent, the week before.</string>
     <string name="label_new_amount">Weekly amount</string>
     <string name="label_new_unique">Budget ID</string>
     <string name="label_new_unique_helper">Share this ID to let another device join. Tap to copy.</string>

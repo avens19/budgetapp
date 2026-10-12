@@ -81,6 +81,8 @@
     <string name="label_budget_name">Nom du budget</string>
     <string name="label_budget_name_helper">Par exemple : Maison, ou Courses</string>
     <string name="label_start_day">La semaine commence le</string>
+    <string name="label_carry_balance">Reporter le solde automatiquement</string>
+    <string name="label_carry_balance_helper">Chaque nouvelle semaine commence avec ce qu\'il restait, ou ce qui a été dépensé en trop, la semaine précédente.</string>
     <string name="label_new_amount">Montant hebdomadaire</string>
     <string name="label_new_unique">ID du budget</string>
     <string name="label_new_unique_helper">Partagez cet ID pour qu\'un autre appareil rejoigne le budget. Touchez pour copier.</string>

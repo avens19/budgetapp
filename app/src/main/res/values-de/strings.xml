@@ -82,6 +82,8 @@
     <string name="label_budget_name">Name des Budgets</string>
     <string name="label_budget_name_helper">Zum Beispiel: Haushalt oder Einkaufen</string>
     <string name="label_start_day">Woche beginnt am</string>
+    <string name="label_carry_balance">Rest automatisch übertragen</string>
+    <string name="label_carry_balance_helper">Jede neue Woche beginnt mit dem, was in der Vorwoche übrig geblieben ist oder zu viel ausgegeben wurde.</string>
     <string name="label_new_amount">Betrag pro Woche</string>
     <string name="label_new_unique">Budget-ID</string>
     <string name="label_new_unique_helper">Teile diese ID, damit ein anderes Gerät beitreten kann. Zum Kopieren tippen.</string>

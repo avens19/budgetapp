@@ -18,6 +18,7 @@ public class Settings {
     private static final String WEEKLY_PLAN = "WEEKLYPLAN";
     private static final String SUGGESTED_AMOUNT = "SUGGESTEDAMOUNT";
     private static final String DENSE_LAYOUT = "DENSELAYOUT";
+    private static final String CARRIED_WEEK = "CARRIEDWEEK";
 
     public static Budget getBudget(Context cxt) {
         SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
@@ -200,6 +201,18 @@ public class Settings {
     static void setSuggestedAmount(Context cxt, String amount) {
         SharedPreferences settings = cxt.getSharedPreferences(SETTINGS_NAME, 0);
         settings.edit().putString(SUGGESTED_AMOUNT, amount).apply();
+    }
+
+    /**
+     * The week, as its first day, that last week's balance was carried into
+     * automatically; null if never. Per budget, since each has its own weeks.
+     */
+    static String getCarriedWeek(Context cxt, String budgetId) {
+        return cxt.getSharedPreferences(SETTINGS_NAME, 0).getString(CARRIED_WEEK + budgetId, null);
+    }
+
+    static void setCarriedWeek(Context cxt, String budgetId, String week) {
+        cxt.getSharedPreferences(SETTINGS_NAME, 0).edit().putString(CARRIED_WEEK + budgetId, week).apply();
     }
 
     static long getNextId(Context cxt) {

@@ -78,6 +78,8 @@
     <string name="label_budget_name">Tên ngân sách</string>
     <string name="label_budget_name_helper">Ví dụ: Gia đình, hoặc Đi chợ</string>
     <string name="label_start_day">Tuần bắt đầu vào</string>
+    <string name="label_carry_balance">Tự động chuyển số dư sang tuần sau</string>
+    <string name="label_carry_balance_helper">Mỗi tuần mới bắt đầu với số tiền còn lại, hoặc chi vượt, của tuần trước.</string>
     <string name="label_new_amount">Số tiền mỗi tuần</string>
     <string name="label_new_unique">ID ngân sách</string>
     <string name="label_new_unique_helper">Chia sẻ ID này để thiết bị khác tham gia. Chạm để sao chép.</string>
