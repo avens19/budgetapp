@@ -324,6 +324,25 @@ class DBHelper {
         return queryExpenses(where, whereArgs, orderBy);
     }
 
+    /** The first day of the week, as the yyyy-MM-dd the table stores. */
+    static String WeekStartString(int daysBackFromToday, int startDay) {
+        return getStartAndEndDatesForWeek(daysBackFromToday, startDay)[0];
+    }
+
+    /** Whether the budget has any expense dated before that week began. */
+    static boolean ExpenseExistsBeforeWeek(String budgetId, int daysBackFromToday, int startDay) {
+        String startString = getStartAndEndDatesForWeek(daysBackFromToday, startDay)[0];
+
+        String query = "SELECT 1 FROM " + EXPENSES_TABLE_NAME + " WHERE BudgetId = ? AND State != ? AND Date < ? LIMIT 1";
+        Cursor c = myDB.rawQuery(query, new String[]{budgetId, DELETED_STATE_KEY, startString});
+
+        boolean exists = c.getCount() >= 1;
+
+        c.close();
+
+        return exists;
+    }
+
     private static String[] getStartAndEndDatesForWeek(int daysBackFromToday, int startDay) {
         Calendar start = Calendar.getInstance();
         start.add(Calendar.DAY_OF_YEAR, daysBackFromToday * -1);

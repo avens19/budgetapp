@@ -104,6 +104,11 @@ public class WeekActivity extends BaseActivity
                     // A sync can bring in expenses from another device, so the
                     // week is re-read rather than only clearing the spinner.
                     if (_budget != null) {
+                        // After the sync, not before: a carry made on another
+                        // device has arrived by now and is seen, not repeated.
+                        if (CarryOver.carryIfDue(WeekActivity.this, _budget)) {
+                            Sync.start(WeekActivity.this);
+                        }
                         loadData();
                     }
                 });
