@@ -81,6 +81,8 @@
     <string name="label_budget_name">預算名稱</string>
     <string name="label_budget_name_helper">例如：家用，或買菜</string>
     <string name="label_start_day">每週開始於</string>
+    <string name="label_carry_balance">自動結轉餘額</string>
+    <string name="label_carry_balance_helper">每個新的一週都會從上週剩下或超支的金額開始。</string>
     <string name="label_new_amount">每週金額</string>
     <string name="label_new_unique">預算 ID</string>
     <string name="label_new_unique_helper">把這個 ID 分享出去，另一台裝置就能加入。點一下複製。</string>

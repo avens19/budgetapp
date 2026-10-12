@@ -7,7 +7,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * Moves last week's balance into the current week, once, without being asked.
+ * Moves last week's balance into the current week, once, for a budget that has
+ * turned that on.
  *
  * <p>The Carry button does the same thing by hand, and people forget to press
  * it. A carry is a system expense on the first day of the week whose amount is
@@ -35,7 +36,8 @@ final class CarryOver {
     }
 
     /**
-     * Carries last week into this one if that has not been done yet.
+     * Carries last week into this one if the budget has asked for that and it has
+     * not been done yet.
      *
      * <p>Meant to run when a sync finishes, so that a carry another device
      * already made has arrived and is seen rather than made twice. A sync that
@@ -49,6 +51,10 @@ final class CarryOver {
      * @return whether an expense was written
      */
     static boolean carryIfDue(Context context, Budget budget) {
+        if (!budget.CarryBalance) {
+            return false;
+        }
+
         String thisWeek = DBHelper.WeekStartString(0, budget.StartDay);
         if (thisWeek.equals(Settings.getCarriedWeek(context, budget.UniqueId))) {
             return false;

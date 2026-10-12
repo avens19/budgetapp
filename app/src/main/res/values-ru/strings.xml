@@ -81,6 +81,8 @@
     <string name="label_budget_name">Название бюджета</string>
     <string name="label_budget_name_helper">Например: Дом или Продукты</string>
     <string name="label_start_day">Неделя начинается с</string>
+    <string name="label_carry_balance">Переносить остаток автоматически</string>
+    <string name="label_carry_balance_helper">Каждая новая неделя начинается с того, что осталось или было потрачено сверх бюджета на прошлой неделе.</string>
     <string name="label_new_amount">Сумма на неделю</string>
     <string name="label_new_unique">ID бюджета</string>
     <string name="label_new_unique_helper">Поделись этим ID, чтобы подключить другое устройство. Нажми, чтобы скопировать.</string>

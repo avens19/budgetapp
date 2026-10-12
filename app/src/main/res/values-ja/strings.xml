@@ -81,6 +81,8 @@
     <string name="label_budget_name">予算の名前</string>
     <string name="label_budget_name_helper">例:「家計」「食費」など</string>
     <string name="label_start_day">週の始まり</string>
+    <string name="label_carry_balance">残りを自動で繰り越す</string>
+    <string name="label_carry_balance_helper">新しい週は、前の週の残り(または使いすぎた分)から始まります。</string>
     <string name="label_new_amount">1週間の金額</string>
     <string name="label_new_unique">予算ID</string>
     <string name="label_new_unique_helper">このIDを共有すると、別の端末から参加できます。タップでコピー。</string>

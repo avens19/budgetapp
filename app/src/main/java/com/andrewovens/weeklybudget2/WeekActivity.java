@@ -106,7 +106,11 @@ public class WeekActivity extends BaseActivity
                     if (_budget != null) {
                         // After the sync, not before: a carry made on another
                         // device has arrived by now and is seen, not repeated.
-                        if (CarryOver.carryIfDue(WeekActivity.this, _budget)) {
+                        // The budget is read again here: the sync has just
+                        // refreshed it, and a setting turned on from another
+                        // device is not in the copy loaded before it.
+                        Budget current = Settings.getBudget(WeekActivity.this);
+                        if (current != null && CarryOver.carryIfDue(WeekActivity.this, current)) {
                             Sync.start(WeekActivity.this);
                         }
                         loadData();

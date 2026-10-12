@@ -78,6 +78,8 @@
     <string name="label_budget_name">预算名称</string>
     <string name="label_budget_name_helper">例如：家用，或者买菜</string>
     <string name="label_start_day">每周开始于</string>
+    <string name="label_carry_balance">自动结转余额</string>
+    <string name="label_carry_balance_helper">每个新的一周都会从上周剩下或超支的金额开始。</string>
     <string name="label_new_amount">每周金额</string>
     <string name="label_new_unique">预算 ID</string>
     <string name="label_new_unique_helper">把这个 ID 发给别人，另一台设备就能加入。点按可复制。</string>

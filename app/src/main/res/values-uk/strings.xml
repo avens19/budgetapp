@@ -82,6 +82,8 @@
     <string name="label_budget_name">Назва бюджету</string>
     <string name="label_budget_name_helper">Наприклад: Дім або Продукти</string>
     <string name="label_start_day">Тиждень починається з</string>
+    <string name="label_carry_balance">Переносити залишок автоматично</string>
+    <string name="label_carry_balance_helper">Кожен новий тиждень починається з того, що залишилося або було витрачено понад бюджет минулого тижня.</string>
     <string name="label_new_amount">Сума на тиждень</string>
     <string name="label_new_unique">ID бюджету</string>
     <string name="label_new_unique_helper">Поділись цим ID, щоб підключити інший пристрій. Натисни, щоб скопіювати.</string>

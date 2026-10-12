@@ -82,6 +82,8 @@
     <string name="label_budget_name">Nome do orçamento</string>
     <string name="label_budget_name_helper">Por exemplo: Casa ou Mercado</string>
     <string name="label_start_day">A semana começa em</string>
+    <string name="label_carry_balance">Transferir o saldo automaticamente</string>
+    <string name="label_carry_balance_helper">Cada nova semana começa com o que sobrou, ou foi gasto a mais, na semana anterior.</string>
     <string name="label_new_amount">Valor semanal</string>
     <string name="label_new_unique">ID do orçamento</string>
     <string name="label_new_unique_helper">Compartilhe este ID para outro dispositivo entrar. Toque para copiar.</string>

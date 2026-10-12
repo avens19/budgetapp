@@ -82,6 +82,8 @@
     <string name="label_budget_name">Nombre del presupuesto</string>
     <string name="label_budget_name_helper">Por ejemplo: Casa o Compra</string>
     <string name="label_start_day">La semana empieza el</string>
+    <string name="label_carry_balance">Pasar el saldo automáticamente</string>
+    <string name="label_carry_balance_helper">Cada semana nueva empieza con lo que sobró, o se gastó de más, la semana anterior.</string>
     <string name="label_new_amount">Importe semanal</string>
     <string name="label_new_unique">ID del presupuesto</string>
     <string name="label_new_unique_helper">Comparte este ID para que otro dispositivo se una. Toca para copiar.</string>

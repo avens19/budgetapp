@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -59,6 +60,7 @@ public class NewBudgetActivity extends BaseActivity {
                 ((EditText) findViewById(R.id.text_new_amount)).setText(Helpers.doubleString(_budget.Amount));
                 uniqueId.setText(_budget.UniqueId);
                 setStartDay(_budget.StartDay);
+                ((MaterialSwitch) findViewById(R.id.switch_carry_balance)).setChecked(_budget.CarryBalance);
             } catch (Exception e) {
                 this.finish();
                 return;
@@ -183,6 +185,7 @@ public class NewBudgetActivity extends BaseActivity {
         }
 
         _budget.StartDay = _startDay;
+        _budget.CarryBalance = ((MaterialSwitch) findViewById(R.id.switch_carry_balance)).isChecked();
         _budget.Name = nameString;
         _budget.Amount = amountValue;
 

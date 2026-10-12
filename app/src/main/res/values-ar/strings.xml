@@ -82,6 +82,8 @@
     <string name="label_budget_name">اسم الميزانية</string>
     <string name="label_budget_name_helper">مثلًا: المنزل أو البقالة</string>
     <string name="label_start_day">يبدأ الأسبوع يوم</string>
+    <string name="label_carry_balance">ترحيل الرصيد تلقائيًا</string>
+    <string name="label_carry_balance_helper">يبدأ كل أسبوع جديد بما تبقّى من الأسبوع السابق أو بما زاد عليه.</string>
     <string name="label_new_amount">المبلغ الأسبوعي</string>
     <string name="label_new_unique">معرّف الميزانية</string>
     <string name="label_new_unique_helper">شارك هذا المعرّف لينضم جهاز آخر. اضغط للنسخ.</string>

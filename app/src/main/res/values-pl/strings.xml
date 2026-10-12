@@ -78,6 +78,8 @@
     <string name="label_budget_name">Nazwa budżetu</string>
     <string name="label_budget_name_helper">Na przykład: Dom albo Zakupy</string>
     <string name="label_start_day">Tydzień zaczyna się w</string>
+    <string name="label_carry_balance">Przenoś saldo automatycznie</string>
+    <string name="label_carry_balance_helper">Każdy nowy tydzień zaczyna się od tego, co zostało, lub co przekroczono, w poprzednim tygodniu.</string>
     <string name="label_new_amount">Kwota na tydzień</string>
     <string name="label_new_unique">ID budżetu</string>
     <string name="label_new_unique_helper">Udostępnij to ID, żeby dołączyło inne urządzenie. Dotknij, aby skopiować.</string>

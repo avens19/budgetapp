@@ -78,6 +78,8 @@
     <string name="label_budget_name">Nome del budget</string>
     <string name="label_budget_name_helper">Per esempio: Casa, oppure Spesa</string>
     <string name="label_start_day">La settimana inizia di</string>
+    <string name="label_carry_balance">Riporta il saldo automaticamente</string>
+    <string name="label_carry_balance_helper">Ogni nuova settimana parte da ciò che è avanzato, o che si è speso in più, la settimana prima.</string>
     <string name="label_new_amount">Importo settimanale</string>
     <string name="label_new_unique">ID del budget</string>
     <string name="label_new_unique_helper">Condividi questo ID per far entrare un altro dispositivo. Tocca per copiare.</string>

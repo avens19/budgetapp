@@ -78,6 +78,8 @@
     <string name="label_budget_name">Bütçe adı</string>
     <string name="label_budget_name_helper">Örneğin: Ev ya da Market</string>
     <string name="label_start_day">Hafta şu gün başlar</string>
+    <string name="label_carry_balance">Bakiyeyi otomatik devret</string>
+    <string name="label_carry_balance_helper">Her yeni hafta, önceki haftadan kalan ya da aşılan tutarla başlar.</string>
     <string name="label_new_amount">Haftalık tutar</string>
     <string name="label_new_unique">Bütçe ID\'si</string>
     <string name="label_new_unique_helper">Başka bir cihazın katılması için bu ID\'yi paylaş. Kopyalamak için dokun.</string>

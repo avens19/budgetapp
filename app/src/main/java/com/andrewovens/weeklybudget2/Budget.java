@@ -11,6 +11,8 @@ public class Budget {
     public String UniqueId;
     public double Amount;
     int StartDay;
+    /** Off unless the budget turned on carrying the balance forward by itself. */
+    boolean CarryBalance;
     String Watermark;
 
     public Budget(boolean newBudget) {
@@ -27,6 +29,7 @@ public class Budget {
         jo.put("UniqueId", UniqueId);
         jo.put("StartDay", StartDay);
         jo.put("Amount", Amount);
+        jo.put("CarryBalance", CarryBalance);
 
         if (!forServer)
             jo.put("Watermark", Watermark);
@@ -40,6 +43,9 @@ public class Budget {
         b.UniqueId = json.getString("UniqueId");
         b.StartDay = json.getInt("StartDay");
         b.Amount = json.getDouble("Amount");
+        // Absent from a server that predates the setting, and from budgets
+        // stored on the device before it existed: both mean off.
+        b.CarryBalance = json.optBoolean("CarryBalance", false);
         // optString's no-fallback overload returns "" for a missing key, not
         // null. The server's budget payload has no Watermark at all, so every
         // budget parsed from a response carried an empty one, and
@@ -56,6 +62,7 @@ public class Budget {
         original.Amount = updated.Amount;
         original.Name = updated.Name;
         original.StartDay = updated.StartDay;
+        original.CarryBalance = updated.CarryBalance;
         original.UniqueId = updated.UniqueId;
         if (updated.Watermark != null)
             original.Watermark = updated.Watermark;

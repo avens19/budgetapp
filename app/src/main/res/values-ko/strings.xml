@@ -78,6 +78,8 @@
     <string name="label_budget_name">예산 이름</string>
     <string name="label_budget_name_helper">예: 생활비, 장보기</string>
     <string name="label_start_day">주 시작 요일</string>
+    <string name="label_carry_balance">잔액 자동 이월</string>
+    <string name="label_carry_balance_helper">새로운 한 주는 지난주에 남은 금액이나 초과한 금액에서 시작해요.</string>
     <string name="label_new_amount">주간 금액</string>
     <string name="label_new_unique">예산 ID</string>
     <string name="label_new_unique_helper">다른 기기가 참여하려면 이 ID를 공유하세요. 눌러서 복사.</string>
