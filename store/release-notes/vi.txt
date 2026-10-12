@@ -1,3 +1,3 @@
-Hai mươi ngôn ngữ mới: ứng dụng giờ đi theo ngôn ngữ của điện thoại.
+Mới: tự động chuyển số dư sang tuần sau.
 
-Và có thêm phần giúp bạn tính số tiền mỗi tuần. Trả lời những câu bạn biết — lương, tiền nhà, bảo hiểm, đi chợ — phần tính toán để nó lo. Nằm ở trang đầu của Cách hoạt động, và cạnh số tiền trong Sửa ngân sách.
+Bật “Tự động chuyển số dư sang tuần sau” trong Sửa ngân sách, và mỗi tuần mới sẽ bắt đầu với số tiền còn lại, hoặc chi vượt, của tuần trước. Tính năng này tắt cho đến khi bạn bật.

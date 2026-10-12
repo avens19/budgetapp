@@ -1,3 +1,3 @@
-Zwanzig neue Sprachen: die App folgt jetzt der Sprache deines Handys.
+Neu: Den Rest automatisch in die nächste Woche übertragen.
 
-Und ein neuer Helfer rechnet deinen Wochenbetrag mit dir aus. Beantworte, was du weißt — Lohn, Miete, Versicherungen, Lebensmittel — den Rest rechnet er. Zu finden auf der ersten Seite von So funktioniert es und neben dem Betrag unter Budget bearbeiten.
+Schalte unter „Budget bearbeiten“ die Option „Rest automatisch übertragen“ ein, und jede neue Woche beginnt mit dem, was in der Vorwoche übrig geblieben ist oder zu viel ausgegeben wurde. Sie ist aus, bis du sie einschaltest.

@@ -1,3 +1,3 @@
-Dua puluh bahasa baru: aplikasi kini mengikuti bahasa ponselmu.
+Baru: bawa sisa ke minggu berikutnya secara otomatis.
 
-Ada juga alat bantu yang menghitung jumlah mingguanmu bersamamu. Isi yang kamu tahu — gaji, sewa, asuransi, belanja — sisanya dia yang hitung. Ada di halaman pertama Cara kerjanya, dan di sebelah jumlah pada Ubah anggaran.
+Aktifkan “Bawa sisa ke depan secara otomatis” di Ubah anggaran, dan setiap minggu baru dimulai dengan sisa, atau kelebihan pengeluaran, dari minggu sebelumnya. Fitur ini mati sampai Anda menyalakannya.
