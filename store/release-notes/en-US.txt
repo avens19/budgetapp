@@ -1,3 +1,1 @@
-New: carry your balance into the next week automatically.
-
-Turn on “Carry balance forward automatically” in Edit budget, and each new week starts with what was left over, or overspent, the week before. It is off until you switch it on.
+A tidier About screen, with a new “Learn more” link to the project's page on the web.

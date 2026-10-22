@@ -1,3 +1,1 @@
-Novo: transfira o saldo para a semana seguinte automaticamente.
-
-Ative “Transferir o saldo automaticamente” em Editar orçamento, e cada nova semana começa com o que sobrou, ou foi gasto a mais, na semana anterior. Fica desativado até você ligar.
+Uma tela Sobre mais organizada, com um novo link “Saiba mais” para a página do projeto na web.

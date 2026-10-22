@@ -1,3 +1,1 @@
-Nowość: automatycznie przenoś saldo na następny tydzień.
-
-Włącz „Przenoś saldo automatycznie” w Edytuj budżet, a każdy nowy tydzień zacznie się od tego, co zostało, lub co przekroczono, w poprzednim tygodniu. Opcja jest wyłączona, dopóki jej nie włączysz.
+Bardziej uporządkowany ekran „O aplikacji” z nowym linkiem „Dowiedz się więcej” do strony projektu w sieci.

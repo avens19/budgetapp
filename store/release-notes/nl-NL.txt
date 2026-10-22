@@ -1,3 +1,1 @@
-Nieuw: schuif je saldo automatisch door naar de volgende week.
-
-Zet „Saldo automatisch doorschuiven” aan bij Budget bewerken, en elke nieuwe week begint met wat er de week ervoor over was, of te veel is uitgegeven. Het staat uit tot je het aanzet.
+Een opgeruimder Over-scherm, met een nieuwe link “Meer weten” naar de webpagina van het project.

@@ -1,3 +1,1 @@
-Novedad: pasa el saldo a la semana siguiente automáticamente.
-
-Activa «Pasar el saldo automáticamente» en Editar presupuesto y cada semana nueva empezará con lo que sobró, o se gastó de más, la semana anterior. Viene desactivada hasta que la actives.
+Una pantalla Acerca de más ordenada, con un nuevo enlace «Saber más» a la página web del proyecto.

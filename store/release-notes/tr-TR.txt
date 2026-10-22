@@ -1,3 +1,1 @@
-Yeni: bakiyenizi bir sonraki haftaya otomatik devredin.
-
-“Bütçeyi düzenle” bölümünde “Bakiyeyi otomatik devret” seçeneğini açın; her yeni hafta, önceki haftadan kalan ya da aşılan tutarla başlar. Siz açana kadar kapalıdır.
+Daha derli toplu bir Hakkında ekranı ve projenin web sayfasına giden yeni bir “Daha fazla bilgi” bağlantısı.
