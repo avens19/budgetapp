@@ -1,3 +1,1 @@
-Mới: tự động chuyển số dư sang tuần sau.
-
-Bật “Tự động chuyển số dư sang tuần sau” trong Sửa ngân sách, và mỗi tuần mới sẽ bắt đầu với số tiền còn lại, hoặc chi vượt, của tuần trước. Tính năng này tắt cho đến khi bạn bật.
+Màn hình Giới thiệu gọn gàng hơn, kèm liên kết “Tìm hiểu thêm” mới tới trang web của dự án.

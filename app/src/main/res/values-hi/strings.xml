@@ -169,8 +169,8 @@
     <string name="about_body">मैं एंड्रयू हूँ — कैलगरी का एक आदमी, जिसे सॉफ़्टवेयर बनाना पसंद है और जो मानता है कि और भी सॉफ़्टवेयर मुफ़्त होना चाहिए। इस ऐप में न विज्ञापन हैं, न अकाउंट, न कीमत, और आगे भी नहीं होंगे। मैं इसे इसलिए बनाता हूँ क्योंकि मैं खुद हर हफ्ते इसका इस्तेमाल करता हूँ।\n\nकुछ टूटा हो, या आप चाहें कि यह कुछ और भी करे, तो मुझे ईमेल करें। मैं सब पढ़ता हूँ।</string>
     <string name="about_help">मदद चाहिए? मुझे ईमेल करें</string>
     <string name="about_review">समीक्षा लिखें</string>
-    <string name="about_coffee">मुझे एक कॉफ़ी पिलाएँ</string>
-    <string name="about_coffee_note">पूरी तरह वैकल्पिक। ऐप वैसे भी मुफ़्त है।</string>
+    <string name="about_learn_more">और जानें</string>
+    <string name="about_learn_more_note">प्रोजेक्ट के बारे में थोड़ा और, वेब पर।</string>
     <string name="about_privacy">निजता</string>
     <string name="about_email_subject">Android के लिए Weekly Budget %1$s</string>
     <string name="error_no_email">यहाँ कोई ऐप ईमेल नहीं भेज सकता।</string>

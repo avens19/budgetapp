@@ -166,8 +166,8 @@
     <string name="about_body">Ik ben Andrew — gewoon iemand uit Calgary die graag software maakt en vindt dat meer software gratis zou moeten zijn. Deze app heeft geen advertenties, geen accounts en geen prijs, en dat blijft zo. Ik maak hem omdat ik hem zelf elke week gebruik.\n\nAls er iets stuk is, of je wilt dat hij iets doet wat hij niet doet, mail me. Ik lees alles.</string>
     <string name="about_help">Hulp nodig? Mail me</string>
     <string name="about_review">Een beoordeling achterlaten</string>
-    <string name="about_coffee">Trakteer me op een koffie</string>
-    <string name="about_coffee_note">Helemaal vrijblijvend. De app is hoe dan ook gratis.</string>
+    <string name="about_learn_more">Meer weten</string>
+    <string name="about_learn_more_note">Wat meer over het project, op het web.</string>
     <string name="about_privacy">Privacy</string>
     <string name="about_email_subject">Weekly Budget %1$s voor Android</string>
     <string name="error_no_email">Geen enkele app hier kan e-mail versturen.</string>

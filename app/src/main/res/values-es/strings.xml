@@ -170,8 +170,8 @@
     <string name="about_body">Soy Andrew — un tipo de Calgary al que le encanta hacer software y que cree que más software debería ser gratis. Esta app no tiene anuncios, ni cuentas, ni precio, y no va a tener ninguna de las tres cosas. La hago porque yo mismo la uso cada semana.\n\nSi algo falla, o quieres que haga algo que no hace, escríbeme. Lo leo todo.</string>
     <string name="about_help">¿Necesitas ayuda? Escríbeme</string>
     <string name="about_review">Dejar una reseña</string>
-    <string name="about_coffee">Invítame a un café</string>
-    <string name="about_coffee_note">Totalmente opcional. La app es gratis igualmente.</string>
+    <string name="about_learn_more">Saber más</string>
+    <string name="about_learn_more_note">Algo más sobre el proyecto, en la web.</string>
     <string name="about_privacy">Privacidad</string>
     <string name="about_email_subject">Weekly Budget %1$s para Android</string>
     <string name="error_no_email">Aquí no hay ninguna app que pueda enviar correo.</string>

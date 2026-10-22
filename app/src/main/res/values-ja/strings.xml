@@ -169,8 +169,8 @@
     <string name="about_body">作者のAndrewです。カルガリー在住で、ソフトを作るのが好きで、もっと多くのソフトが無料であるべきだと思っています。このアプリに広告もアカウントも料金もありません。これからも増やしません。自分が毎週使っているから作っています。\n\n不具合があったり、こんなことができたらと思ったら、メールをください。すべて読んでいます。</string>
     <string name="about_help">困ったときはメールで</string>
     <string name="about_review">レビューを書く</string>
-    <string name="about_coffee">コーヒーをおごる</string>
-    <string name="about_coffee_note">まったく任意です。どちらでもアプリは無料です。</string>
+    <string name="about_learn_more">詳しく見る</string>
+    <string name="about_learn_more_note">このプロジェクトについて、もう少し詳しく（ウェブ）。</string>
     <string name="about_privacy">プライバシー</string>
     <string name="about_email_subject">Weekly Budget %1$s (Android)</string>
     <string name="error_no_email">メールを送れるアプリがありません。</string>

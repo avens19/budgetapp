@@ -169,8 +169,8 @@
     <string name="about_body">我是 Andrew——卡加利的一個普通人，喜歡寫軟體，也覺得應該有更多軟體是免費的。這個應用程式沒有廣告、沒有帳號、沒有價格，以後也不會有。我做它，是因為我自己每週都在用。\n\n如果哪裡壞了，或者你希望它能多做點什麼，寄封信給我。我每封都會看。</string>
     <string name="about_help">需要協助？寄信給我</string>
     <string name="about_review">寫個評論</string>
-    <string name="about_coffee">請我喝杯咖啡</string>
-    <string name="about_coffee_note">完全隨意。不管怎樣應用程式都是免費的。</string>
+    <string name="about_learn_more">了解更多</string>
+    <string name="about_learn_more_note">關於這個專案的更多內容，在網頁上。</string>
     <string name="about_privacy">隱私</string>
     <string name="about_email_subject">Android 版 Weekly Budget %1$s</string>
     <string name="error_no_email">這裡沒有可以寄信的應用程式。</string>

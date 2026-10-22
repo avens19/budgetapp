@@ -1,3 +1,1 @@
-Nouveau : reportez automatiquement votre solde sur la semaine suivante.
-
-Activez « Reporter le solde automatiquement » dans Modifier le budget, et chaque nouvelle semaine commence avec ce qu'il restait, ou ce qui a été dépensé en trop, la semaine précédente. L'option est désactivée tant que vous ne l'activez pas.
+Un écran À propos plus net, avec un nouveau lien « En savoir plus » vers la page web du projet.

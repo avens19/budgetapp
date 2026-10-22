@@ -1,3 +1,1 @@
-Neu: Den Rest automatisch in die nächste Woche übertragen.
-
-Schalte unter „Budget bearbeiten“ die Option „Rest automatisch übertragen“ ein, und jede neue Woche beginnt mit dem, was in der Vorwoche übrig geblieben ist oder zu viel ausgegeben wurde. Sie ist aus, bis du sie einschaltest.
+Ein aufgeräumterer Über-Bildschirm mit einem neuen Link „Mehr erfahren“ zur Webseite des Projekts.

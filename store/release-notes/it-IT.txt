@@ -1,3 +1,1 @@
-Novità: riporta il saldo alla settimana successiva in automatico.
-
-Attiva «Riporta il saldo automaticamente» in Modifica budget e ogni nuova settimana parte da ciò che è avanzato, o che si è speso in più, la settimana prima. È disattivato finché non lo attivi.
+Una schermata Info più ordinata, con un nuovo link «Scopri di più» alla pagina web del progetto.
