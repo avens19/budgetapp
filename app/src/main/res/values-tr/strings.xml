@@ -166,8 +166,8 @@
     <string name="about_body">Ben Andrew — Calgary\'de yaşayan, yazılım yapmayı seven ve daha fazlasının ücretsiz olması gerektiğini düşünen biriyim. Bu uygulamada reklam, hesap ve ücret yok; olmayacak da. Onu yapıyorum çünkü her hafta kendim kullanıyorum.\n\nBir şey bozuksa ya da yapmadığı bir şeyi yapmasını istiyorsan bana yaz. Hepsini okuyorum.</string>
     <string name="about_help">Yardım mı lazım? Bana yaz</string>
     <string name="about_review">Değerlendirme bırak</string>
-    <string name="about_coffee">Bana bir kahve ısmarla</string>
-    <string name="about_coffee_note">Tamamen isteğe bağlı. Uygulama her hâlükârda ücretsiz.</string>
+    <string name="about_learn_more">Daha fazla bilgi</string>
+    <string name="about_learn_more_note">Proje hakkında biraz daha bilgi, web\'de.</string>
     <string name="about_privacy">Gizlilik</string>
     <string name="about_email_subject">Android için Weekly Budget %1$s</string>
     <string name="error_no_email">Burada e-posta gönderebilecek bir uygulama yok.</string>

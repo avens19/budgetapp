@@ -166,8 +166,8 @@
     <string name="about_body">我是 Andrew——卡尔加里的一个普通人，喜欢写软件，也觉得应该有更多软件是免费的。这个应用没有广告、没有账号、没有价格，以后也不会有。我做它，是因为我自己每周都在用。\n\n如果哪里坏了，或者你希望它能做点别的，给我发邮件。我每封都会看。</string>
     <string name="about_help">需要帮助？给我发邮件</string>
     <string name="about_review">写个评价</string>
-    <string name="about_coffee">请我喝杯咖啡</string>
-    <string name="about_coffee_note">完全随意。不管怎样应用都是免费的。</string>
+    <string name="about_learn_more">了解更多</string>
+    <string name="about_learn_more_note">关于这个项目的更多内容，在网页上。</string>
     <string name="about_privacy">隐私</string>
     <string name="about_email_subject">Android 版 Weekly Budget %1$s</string>
     <string name="error_no_email">这里没有能发邮件的应用。</string>

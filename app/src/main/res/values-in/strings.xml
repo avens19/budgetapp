@@ -170,8 +170,8 @@
     <string name="about_body">Saya Andrew — orang biasa dari Calgary yang senang membuat perangkat lunak dan berpendapat lebih banyak di antaranya seharusnya gratis. Aplikasi ini tanpa iklan, tanpa akun, dan tanpa harga, dan tidak akan berubah. Saya membuatnya karena saya sendiri memakainya tiap minggu.\n\nKalau ada yang rusak, atau kamu ingin aplikasi ini bisa sesuatu yang belum bisa, kirim email ke saya. Semuanya saya baca.</string>
     <string name="about_help">Butuh bantuan? Kirim email</string>
     <string name="about_review">Tulis ulasan</string>
-    <string name="about_coffee">Traktir saya kopi</string>
-    <string name="about_coffee_note">Sepenuhnya opsional. Aplikasi ini tetap gratis.</string>
+    <string name="about_learn_more">Selengkapnya</string>
+    <string name="about_learn_more_note">Sedikit lebih banyak tentang proyek ini, di web.</string>
     <string name="about_privacy">Privasi</string>
     <string name="about_email_subject">Weekly Budget %1$s untuk Android</string>
     <string name="error_no_email">Tidak ada aplikasi di sini yang bisa mengirim email.</string>

@@ -170,8 +170,8 @@
     <string name="about_body">Я Ендрю — звичайний хлопець із Калгарі, який любить робити софт і вважає, що більше софту має бути безкоштовним. Тут немає реклами, немає акаунтів і немає ціни, і не з\'явиться. Я роблю цей застосунок, бо сам користуюся ним щотижня.\n\nЯкщо щось зламалося або хочеться, щоб воно вміло більше, напиши мені. Я читаю все.</string>
     <string name="about_help">Потрібна допомога? Напиши мені</string>
     <string name="about_review">Залишити відгук</string>
-    <string name="about_coffee">Купи мені каву</string>
-    <string name="about_coffee_note">Цілком необов\'язково. Застосунок безкоштовний у будь-якому разі.</string>
+    <string name="about_learn_more">Докладніше</string>
+    <string name="about_learn_more_note">Трохи більше про проєкт — на сайті.</string>
     <string name="about_privacy">Приватність</string>
     <string name="about_email_subject">Weekly Budget %1$s для Android</string>
     <string name="error_no_email">Тут немає застосунку, який може надіслати лист.</string>

@@ -166,8 +166,8 @@
     <string name="about_body">Tôi là Andrew — một người ở Calgary, thích viết phần mềm và nghĩ rằng nhiều phần mềm hơn nữa nên miễn phí. Ứng dụng này không quảng cáo, không tài khoản, không giá, và sẽ không đổi. Tôi làm nó vì chính tôi dùng nó mỗi tuần.\n\nNếu có gì hỏng, hoặc bạn muốn nó làm được điều gì đó, hãy gửi email cho tôi. Tôi đọc hết.</string>
     <string name="about_help">Cần giúp? Gửi email cho tôi</string>
     <string name="about_review">Viết đánh giá</string>
-    <string name="about_coffee">Mời tôi một ly cà phê</string>
-    <string name="about_coffee_note">Hoàn toàn tuỳ bạn. Ứng dụng vẫn miễn phí.</string>
+    <string name="about_learn_more">Tìm hiểu thêm</string>
+    <string name="about_learn_more_note">Thêm một chút về dự án này, trên web.</string>
     <string name="about_privacy">Quyền riêng tư</string>
     <string name="about_email_subject">Weekly Budget %1$s cho Android</string>
     <string name="error_no_email">Ở đây không có ứng dụng nào gửi được email.</string>

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 /**
- * Who wrote this, how to reach him, and the two ways to say thanks.
+ * Who wrote this, how to reach him, and where the rest of it is.
  *
  * <p>There are no accounts and no support desk, so a user with a problem has
  * nowhere to go: the Play listing's reply box is one-way and slow, and the
@@ -12,6 +12,11 @@ import android.widget.TextView;
  * place in the app that answers "who is behind this and how do I ask them
  * something", and it carries the build number so a bug report says which
  * version it came from without anyone having to ask.
+ *
+ * <p>There is no tip jar here on purpose. Google Play's payments policy treats
+ * an in-app link that asks for money outside Play Billing as a violation, so
+ * the ask lives on the web page behind "Learn more", the same way the iOS app
+ * handles it. The link out stays a plain "there is more about this on the web".
  */
 public class AboutActivity extends BaseActivity {
 
@@ -30,8 +35,8 @@ public class AboutActivity extends BaseActivity {
 
         findViewById(R.id.button_review).setOnClickListener(v -> Helpers.openPlayListing(this));
 
-        findViewById(R.id.button_coffee)
-                .setOnClickListener(v -> Helpers.openUrl(this, getString(R.string.url_coffee)));
+        findViewById(R.id.button_learn_more)
+                .setOnClickListener(v -> Helpers.openUrl(this, getString(R.string.url_about)));
 
         findViewById(R.id.button_privacy)
                 .setOnClickListener(v -> Helpers.openUrl(this, getString(R.string.url_privacy)));

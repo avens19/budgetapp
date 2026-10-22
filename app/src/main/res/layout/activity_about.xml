@@ -87,20 +87,20 @@
                 app:icon="@drawable/ic_star" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_coffee"
+                android:id="@+id/button_learn_more"
                 style="@style/Widget.Budget.Button.Secondary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_m"
-                android:text="@string/about_coffee"
-                app:icon="@drawable/ic_coffee" />
+                android:text="@string/about_learn_more"
+                app:icon="@drawable/ic_open_in_new" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_m"
                 android:gravity="center"
-                android:text="@string/about_coffee_note"
+                android:text="@string/about_learn_more_note"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="?attr/colorOnSurfaceVariant" />
 

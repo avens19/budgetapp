@@ -170,8 +170,8 @@
     <string name="about_body">أنا أندرو — رجل من كالغاري يحب صناعة البرمجيات ويرى أن المزيد منها يجب أن يكون مجانيًا. هذا التطبيق بلا إعلانات ولا حسابات ولا سعر، ولن يتغير ذلك. أصنعه لأنني أستخدمه بنفسي كل أسبوع.\n\nإذا تعطل شيء، أو أردته أن يفعل ما لا يفعله، راسلني. أقرأ كل الرسائل.</string>
     <string name="about_help">تحتاج مساعدة؟ راسلني</string>
     <string name="about_review">اكتب تقييمًا</string>
-    <string name="about_coffee">ادعُني إلى قهوة</string>
-    <string name="about_coffee_note">اختياري تمامًا. التطبيق مجاني في الحالتين.</string>
+    <string name="about_learn_more">معرفة المزيد</string>
+    <string name="about_learn_more_note">المزيد عن المشروع، على الويب.</string>
     <string name="about_privacy">الخصوصية</string>
     <string name="about_email_subject">Weekly Budget %1$s لأندرويد</string>
     <string name="error_no_email">لا يوجد هنا تطبيق يستطيع إرسال بريد.</string>

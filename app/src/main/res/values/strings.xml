@@ -224,15 +224,15 @@
     <string name="about_body">I\'m Andrew — just a guy in Calgary who loves making software and thinks more of it should be free. This app has no ads, no accounts and no price, and it is not going to grow any. I build it because I use it every week myself.\n\nIf something is broken, or you want it to do something it doesn\'t, email me. I read all of it.</string>
     <string name="about_help">Need help? Email me</string>
     <string name="about_review">Leave a review</string>
-    <string name="about_coffee">Buy me a coffee</string>
-    <string name="about_coffee_note">Entirely optional. The app is free either way.</string>
+    <string name="about_learn_more">Learn more</string>
+    <string name="about_learn_more_note">A little more about the project, on the web.</string>
     <string name="about_privacy">Privacy</string>
     <!-- Carries the version so a bug report says which build it came from. -->
     <string name="about_email_subject">Weekly Budget %1$s for Android</string>
     <string name="error_no_email">No app here can send email.</string>
 
     <string name="email_support" translatable="false">avens19@gmail.com</string>
-    <string name="url_coffee" translatable="false">https://buymeacoffee.com/ovens</string>
+    <string name="url_about" translatable="false">https://budget.andrewovens.com/About</string>
     <string name="url_privacy" translatable="false">https://budget.andrewovens.com/privacy</string>
     <!--
         Two spellings of the same listing. market:// opens the Play app straight
