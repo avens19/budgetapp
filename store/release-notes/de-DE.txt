@@ -1,1 +1,1 @@
-Ein aufgeräumterer Über-Bildschirm mit einem neuen Link „Mehr erfahren“ zur Webseite des Projekts.
+Neu: Die neuesten Ausgaben der Woche zuerst anzeigen. Aktiviere „Neueste zuerst“ im ⋮-Menü; deine Wahl wird gespeichert.

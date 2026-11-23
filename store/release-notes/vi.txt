@@ -1,1 +1,1 @@
-Màn hình Giới thiệu gọn gàng hơn, kèm liên kết “Tìm hiểu thêm” mới tới trang web của dự án.
+Mới: hiển thị các khoản chi mới nhất của tuần lên đầu. Bật “Mới nhất trước” trong menu ⋮; lựa chọn của bạn sẽ được nhớ.

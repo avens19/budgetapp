@@ -1,1 +1,1 @@
-Una schermata Info più ordinata, con un nuovo link «Scopri di più» alla pagina web del progetto.
+Novità: mostra per prime le spese più recenti della settimana. Attiva “Più recenti prima” nel menu ⋮; la scelta viene ricordata.

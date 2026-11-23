@@ -1,1 +1,1 @@
-Um ecrã Sobre mais arrumado, com uma nova ligação “Saber mais” para a página do projeto na web.
+Novidade: mostre primeiro as despesas mais recentes da semana. Ative “Mais recentes primeiro” no menu ⋮; a sua escolha fica guardada.

@@ -1,1 +1,1 @@
-Una pantalla Acerca de más ordenada, con un nuevo enlace «Saber más» a la página web del proyecto.
+Novedad: muestra primero los gastos más recientes de la semana. Activa «Más recientes primero» en el menú ⋮; se recordará tu elección.

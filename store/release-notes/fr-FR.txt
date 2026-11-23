@@ -1,1 +1,1 @@
-Un écran À propos plus net, avec un nouveau lien « En savoir plus » vers la page web du projet.
+Nouveau : affichez d’abord les dépenses les plus récentes de la semaine. Activez « Plus récentes en premier » dans le menu ⋮ ; votre choix est mémorisé.

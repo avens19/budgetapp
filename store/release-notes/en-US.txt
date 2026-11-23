@@ -1,1 +1,1 @@
-A tidier About screen, with a new “Learn more” link to the project's page on the web.
+New: list the week’s newest expenses first. Turn on “Newest first” in the ⋮ menu; your choice is remembered.

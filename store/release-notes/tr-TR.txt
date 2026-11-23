@@ -1,1 +1,1 @@
-Daha derli toplu bir Hakkında ekranı ve projenin web sayfasına giden yeni bir “Daha fazla bilgi” bağlantısı.
+Yeni: haftanın en yeni harcamalarını en üstte göster. ⋮ menüsünden “Önce en yeni” seçeneğini aç; tercihin hatırlanır.

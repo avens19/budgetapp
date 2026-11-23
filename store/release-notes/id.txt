@@ -1,1 +1,1 @@
-Layar Tentang yang lebih rapi, dengan tautan baru “Selengkapnya” ke halaman web proyek ini.
+Baru: tampilkan pengeluaran terbaru minggu ini lebih dulu. Aktifkan “Terbaru dulu” di menu ⋮; pilihanmu akan diingat.

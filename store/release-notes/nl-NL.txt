@@ -1,1 +1,1 @@
-Een opgeruimder Over-scherm, met een nieuwe link “Meer weten” naar de webpagina van het project.
+Nieuw: toon de nieuwste uitgaven van de week eerst. Zet “Nieuwste eerst” aan in het ⋮-menu; je keuze wordt onthouden.

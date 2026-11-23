@@ -1,1 +1,1 @@
-Bardziej uporządkowany ekran „O aplikacji” z nowym linkiem „Dowiedz się więcej” do strony projektu w sieci.
+Nowość: wyświetlaj najnowsze wydatki tygodnia na górze. Włącz „Najnowsze najpierw” w menu ⋮; wybór zostanie zapamiętany.
