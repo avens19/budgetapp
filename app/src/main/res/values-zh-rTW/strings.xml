@@ -175,6 +175,7 @@
     <string name="about_email_subject">Android 版 Weekly Budget %1$s</string>
     <string name="error_no_email">這裡沒有可以寄信的應用程式。</string>
     <string name="action_dense_layout">精簡版面</string>
+    <string name="action_newest_first">最新優先</string>
     <string name="week_dense_left">剩 %1$s</string>
     <string name="week_dense_over">超 %1$s</string>
     <string name="carry_balance">結轉餘額</string>

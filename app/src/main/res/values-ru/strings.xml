@@ -175,6 +175,7 @@
     <string name="about_email_subject">Weekly Budget %1$s для Android</string>
     <string name="error_no_email">Здесь нет приложения, которое может отправить письмо.</string>
     <string name="action_dense_layout">Компактный вид</string>
+    <string name="action_newest_first">Сначала новые</string>
     <string name="week_dense_left">Осталось %1$s</string>
     <string name="week_dense_over">Перерасход %1$s</string>
     <string name="carry_balance">Перенести остаток</string>

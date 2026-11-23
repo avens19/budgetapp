@@ -172,6 +172,7 @@
     <string name="about_email_subject">Android için Weekly Budget %1$s</string>
     <string name="error_no_email">Burada e-posta gönderebilecek bir uygulama yok.</string>
     <string name="action_dense_layout">Sıkışık görünüm</string>
+    <string name="action_newest_first">Önce en yeni</string>
     <string name="week_dense_left">%1$s kaldı</string>
     <string name="week_dense_over">%1$s aşım</string>
     <string name="carry_balance">Kalanı devret</string>

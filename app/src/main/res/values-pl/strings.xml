@@ -172,6 +172,7 @@
     <string name="about_email_subject">Weekly Budget %1$s na Androida</string>
     <string name="error_no_email">Żadna aplikacja tutaj nie wyśle e-maila.</string>
     <string name="action_dense_layout">Widok kompaktowy</string>
+    <string name="action_newest_first">Najnowsze najpierw</string>
     <string name="week_dense_left">Zostało %1$s</string>
     <string name="week_dense_over">%1$s ponad</string>
     <string name="carry_balance">Przenieś saldo</string>

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,6 +80,13 @@ final class ExpenseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.dense = dense;
     }
 
+    /** Most recent first, both across the days and within each one. */
+    private boolean newestFirst;
+
+    void setNewestFirst(boolean newestFirst) {
+        this.newestFirst = newestFirst;
+    }
+
     /**
      * The spent-against-budget line shown under the last expense, in both layouts.
      *
@@ -110,6 +118,11 @@ final class ExpenseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @SuppressLint("NotifyDataSetChanged")
     void setExpenses(List<Expense> expenses) {
         rows.clear();
+
+        if (newestFirst) {
+            expenses = new ArrayList<>(expenses);
+            Collections.reverse(expenses);
+        }
 
         if (dense) {
             // Flat and in date order — deliberately a running list of the week

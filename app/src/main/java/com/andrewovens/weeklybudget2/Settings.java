@@ -18,6 +18,7 @@ public class Settings {
     private static final String WEEKLY_PLAN = "WEEKLYPLAN";
     private static final String SUGGESTED_AMOUNT = "SUGGESTEDAMOUNT";
     private static final String DENSE_LAYOUT = "DENSELAYOUT";
+    private static final String NEWEST_FIRST = "NEWESTFIRST";
     private static final String CARRIED_WEEK = "CARRIEDWEEK";
 
     public static Budget getBudget(Context cxt) {
@@ -93,6 +94,21 @@ public class Settings {
 
     static void setDenseLayout(Context cxt, boolean dense) {
         cxt.getSharedPreferences(SETTINGS_NAME, 0).edit().putBoolean(DENSE_LAYOUT, dense).apply();
+    }
+
+    /**
+     * Whether the week lists its newest expenses first. Off by default, which
+     * keeps the long-standing oldest-first order.
+     *
+     * <p>Like the layout, a display preference for this device that does not
+     * sync.
+     */
+    static boolean isNewestFirst(Context cxt) {
+        return cxt.getSharedPreferences(SETTINGS_NAME, 0).getBoolean(NEWEST_FIRST, false);
+    }
+
+    static void setNewestFirst(Context cxt, boolean newestFirst) {
+        cxt.getSharedPreferences(SETTINGS_NAME, 0).edit().putBoolean(NEWEST_FIRST, newestFirst).apply();
     }
 
     static Budget[] getBudgets(Context cxt) {

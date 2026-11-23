@@ -176,6 +176,7 @@
     <string name="about_email_subject">Weekly Budget %1$s لأندرويد</string>
     <string name="error_no_email">لا يوجد هنا تطبيق يستطيع إرسال بريد.</string>
     <string name="action_dense_layout">عرض مضغوط</string>
+    <string name="action_newest_first">الأحدث أولاً</string>
     <string name="week_dense_left">يتبقى %1$s</string>
     <string name="week_dense_over">تجاوز %1$s</string>
     <string name="carry_balance">ترحيل الرصيد</string>

@@ -172,6 +172,7 @@
     <string name="about_email_subject">Android용 Weekly Budget %1$s</string>
     <string name="error_no_email">메일을 보낼 수 있는 앱이 없어요.</string>
     <string name="action_dense_layout">간결한 레이아웃</string>
+    <string name="action_newest_first">최신순</string>
     <string name="week_dense_left">%1$s 남음</string>
     <string name="week_dense_over">%1$s 초과</string>
     <string name="carry_balance">잔액 이월</string>

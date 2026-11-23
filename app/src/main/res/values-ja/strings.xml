@@ -175,6 +175,7 @@
     <string name="about_email_subject">Weekly Budget %1$s (Android)</string>
     <string name="error_no_email">メールを送れるアプリがありません。</string>
     <string name="action_dense_layout">コンパクト表示</string>
+    <string name="action_newest_first">新しい順</string>
     <string name="week_dense_left">残り %1$s</string>
     <string name="week_dense_over">%1$s 超過</string>
     <string name="carry_balance">残りを繰り越す</string>

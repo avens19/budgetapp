@@ -172,6 +172,7 @@
     <string name="about_email_subject">Weekly Budget %1$s cho Android</string>
     <string name="error_no_email">Ở đây không có ứng dụng nào gửi được email.</string>
     <string name="action_dense_layout">Bố cục gọn</string>
+    <string name="action_newest_first">Mới nhất trước</string>
     <string name="week_dense_left">Còn %1$s</string>
     <string name="week_dense_over">Vượt %1$s</string>
     <string name="carry_balance">Chuyển số dư</string>

@@ -248,6 +248,7 @@
         into days they do not always file things under correctly.
     -->
     <string name="action_dense_layout">Compact layout</string>
+    <string name="action_newest_first">Newest first</string>
     <string name="week_dense_left">%1$s left</string>
     <string name="week_dense_over">%1$s over</string>
 

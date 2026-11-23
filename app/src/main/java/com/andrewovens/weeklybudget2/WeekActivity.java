@@ -60,6 +60,7 @@ public class WeekActivity extends BaseActivity
 
     /** Read once in onCreate; toggling it recreates the screen. */
     private boolean _dense;
+    private boolean _newestFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +70,13 @@ public class WeekActivity extends BaseActivity
         Navigation.setUp(this, Navigation.WEEK, this);
 
         _dense = Settings.isDenseLayout(this);
+        _newestFirst = Settings.isNewestFirst(this);
 
         collapseBalanceCard();
 
         _adapter = new ExpenseAdapter(this, true);
         _adapter.setDense(_dense);
+        _adapter.setNewestFirst(_newestFirst);
         RecyclerView list = findViewById(R.id.week_list);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(_adapter);
@@ -572,6 +575,10 @@ public class WeekActivity extends BaseActivity
         if (dense != null) {
             dense.setChecked(_dense);
         }
+        MenuItem newest = menu.findItem(R.id.action_newest_first);
+        if (newest != null) {
+            newest.setChecked(_newestFirst);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -596,6 +603,11 @@ public class WeekActivity extends BaseActivity
             // change, and a RecyclerView holding pooled views of the old shape
             // would hand them back for the new one.
             Settings.setDenseLayout(this, !_dense);
+            recreate();
+            return true;
+        }
+        if (id == R.id.action_newest_first) {
+            Settings.setNewestFirst(this, !_newestFirst);
             recreate();
             return true;
         }
